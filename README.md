@@ -1,4 +1,4 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/Ichchhie/BaatoAndroidLibrary)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/baato/java-client)
 
 # Baato-Library
 
