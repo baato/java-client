@@ -10,6 +10,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Features
 
+* Forward Geocoding
+* Reverse Geocoding
+* Navigation
 
 ### Installing
 
@@ -66,10 +69,6 @@ dependencies {
 ```
 
 ### Implementation
-
-* Forward Geocoding
-* Reverse Geocoding
-* Navigation
 
  #### 1. Search 
  
