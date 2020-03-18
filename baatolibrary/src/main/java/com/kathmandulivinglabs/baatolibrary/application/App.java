@@ -53,7 +53,7 @@ public class App extends Application {
 
     public static Retrofit retrofitV2() {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://178.128.59.143:8080/api/v2/")
+                .baseUrl("http://178.128.71.143:8080/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create());
 
 
