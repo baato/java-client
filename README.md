@@ -4,17 +4,13 @@
 
 Fast and efficient library to perform search and reverse geocoding
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Features
+## Features
 
 * Forward Geocoding
 * Reverse Geocoding
 * Navigation
 
-### Installing
+## Getting Started
 
  1.Open up your project's build.gradle file. Add the following code:
  
