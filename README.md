@@ -32,7 +32,7 @@ android {
 
 ```
 dependencies {
-   implementation 'com.github.Ichchhie:BaatoAndroidLibrary:0.1.0'
+   implementation 'com.github.baato:java-client:0.1.2'
 }
 ```
 
