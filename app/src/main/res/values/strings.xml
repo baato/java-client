@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Baato Sample App</string>
+    <string name="mapbox_access_token">{your-access-token}</string>
+</resources>

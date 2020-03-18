@@ -1,0 +1,2 @@
+include ':app', ':baatolibrary'
+rootProject.name='OSM Navigation App'
