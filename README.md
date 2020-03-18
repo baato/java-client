@@ -10,7 +10,7 @@ Fast and efficient library to perform search and reverse geocoding
 * Reverse Geocoding
 * Navigation
 
-## Getting Started
+### Getting Started
 
  1.Open up your project's build.gradle file. Add the following code:
  
