@@ -6,7 +6,7 @@ Fast and efficient library to perform search and reverse geocoding
 
 ## Features
 
-* Forward Geocoding
+* Search
 * Reverse Geocoding
 * Navigation
 
@@ -34,7 +34,7 @@ android {
 
 ```
 dependencies {
-   implementation 'com.github.baato:java-client:0.1.2'
+   implementation 'com.github.baato:java-client:latest-version'
 }
 ```
 
