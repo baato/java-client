@@ -34,7 +34,7 @@ android {
 
 ```
 dependencies {
-   implementation 'com.github.baato:java-client:{latest-version}'
+   implementation 'com.github.baato:java-client:${latest-version}'
 }
 ```
 
