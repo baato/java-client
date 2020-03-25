@@ -7,12 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.kathmandulivinglabs.baatolibrary.application.App;
 import com.kathmandulivinglabs.baatolibrary.models.Geocode;
-import com.kathmandulivinglabs.baatolibrary.models.Place;
+
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
-
-import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,7 +74,7 @@ public class BaatoReverseGeoCode {
     }
 
     public void doReverseGeoCode() {
-        QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
+        QueryAPI queryAPI = App.retrofit(accessToken).create(QueryAPI.class);
         queryAPI.performReverseGeoCode(accessToken, geocode.lat, geocode.lon).enqueue(new Callback<SearchAPIResponse>() {
             @Override
             public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {

@@ -5,10 +5,12 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.Geocode;
 import com.kathmandulivinglabs.baatolibrary.models.Geometry;
 
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.services.BaatoAutoComplete;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoReverseGeoCode;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoSearch;
 import com.kathmandulivinglabs.baatolibrary.services.ToasterMessage;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         performReverseGeoCoding();
         performSearch();
+        performAutoComplete();
     }
 
     private void performReverseGeoCoding() {
@@ -48,6 +51,26 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .doReverseGeoCode();
+    }
+
+    private void performAutoComplete() {
+        new BaatoAutoComplete(this)
+                .setAccessToken(Constants.TOKEN)
+                .setQuery("Budhanilkantha")
+                .withListener(new BaatoAutoComplete.BaatoAutoCompleteListener() {
+                    @Override
+                    public void onSuccess(AutoCompleteAPIResponse places) {
+                        //success response here
+                        Log.d(TAG, "onSuccess: autocomplete" + places.toString());
+                    }
+
+                    @Override
+                    public void onFailed(Throwable error) {
+                        //failure response here
+                        Log.d(TAG, "onFailed: autocomplete" + error.getMessage());
+                    }
+                })
+        .performAutoComplete();
     }
 
     private void performSearch() {
