@@ -62,7 +62,7 @@ public class BaatoAutoComplete {
     }
 
     public void performAutoComplete(){
-        QueryAPI queryAPI = App.retrofit(accessToken).create(QueryAPI.class);
+        QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
         queryAPI.performAutoComplete(accessToken, query).enqueue(new Callback<AutoCompleteAPIResponse>() {
             @Override
             public void onResponse(Call<AutoCompleteAPIResponse> call, Response<AutoCompleteAPIResponse> response) {

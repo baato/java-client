@@ -74,7 +74,7 @@ public class BaatoReverseGeoCode {
     }
 
     public void doReverseGeoCode() {
-        QueryAPI queryAPI = App.retrofit(accessToken).create(QueryAPI.class);
+        QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
         queryAPI.performReverseGeoCode(accessToken, geocode.lat, geocode.lon).enqueue(new Callback<SearchAPIResponse>() {
             @Override
             public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {
