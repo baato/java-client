@@ -1,5 +1,6 @@
 package com.kathmandulivinglabs.baatolibrary.requests;
 
+import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.Place;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 
@@ -28,4 +29,7 @@ public interface QueryAPI {
 
     @GET("reverse")
     Call<SearchAPIResponse> performReverseGeoCode(@Query("key") String key, @Query("lat") double lat, @Query("lon") double lon);
+
+    @GET("autocomplete")
+    Call<AutoCompleteAPIResponse> performAutoComplete(@Query("key") String key, @Query("q") String query);
 }

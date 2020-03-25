@@ -30,7 +30,7 @@ public class App extends Application {
 
     public static Retrofit retrofit(final String token) {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://178.128.59.143/api/v1/")
+                .baseUrl("http://178.128.59.143:8080/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create());
 
         OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
