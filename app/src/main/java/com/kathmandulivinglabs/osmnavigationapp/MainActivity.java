@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private void performSearch() {
         new BaatoSearch(this)
                 .setAccessToken(Constants.TOKEN)
-                .setQuery("Kathmandu Living Labs")
+                .setQuery("Kathmandu")
                 .withListener(new BaatoSearch.BaatoSearchRequestListener() {
                     @Override
                     public void onSuccess(SearchAPIResponse places) {

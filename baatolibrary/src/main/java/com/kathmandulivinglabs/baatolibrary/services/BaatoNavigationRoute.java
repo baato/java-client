@@ -62,26 +62,26 @@ public class BaatoNavigationRoute {
         return this;
     }
 
-    public void giveMeRoutes() {
-        QueryAPI queryAPI = App.retrofit(accessToken).create(QueryAPI.class);
-        queryAPI.searchQuery(accessToken, query).enqueue(new Callback<SearchAPIResponse>() {
-            @Override
-            public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {
-                if (response.isSuccessful() && response.body() != null)
-                    baatoRouteRequestListener.onSuccess(response.body());
-                else{
-                    try {
-                        baatoRouteRequestListener.onFailed(new Throwable(response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SearchAPIResponse> call, Throwable throwable) {
-                baatoRouteRequestListener.onFailed(throwable);
-            }
-        });
-    }
+//    public void giveMeRoutes() {
+//        QueryAPI queryAPI = App.retrofit(accessToken).create(QueryAPI.class);
+//        queryAPI.searchQuery(accessToken, query).enqueue(new Callback<SearchAPIResponse>() {
+//            @Override
+//            public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {
+//                if (response.isSuccessful() && response.body() != null)
+//                    baatoRouteRequestListener.onSuccess(response.body());
+//                else{
+//                    try {
+//                        baatoRouteRequestListener.onFailed(new Throwable(response.errorBody().string()));
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<SearchAPIResponse> call, Throwable throwable) {
+//                baatoRouteRequestListener.onFailed(throwable);
+//            }
+//        });
+//    }
 }

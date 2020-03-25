@@ -7,4 +7,12 @@ public class Geocode {
         this.lat = lat;
         this.lon = lon;
     }
+
+    @Override
+    public String toString() {
+        return "Geocode{" +
+                "lat=" + lat +
+                ", lon=" + lon +
+                '}';
+    }
 }

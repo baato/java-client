@@ -4,30 +4,34 @@ import java.util.List;
 
 public class Place {
     private Long placeId;
-
-    private Long osmId;
     private String osmType;
-    private String housenumber;
     private String address;
     private String classification;
     private String type;
     private Integer searchRank;
     private Integer addressRank;
-    private String geometryType;
     private Geocode centroid;
-
+    private String license;
     private List<String> tags;
     private String country;
-    private Integer adminLevel;
     private String name;
 
     @Override
     public String toString() {
-        return "Place [placeId=" + placeId + ", osmId=" + osmId + ", osmType=" + osmType + ", housenumber="
-                + housenumber + ", address=" + address + ", classification=" + classification + ", type=" + type
-                + ", searchRank=" + searchRank + ", addressRank=" + addressRank + ", geometryType=" + geometryType
-                + ", centroid= none" + ", tags=" + tags + ", country=" + country + ", adminLevel=" + adminLevel
-                + ", name=" + name + "]";
+        return "Place{" +
+                "placeId=" + placeId +
+                ", osmType='" + osmType + '\'' +
+                ", address='" + address + '\'' +
+                ", classification='" + classification + '\'' +
+                ", type='" + type + '\'' +
+                ", searchRank=" + searchRank +
+                ", addressRank=" + addressRank +
+                ", centroid=" + centroid.toString() +
+                ", license='" + license + '\'' +
+                ", tags=" + tags +
+                ", country='" + country + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     public Long getPlaceId() {
@@ -38,28 +42,12 @@ public class Place {
         this.placeId = placeId;
     }
 
-    public Long getOsmId() {
-        return osmId;
-    }
-
-    public void setOsmId(Long osmId) {
-        this.osmId = osmId;
-    }
-
     public String getOsmType() {
         return osmType;
     }
 
     public void setOsmType(String osmType) {
         this.osmType = osmType;
-    }
-
-    public String getHousenumber() {
-        return housenumber;
-    }
-
-    public void setHousenumber(String housenumber) {
-        this.housenumber = housenumber;
     }
 
     public String getAddress() {
@@ -102,14 +90,6 @@ public class Place {
         this.addressRank = addressRank;
     }
 
-    public String getGeometryType() {
-        return geometryType;
-    }
-
-    public void setGeometryType(String geometryType) {
-        this.geometryType = geometryType;
-    }
-
     public Geocode getCentroid() {
         return centroid;
     }
@@ -132,14 +112,6 @@ public class Place {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public Integer getAdminLevel() {
-        return adminLevel;
-    }
-
-    public void setAdminLevel(Integer adminLevel) {
-        this.adminLevel = adminLevel;
     }
 
     public String getName() {
