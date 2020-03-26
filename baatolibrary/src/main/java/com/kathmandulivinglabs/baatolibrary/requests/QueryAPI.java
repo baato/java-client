@@ -1,6 +1,7 @@
 package com.kathmandulivinglabs.baatolibrary.requests;
 
 import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.Place;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 
@@ -13,17 +14,9 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface QueryAPI {
+    @GET("directions")
+    Call<DirectionsAPIResponse> getDirections(@Query("key") String key, @Query("points[]") String[] points, @Query("mode") String mode, @Query("alternatives") Boolean alternatives);
 
-//    @GET("search")
-//    Call<SearchAPIResponse> searchQuery(@Query("q") String query);
-
-//    @GET("reverse")
-//    Call<SearchAPIResponse> performReverseGeoCode(@Query("lat") double lat, @Query("lon") double lon, @Query("radius") int radius);
-
-    @GET("routes")
-    Call<List<Place>> searchQuery(@Query("origin") String origin, @Query("destination") String destination, @Query("mode") String mode);
-
-    //API version 2
     @GET("search")
     Call<SearchAPIResponse> searchQuery(@QueryMap Map<String, String> filters);
 
@@ -31,5 +24,5 @@ public interface QueryAPI {
     Call<SearchAPIResponse> performReverseGeoCode(@Query("key") String key, @Query("lat") double lat, @Query("lon") double lon);
 
     @GET("autocomplete")
-    Call<AutoCompleteAPIResponse> performAutoComplete(@Query("key") String key, @Query("q") String query);
+    Call<AutoCompleteAPIResponse> performAutoComplete(@QueryMap Map<String, String> filter);
 }

@@ -6,11 +6,13 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.Geocode;
 import com.kathmandulivinglabs.baatolibrary.models.Geometry;
 
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoAutoComplete;
+import com.kathmandulivinglabs.baatolibrary.services.BaatoNavigationRoute;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoReverseGeoCode;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoSearch;
 import com.kathmandulivinglabs.baatolibrary.services.ToasterMessage;
@@ -28,9 +30,34 @@ public class MainActivity extends AppCompatActivity {
         ToasterMessage.s(this, "Hello Good Morning");
         Geometry geometry = BaatoUtil.getGeoJsonFromEncodedPolyLine(encoded);
 
+        performRouting();
         performReverseGeoCoding();
         performSearch();
         performAutoComplete();
+    }
+
+    private void performRouting() {
+        String points[] = new String[]{"27.73405,85.33685", "27.7177,85.3278"};
+        new BaatoNavigationRoute(this)
+                .setAccessToken(Constants.TOKEN)
+                .setPoints(points)
+                .setMode("car")
+                .setAlternatives(true)
+                .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
+                    @Override
+                    public void onSuccess(DirectionsAPIResponse places) {
+                        // success response here
+                        Log.d(TAG, "onSuccess: routes" + places.toString());
+                        Log.d(TAG, "onSuccess:routes 1 " + BaatoUtil.decodePolyline(places.getData().get(0).getEncodedPolyline(), false));
+                    }
+
+                    @Override
+                    public void onFailed(Throwable error) {
+                        // failure response here
+                        Log.d(TAG, "onFailed:routes " + error.getMessage());
+                    }
+                })
+                .doRequest();
     }
 
     private void performReverseGeoCoding() {
@@ -57,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         new BaatoAutoComplete(this)
                 .setAccessToken(Constants.TOKEN)
                 .setQuery("Budhanilkantha")
+                .setLimit(2)
                 .withListener(new BaatoAutoComplete.BaatoAutoCompleteListener() {
                     @Override
                     public void onSuccess(AutoCompleteAPIResponse places) {
@@ -70,13 +98,14 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "onFailed: autocomplete" + error.getMessage());
                     }
                 })
-        .performAutoComplete();
+                .doAutoComplete();
     }
 
     private void performSearch() {
         new BaatoSearch(this)
                 .setAccessToken(Constants.TOKEN)
                 .setQuery("Kathmandu")
+                .setLimit(5)
                 .withListener(new BaatoSearch.BaatoSearchRequestListener() {
                     @Override
                     public void onSuccess(SearchAPIResponse places) {

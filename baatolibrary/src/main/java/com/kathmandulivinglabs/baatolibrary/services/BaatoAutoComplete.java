@@ -9,6 +9,8 @@ import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,6 +21,8 @@ public class BaatoAutoComplete {
     private Context context;
     private String accessToken, query;
     private BaatoAutoCompleteListener baatoAutoCompleteListener;
+    private int radius = 0, limit = 0;
+    private double lat = 0.00, lon = 0.00;
 
     public interface BaatoAutoCompleteListener {
         /**
@@ -51,6 +55,31 @@ public class BaatoAutoComplete {
     }
 
     /**
+     * Set the radius to search.
+     */
+    public BaatoAutoComplete setRadius(@NonNull int radius) {
+        this.radius = radius;
+        return this;
+    }
+
+    /**
+     * Set the limit to search.
+     */
+    public BaatoAutoComplete setLimit(@NonNull int limit) {
+        this.limit = limit;
+        return this;
+    }
+
+    /**
+     * Set the lat and long value.
+     */
+    public BaatoAutoComplete setLatLong(@NonNull double lat, double lon) {
+        this.lat = lat;
+        this.lon = lon;
+        return this;
+    }
+
+    /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
      * @param baatoAutoCompleteListener the listener to be notified
@@ -61,14 +90,14 @@ public class BaatoAutoComplete {
         return this;
     }
 
-    public void performAutoComplete(){
+    public void doAutoComplete() {
         QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
-        queryAPI.performAutoComplete(accessToken, query).enqueue(new Callback<AutoCompleteAPIResponse>() {
+        queryAPI.performAutoComplete(giveMeQueryFilter()).enqueue(new Callback<AutoCompleteAPIResponse>() {
             @Override
             public void onResponse(Call<AutoCompleteAPIResponse> call, Response<AutoCompleteAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
                     baatoAutoCompleteListener.onSuccess(response.body());
-                else{
+                else {
                     try {
                         baatoAutoCompleteListener.onFailed(new Throwable(response.errorBody().string()));
                     } catch (IOException e) {
@@ -82,5 +111,25 @@ public class BaatoAutoComplete {
                 baatoAutoCompleteListener.onFailed(throwable);
             }
         });
+    }
+
+    private Map<String, String> giveMeQueryFilter() {
+        Map<String, String> queryMap = new HashMap<>();
+        //compulsory ones
+        if (accessToken != null)
+            queryMap.put("key", accessToken);
+        if (query != null)
+            queryMap.put("q", query);
+
+        //optionals
+        if (radius != 0)
+            queryMap.put("radius", radius + "");
+        if (limit != 0)
+            queryMap.put("limit", limit + "");
+        if (lat != 0.00)
+            queryMap.put("lat", lat + "");
+        if (lon != 0.00)
+            queryMap.put("lon", lon + "");
+        return queryMap;
     }
 }

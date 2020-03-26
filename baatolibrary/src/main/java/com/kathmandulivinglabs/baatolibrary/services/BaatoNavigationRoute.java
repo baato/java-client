@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.kathmandulivinglabs.baatolibrary.application.App;
+import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.Place;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
@@ -19,14 +20,16 @@ import retrofit2.Response;
 public class BaatoNavigationRoute {
     private Context context;
     private BaatoRouteRequestListener baatoRouteRequestListener;
-    private String accessToken, query;
+    private String accessToken, query, mode;
+    private String[] points;
+    private boolean alternatives;
 
     public interface BaatoRouteRequestListener {
         /**
          * onSuccess method called after it is successful
          * onFailed method called if it can't places
          */
-        void onSuccess(SearchAPIResponse places);
+        void onSuccess(DirectionsAPIResponse places);
 
         void onFailed(Throwable error);
     }
@@ -44,10 +47,26 @@ public class BaatoNavigationRoute {
     }
 
     /**
+     * Set the accessToken.
+     */
+    public BaatoNavigationRoute setMode(@NonNull String mode) {
+        this.mode = mode;
+        return this;
+    }
+
+    /**
      * Set the query to search.
      */
-    public BaatoNavigationRoute setQuery(@NonNull String query) {
-        this.query = query;
+    public BaatoNavigationRoute setAlternatives(@NonNull boolean alternatives) {
+        this.alternatives = alternatives;
+        return this;
+    }
+
+    /**
+     * Set the query to search.
+     */
+    public BaatoNavigationRoute setPoints(@NonNull String[] points) {
+        this.points = points;
         return this;
     }
 
@@ -62,26 +81,28 @@ public class BaatoNavigationRoute {
         return this;
     }
 
-//    public void giveMeRoutes() {
-//        QueryAPI queryAPI = App.retrofit(accessToken).create(QueryAPI.class);
-//        queryAPI.searchQuery(accessToken, query).enqueue(new Callback<SearchAPIResponse>() {
-//            @Override
-//            public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {
-//                if (response.isSuccessful() && response.body() != null)
-//                    baatoRouteRequestListener.onSuccess(response.body());
-//                else{
-//                    try {
-//                        baatoRouteRequestListener.onFailed(new Throwable(response.errorBody().string()));
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<SearchAPIResponse> call, Throwable throwable) {
-//                baatoRouteRequestListener.onFailed(throwable);
-//            }
-//        });
-//    }
+    public void doRequest() {
+        QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
+        queryAPI.getDirections(accessToken, points, mode, alternatives)
+                .enqueue(new Callback<DirectionsAPIResponse>() {
+                    @Override
+                    public void onResponse(Call<DirectionsAPIResponse> call, Response<DirectionsAPIResponse> response) {
+                        baatoRouteRequestListener.onFailed(new Throwable(String.valueOf(call.request())));
+                        if (response.isSuccessful() && response.body() != null)
+                            baatoRouteRequestListener.onSuccess(response.body());
+                        else {
+                            try {
+                                baatoRouteRequestListener.onFailed(new Throwable(response.errorBody().string()));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<DirectionsAPIResponse> call, Throwable t) {
+                        baatoRouteRequestListener.onFailed(t);
+                    }
+                });
+    }
 }
