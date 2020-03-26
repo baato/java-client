@@ -70,8 +70,9 @@ dependencies {
  
 ```
  new BaatoSearch(this)
-          .setAccessToken(Constants.TOKEN)
+          .setAccessToken(YOUR_ACCESS_KEY)
           .setQuery(query)
+          .setType("hospital") //optional parameter
           .withListener(new BaatoSearch.BaatoSearchRequestListener() {
               @Override
               public void onSuccess(SearchAPIResponse places) {
@@ -92,7 +93,7 @@ dependencies {
  ```
   new BaatoReverseGeoCode(this)
                 .setGeoCode(new Geocode(lat, lon))
-                .setAccessToken(Constants.TOKEN)
+                .setAccessToken(YOUR_ACCESS_KEY)
                 .withListener(new BaatoReverseGeoCode.BaatoReverseGeoCodeRequestListener() {
                     @Override
                     public void onSuccess(SearchAPIResponse places) {
@@ -107,6 +108,53 @@ dependencies {
                     }
                 })
                 .doReverseGeoCode();
+```
+#### 3. Autocomplete
+ 
+ ```
+  new BaatoAutoComplete(this)
+                .setAccessToken(YOUR_ACCESS_KEY)
+                .setQuery(query)
+                .setLimit(5) //optional parameter
+                .withListener(new BaatoAutoComplete.BaatoAutoCompleteListener() {
+                    @Override
+                    public void onSuccess(AutoCompleteAPIResponse places) {
+                        //success response here
+                        Log.d(TAG, "onSuccess: autocomplete" + places.toString());
+                    }
+
+                    @Override
+                    public void onFailed(Throwable error) {
+                        //failure response here
+                        Log.d(TAG, "onFailed: autocomplete" + error.getMessage());
+                    }
+                })
+                .doAutoComplete();
+```
+#### 4. Directions
+ 
+ ```
+  String points[] = new String[]{"27.73405,85.33685", "27.7177,85.3278"};
+  new BaatoNavigationRoute(this)
+                .setAccessToken(YOUR_ACCESS_KEY)
+                .setPoints(points)
+                .setMode(mode) //eg bike,car,foot
+                .setAlternatives(true) //optional parameter
+                .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
+                    @Override
+                    public void onSuccess(DirectionsAPIResponse routes) {
+                        // success response here
+                        Log.d(TAG, "onSuccess: routes" + routes.toString());
+                        Log.d(TAG, "decode polyline " + BaatoUtil.decodePolyline(routes.getData().get(0).getEncodedPolyline(), false));
+                    }
+
+                    @Override
+                    public void onFailed(Throwable error) {
+                        // failure response here
+                        Log.d(TAG, "onFailed:routes " + error.getMessage());
+                    }
+                })
+                .doRequest();
 ```
 
 ## Built With
