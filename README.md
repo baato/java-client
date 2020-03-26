@@ -2,13 +2,14 @@
 
 # Baato-Library
 
-Fast and efficient library to perform search and reverse geocoding
+The Java library makes it easy to consume the Baato API into existing native android projects.
 
 ## Features
 
 * Search
 * Reverse Geocoding
-* Navigation
+* Autocomplete
+* Directions
 
 ### Getting Started
 
@@ -97,13 +98,11 @@ dependencies {
                 .withListener(new BaatoReverseGeoCode.BaatoReverseGeoCodeRequestListener() {
                     @Override
                     public void onSuccess(SearchAPIResponse places) {
-                        // success response here
                         Log.d(TAG, "onSuccess: reverse " + places.toString());
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
-                        // failure response here
                         Log.d(TAG, "onFailed:reverse " + error.getMessage());
                     }
                 })
@@ -119,13 +118,11 @@ dependencies {
                 .withListener(new BaatoAutoComplete.BaatoAutoCompleteListener() {
                     @Override
                     public void onSuccess(AutoCompleteAPIResponse places) {
-                        //success response here
                         Log.d(TAG, "onSuccess: autocomplete" + places.toString());
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
-                        //failure response here
                         Log.d(TAG, "onFailed: autocomplete" + error.getMessage());
                     }
                 })
@@ -143,14 +140,12 @@ dependencies {
                 .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
                     @Override
                     public void onSuccess(DirectionsAPIResponse routes) {
-                        // success response here
                         Log.d(TAG, "onSuccess: routes" + routes.toString());
                         Log.d(TAG, "decode polyline " + BaatoUtil.decodePolyline(routes.getData().get(0).getEncodedPolyline(), false));
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
-                        // failure response here
                         Log.d(TAG, "onFailed:routes " + error.getMessage());
                     }
                 })
