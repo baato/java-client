@@ -131,25 +131,28 @@ dependencies {
 #### 4. Directions
  
  ```
-  String points[] = new String[]{"27.73405,85.33685", "27.7177,85.3278"};
-  new BaatoNavigationRoute(this)
-                .setAccessToken(YOUR_ACCESS_KEY)
+    String points[] = new String[]{"27.73405,85.33685", "27.7177,85.3278"};
+        new BaatoNavigationRoute(this)
                 .setPoints(points)
-                .setMode(mode) //eg bike,car,foot
-                .setAlternatives(true) //optional parameter
+                .setAccessToken(YOUR_ACCESS_KEY)
+                .setMode(mode) //eg bike, car, foot
+                .setAlternatives(false) //optional parameter
+                .setInstructions(true) //optional parameter
                 .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
                     @Override
-                    public void onSuccess(DirectionsAPIResponse routes) {
-                        Log.d(TAG, "onSuccess: routes" + routes.toString());
-                        Log.d(TAG, "decode polyline " + BaatoUtil.decodePolyline(routes.getData().get(0).getEncodedPolyline(), false));
+                    public void onSuccess(DirectionsAPIResponse places) {
+                        // success response here
+                        Log.d(TAG, "onSuccess: routes" + places.toString());
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
+                        // failure response here
                         Log.d(TAG, "onFailed:routes " + error.getMessage());
                     }
                 })
                 .doRequest();
+    }
 ```
 
 ## Built With
