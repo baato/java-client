@@ -119,24 +119,4 @@ public class BaatoNavigationRoute {
                     }
                 });
     }
-
-
-    private Map<String, String> giveQueryFilter() {
-        Map<String, String> queryMap = new HashMap<>();
-        //compulsory
-        if (accessToken != null)
-            queryMap.put("key", accessToken);
-        if (points != null)
-            queryMap.put("points[]", Arrays.toString(points));
-        if (mode != null)
-            queryMap.put("mode", mode);
-        if (alternatives != null)
-            queryMap.put("alternatives", alternatives + "");
-
-        //optional
-        if (instructions != null)
-            queryMap.put("instructions", instructions + "");
-
-        return queryMap;
-    }
 }
