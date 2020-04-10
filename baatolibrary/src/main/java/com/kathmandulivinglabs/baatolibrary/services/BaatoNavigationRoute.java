@@ -97,7 +97,7 @@ public class BaatoNavigationRoute {
 
     public void doRequest() {
         QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
-        queryAPI.getDirections(giveQueryFilter())
+        queryAPI.getDirections(accessToken,points,mode,alternatives,instructions)
                 .enqueue(new Callback<DirectionsAPIResponse>() {
                     @Override
                     public void onResponse(Call<DirectionsAPIResponse> call, Response<DirectionsAPIResponse> response) {
