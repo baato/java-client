@@ -15,7 +15,7 @@ import retrofit2.http.QueryMap;
 
 public interface QueryAPI {
     @GET("directions")
-    Call<DirectionsAPIResponse> getDirections(@Query("key") String key, @Query("points[]") String[] points, @Query("mode") String mode, @Query("alternatives") Boolean alternatives);
+    Call<DirectionsAPIResponse> getDirections(@QueryMap Map<String, String> filter);
 
     @GET("search")
     Call<SearchAPIResponse> searchQuery(@QueryMap Map<String, String> filters);

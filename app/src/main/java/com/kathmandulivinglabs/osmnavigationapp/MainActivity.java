@@ -38,17 +38,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void performRouting() {
         String points[] = new String[]{"27.73405,85.33685", "27.7177,85.3278"};
+//        String points[] = new String[]{"27.68733822894479,85.3146743774414", "27.68733822894479,85.3146743774414"};
         new BaatoNavigationRoute(this)
-                .setAccessToken(Constants.TOKEN)
                 .setPoints(points)
-                .setMode("car")
-                .setAlternatives(true)
+                .setAccessToken(Constants.TOKEN)
+                .setMode("foot")
+                .setAlternatives(false)
+                .setInstructions(true)
                 .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
                     @Override
                     public void onSuccess(DirectionsAPIResponse places) {
                         // success response here
                         Log.d(TAG, "onSuccess: routes" + places.toString());
-                        Log.d(TAG, "onSuccess:routes 1 " + BaatoUtil.decodePolyline(places.getData().get(0).getEncodedPolyline(), false));
+//                        Log.d(TAG, "onSuccess:routes 1 " + BaatoUtil.decodePolyline(places.getData().get(0).getEncodedPolyline(), false));
                     }
 
                     @Override

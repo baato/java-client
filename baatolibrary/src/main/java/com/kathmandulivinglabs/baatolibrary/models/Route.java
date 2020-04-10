@@ -4,7 +4,7 @@ public class Route {
     private String encodedPolyline;
     private double distanceInMeters;
     private long timeInMs;
-    private Object instructionList;
+    private InstructionList[] instructionList;
 
     public String getEncodedPolyline() {
         return encodedPolyline;
@@ -30,11 +30,11 @@ public class Route {
         this.timeInMs = timeInMs;
     }
 
-    public Object getInstructionList() {
+    public InstructionList[] getInstructionList() {
         return instructionList;
     }
 
-    public void setInstructionList(Object instructionList) {
+    public void setInstructionList(InstructionList[] instructionList) {
         this.instructionList = instructionList;
     }
 

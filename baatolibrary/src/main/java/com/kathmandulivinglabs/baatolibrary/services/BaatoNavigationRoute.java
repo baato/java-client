@@ -11,7 +11,10 @@ import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,7 +25,8 @@ public class BaatoNavigationRoute {
     private BaatoRouteRequestListener baatoRouteRequestListener;
     private String accessToken, query, mode;
     private String[] points;
-    private boolean alternatives;
+    private Boolean alternatives;
+    private Boolean instructions;
 
     public interface BaatoRouteRequestListener {
         /**
@@ -47,7 +51,7 @@ public class BaatoNavigationRoute {
     }
 
     /**
-     * Set the accessToken.
+     * Set the mode.
      */
     public BaatoNavigationRoute setMode(@NonNull String mode) {
         this.mode = mode;
@@ -57,8 +61,16 @@ public class BaatoNavigationRoute {
     /**
      * Set the query to search.
      */
-    public BaatoNavigationRoute setAlternatives(@NonNull boolean alternatives) {
+    public BaatoNavigationRoute setAlternatives(@NonNull Boolean alternatives) {
         this.alternatives = alternatives;
+        return this;
+    }
+
+    /**
+     * Set true to get instruction list
+     */
+    public BaatoNavigationRoute setInstructions(Boolean instructions) {
+        this.instructions = instructions;
         return this;
     }
 
@@ -69,6 +81,8 @@ public class BaatoNavigationRoute {
         this.points = points;
         return this;
     }
+
+
 
     /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
@@ -83,7 +97,7 @@ public class BaatoNavigationRoute {
 
     public void doRequest() {
         QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
-        queryAPI.getDirections(accessToken, points, mode, alternatives)
+        queryAPI.getDirections(giveQueryFilter())
                 .enqueue(new Callback<DirectionsAPIResponse>() {
                     @Override
                     public void onResponse(Call<DirectionsAPIResponse> call, Response<DirectionsAPIResponse> response) {
@@ -104,5 +118,25 @@ public class BaatoNavigationRoute {
                         baatoRouteRequestListener.onFailed(t);
                     }
                 });
+    }
+
+
+    private Map<String, String> giveQueryFilter() {
+        Map<String, String> queryMap = new HashMap<>();
+        //compulsory
+        if (accessToken != null)
+            queryMap.put("key", accessToken);
+        if (points != null)
+            queryMap.put("points[]", Arrays.toString(points));
+        if (mode != null)
+            queryMap.put("mode", mode);
+        if (alternatives != null)
+            queryMap.put("alternatives", alternatives + "");
+
+        //optional
+        if (instructions != null)
+            queryMap.put("instructions", instructions + "");
+
+        return queryMap;
     }
 }
