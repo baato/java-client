@@ -139,7 +139,6 @@ dependencies {
                 .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
-                        // success response here
                         Log.d(TAG, "onSuccess: routes" + directionResponse.toString());
                     }
 
