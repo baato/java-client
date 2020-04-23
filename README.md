@@ -102,8 +102,7 @@ dependencies {
                     }
 
                     @Override
-                    public void onFailed(Throwable error) {
-                     
+                    public void onFailed(Throwable error) { 
                     }
                 })
                 .doReverseGeoCode();
@@ -122,8 +121,7 @@ dependencies {
                     }
 
                     @Override
-                    public void onFailed(Throwable error) {
-                      
+                    public void onFailed(Throwable error) {          
                     }
                 })
                 .doAutoComplete();
@@ -146,8 +144,7 @@ dependencies {
                     }
 
                     @Override
-                    public void onFailed(Throwable error) {
-                     
+                    public void onFailed(Throwable error) {          
                     }
                 })
                 .doRequest();
