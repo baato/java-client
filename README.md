@@ -103,7 +103,7 @@ dependencies {
 
                     @Override
                     public void onFailed(Throwable error) {
-                        Log.d(TAG, "onFailed:reverse " + error.getMessage());
+                     
                     }
                 })
                 .doReverseGeoCode();
@@ -123,7 +123,7 @@ dependencies {
 
                     @Override
                     public void onFailed(Throwable error) {
-                        Log.d(TAG, "onFailed: autocomplete" + error.getMessage());
+                      
                     }
                 })
                 .doAutoComplete();
@@ -147,8 +147,7 @@ dependencies {
 
                     @Override
                     public void onFailed(Throwable error) {
-                        // failure response here
-                        Log.d(TAG, "onFailed:routes " + error.getMessage());
+                     
                     }
                 })
                 .doRequest();
@@ -156,7 +155,7 @@ dependencies {
 ```
 #### 5. To use turn by turn navigation:
 
- Get the directionResponse from step no 4 and follow the following steps:
+ Get the directionResponse from step no 4 and follow the below steps:
  
  ```
  NavResponse navResponse = directionResponse.getData().get(0);
@@ -167,6 +166,7 @@ dependencies {
 Now that you have your route, you can navigate using NavigationLauncher
 
 ```
+boolean simulateRoute=false;
 NavigationLauncherOptions options = NavigationLauncherOptions.builder()
         .directionsRoute(currentRoute)
         .shouldSimulateRoute(simulateRoute) // boolean value set true for simulation
