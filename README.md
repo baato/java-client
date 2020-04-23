@@ -140,9 +140,9 @@ dependencies {
                 .setInstructions(true) //optional parameter
                 .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
                     @Override
-                    public void onSuccess(DirectionsAPIResponse places) {
+                    public void onSuccess(DirectionsAPIResponse directionResponse) {
                         // success response here
-                        Log.d(TAG, "onSuccess: routes" + places.toString());
+                        Log.d(TAG, "onSuccess: routes" + directionResponse.toString());
                     }
 
                     @Override
@@ -157,7 +157,7 @@ dependencies {
 #### To use turn by turn navigation:
 
 ```
- NavResponse navResponse = response.body().getData().get(0);
+ NavResponse navResponse = directionResponse.getData().get(0);
  ObjectNode obj = NavigateResponseConverter.convertFromGHResponse(navResponse, Locale.ENGLISH, new DistanceConfig(DistanceUtils.Unit.METRIC, translationMap, navigateResponseConverterTranslationMap, Locale.ENGLISH));  
  DirectionsResponse directionsResponse = DirectionsResponse.fromJson(obj.toString());
  currentRoute = directionsResponse.routes().get(0);
