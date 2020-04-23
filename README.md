@@ -156,13 +156,22 @@ dependencies {
 ```
 #### 5. To use turn by turn navigation:
 
-```
  Get the directionResponse from step no 4 and follow the following steps:
  
+ ```
  NavResponse navResponse = directionResponse.getData().get(0);
  ObjectNode obj = NavigateResponseConverter.convertFromGHResponse(navResponse, Locale.ENGLISH, new  DistanceConfig(DistanceUtils.Unit.METRIC, translationMap, navigateResponseConverterTranslationMap, Locale.ENGLISH));  
  DirectionsResponse directionsResponse = DirectionsResponse.fromJson(obj.toString());
  currentRoute = directionsResponse.routes().get(0);
+```
+Now that you have your route, you can navigate using NavigationLauncher
+
+```
+NavigationLauncherOptions options = NavigationLauncherOptions.builder()
+        .directionsRoute(currentRoute)
+        .shouldSimulateRoute(simulateRoute)
+        .build();
+NavigationLauncher.startNavigation(NavigationLibraryIntegrationActivity.this, options);
 ```
 
 ## Built With
