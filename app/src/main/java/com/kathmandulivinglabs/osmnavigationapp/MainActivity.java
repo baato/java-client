@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onSuccess(DirectionsAPIResponse places) {
                         // success response here
                         Log.d(TAG, "onSuccess: routes" + places.toString());
+
 //                        Log.d(TAG, "onSuccess:routes 1 " + places.getData().get(0).getInstructionList().toString());
                     }
 

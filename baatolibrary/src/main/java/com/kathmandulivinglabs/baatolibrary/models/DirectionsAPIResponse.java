@@ -7,7 +7,7 @@ public class DirectionsAPIResponse {
     private String timestamp;
     private Integer status;
     private String message;
-    private List<Route> data;
+    private List<NavResponse> data;
 
     public String getTimestamp() {
         return timestamp;
@@ -33,11 +33,11 @@ public class DirectionsAPIResponse {
         this.message = message;
     }
 
-    public List<Route> getData() {
+    public List<NavResponse> getData() {
         return data;
     }
 
-    public void setData(List<Route> data) {
+    public void setData(List<NavResponse> data) {
         this.data = data;
     }
 
