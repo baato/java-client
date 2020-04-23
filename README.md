@@ -169,9 +169,9 @@ Now that you have your route, you can navigate using NavigationLauncher
 ```
 NavigationLauncherOptions options = NavigationLauncherOptions.builder()
         .directionsRoute(currentRoute)
-        .shouldSimulateRoute(simulateRoute)
+        .shouldSimulateRoute(simulateRoute) // boolean value set true for simulation
         .build();
-NavigationLauncher.startNavigation(NavigationLibraryIntegrationActivity.this, options);
+NavigationLauncher.startNavigation(YourActivity.this, options);
 ```
 
 ## Built With
