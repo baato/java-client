@@ -157,6 +157,7 @@ dependencies {
 #### To use turn by turn navigation:
 
 ```
+ NavResponse navResponse = response.body().getData().get(0);
  ObjectNode obj = NavigateResponseConverter.convertFromGHResponse(navResponse, Locale.ENGLISH, new DistanceConfig(DistanceUtils.Unit.METRIC, translationMap, navigateResponseConverterTranslationMap, Locale.ENGLISH));  
  DirectionsResponse directionsResponse = DirectionsResponse.fromJson(obj.toString());
  currentRoute = directionsResponse.routes().get(0);
