@@ -157,7 +157,7 @@ dependencies {
  NavResponse navResponse = directionResponse.getData().get(0);
  ObjectNode obj = NavigateResponseConverter.convertFromGHResponse(navResponse);
  DirectionsResponse directionsResponse = DirectionsResponse.fromJson(obj.toString());
- currentRoute = directionsResponse.routes().get(0);
+ DirectionsRoute currentRoute = directionsResponse.routes().get(0);
 ```
 Now that you have your route, you can navigate using NavigationLauncher
 
