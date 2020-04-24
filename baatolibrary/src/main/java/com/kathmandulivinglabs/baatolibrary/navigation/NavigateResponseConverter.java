@@ -19,11 +19,10 @@ package com.kathmandulivinglabs.baatolibrary.navigation;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-
+import android.text.TextUtils;
+import android.util.Log;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -34,6 +33,7 @@ import com.graphhopper.util.PointList;
 import com.graphhopper.util.RoundaboutInstruction;
 import com.graphhopper.util.TranslationMap;
 import com.kathmandulivinglabs.baatolibrary.models.NavResponse;
+//import com.mapbox.api.directions.v5.models.StepIntersection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,8 @@ import java.util.UUID;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
-public class NavigationResponseConverter {
+
+public class NavigateResponseConverter {
     private static class MapObj{
         private int start;
         private int end;
@@ -94,8 +95,9 @@ public class NavigationResponseConverter {
     private static NavResponse ghResponse = new NavResponse();
     private static List<List<Double>> allCord = new ArrayList<>();
     private static final TranslationMap trMap = new TranslationMap().doImport();
-    private static  final TranslationMap mtrMap = new ResponseConverterTranslationMap().doImport();
+    private static  final  TranslationMap mtrMap = new NavigateResponseConverterTranslationMap().doImport();
     private static String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+    private static String mode = "driving";
     private enum Profile {
         CAR,
         BIKE,
@@ -105,7 +107,7 @@ public class NavigationResponseConverter {
     /**
      * Converts a GHResponse into a json that follows the Mapbox API specification
      */
-    public static ObjectNode convertFromGHResponse(NavResponse ghResponsee, Locale locale, DistanceConfig distanceConfig) {
+    public static ObjectNode convertFromGHResponse(NavResponse ghResponsee, String type) {
         ObjectNode json = JsonNodeFactory.instance.objectNode();
         ghResponse = ghResponsee;
 
@@ -118,13 +120,26 @@ public class NavigationResponseConverter {
 
 
         final ArrayNode routesJson = json.putArray("routes");
+        switch (type){
+            case "car":
+                mode = "driving";
+            case "foot":
+                mode = "walking";
+            case "hike":
+                mode = "walking";
+            case "bike":
+                mode = "cycling";
+            default:
+                mode = "driving";
+        }
 
 //        List<PathWrapper> paths = ghResponse.getAll();
         List<List<Double>>  waypointsg = DecodeLine.decodePolyline(ghResponse.getEncoded_polyline(), false);
+        Log.d("waypoints:", String.valueOf(waypointsg));
         allCord = waypointsg;
         ObjectNode pathJson = routesJson.addObject();
         for (int i = 0; i < waypointsg.size(); i++) {routePoints.add(waypointsg.get(i).get(0), waypointsg.get(i).get(1));}
-        putRouteInformation(pathJson,0, locale, distanceConfig, routePoints);
+        putRouteInformation(pathJson,0, Locale.ENGLISH, new DistanceConfig(DistanceUtils.Unit.METRIC, trMap, mtrMap, Locale.ENGLISH), routePoints);
         final ArrayNode waypointsJson = json.putArray("waypoints");
         getWaypoints(waypointsJson, waypointsg, 0);
         getWaypoints(waypointsJson, waypointsg, ghResponsee.getInstructionList().size()-1);
@@ -186,7 +201,8 @@ public class NavigationResponseConverter {
         }
         ObjectNode routeObject =
                 pathJson.put("weight_name", "routability");
-        double weight = ghResponse.getTimeInMs()/100;
+
+        double weight = ghResponse.getRouteWeight();
         pathJson.put("weight", Helper.round(weight, 1));
         pathJson.put("duration", convertToSeconds(ghResponse.getTimeInMs()));
         pathJson.put("distance", Helper.round(ghResponse.getDistanceInMeters(), 1));
@@ -197,7 +213,7 @@ public class NavigationResponseConverter {
         ObjectNode json = JsonNodeFactory.instance.objectNode();
         json.put("baseUrl", "https://api.mapbox.com");
         json.put("user", "mapbox");
-        json.put("profile", "driving");
+        json.put("profile", mode);
         ArrayNode coordinates = json.putArray("coordinates");
         getCord(coordinates);
 //        json.put("coordinates",getCord(coordinates));
@@ -319,7 +335,7 @@ public class NavigationResponseConverter {
     }
     private static double returnIntersections(Instruction instruction){
         ObjectNode jsonObj = JsonNodeFactory.instance.objectNode();
-
+//        List<StepIntersection> stepIntersections = new ArrayList<>();
         ArrayNode intersection = jsonObj.putArray("intersections");
         ObjectNode intersections = intersection.addObject();
         MapObj mapObj = computeInterval(instruction);
@@ -484,7 +500,7 @@ public class NavigationResponseConverter {
         MapObj mapObj = computeInterval(instruction);
         return (mapObj.getEnd() - mapObj.getStart() -1)>0;
     }
-    private static void putVoiceInstructions(ArrayList<Instruction> instructions, double distance, int index, Locale locale, TranslationMap translationMap, TranslationMap ResponseConverterTranslationMap, ArrayNode voiceInstructions, DistanceConfig distanceConfig) {
+    private static void putVoiceInstructions(ArrayList<Instruction> instructions, double distance, int index, Locale locale, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap, ArrayNode voiceInstructions, DistanceConfig distanceConfig) {
         /*
             A VoiceInstruction Object looks like this
             {
@@ -496,7 +512,7 @@ public class NavigationResponseConverter {
 
         Instruction nextInstruction = instructions.get(index + 1);
         String turnDescription = nextInstruction.getTurnDescription(translationMap.getWithFallBack(locale));
-        String thenVoiceInstruction = getThenVoiceInstructionpart(instructions, index, locale, translationMap, ResponseConverterTranslationMap);
+        String thenVoiceInstruction = getThenVoiceInstructionpart(instructions, index, locale, translationMap, navigateResponseConverterTranslationMap);
         List<VoiceInstructionConfig.VoiceInstructionValue> voiceValues = distanceConfig.getVoiceInstructionsForDistance(distance, turnDescription, thenVoiceInstruction);
 
         for (VoiceInstructionConfig.VoiceInstructionValue voiceValue : voiceValues) {
@@ -552,13 +568,13 @@ public class NavigationResponseConverter {
      * <p>
      * For instruction i+1 distance > VOICE_INSTRUCTION_MERGE_TRESHHOLD an empty String will be returned
      */
-    private static String getThenVoiceInstructionpart(ArrayList<Instruction> instructions, int index, Locale locale, TranslationMap translationMap, TranslationMap ResponseConverterTranslationMap) {
+    private static String getThenVoiceInstructionpart(ArrayList<Instruction> instructions, int index, Locale locale, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap) {
         if (instructions.size() > index + 2) {
             Instruction firstInstruction = instructions.get(index + 1);
             if (firstInstruction.getDistance() < VOICE_INSTRUCTION_MERGE_TRESHHOLD) {
                 Instruction secondInstruction = instructions.get(index + 2);
                 if (secondInstruction.getSign() != Instruction.REACHED_VIA)
-                    return ", " + ResponseConverterTranslationMap.getWithFallBack(locale).tr("then") + " " + secondInstruction.getTurnDescription(translationMap.getWithFallBack(locale));
+                    return ", " + navigateResponseConverterTranslationMap.getWithFallBack(locale).tr("then") + " " + secondInstruction.getTurnDescription(translationMap.getWithFallBack(locale));
             }
         }
 
@@ -669,8 +685,8 @@ public class NavigationResponseConverter {
         // exit number
         if (instruction instanceof RoundaboutInstruction)
             maneuver.put("exit", ((RoundaboutInstruction) instruction).getExitNumber());
-        final TranslationMap ResponseConverterTranslationMap = new ResponseConverterTranslationMap().doImport();
-        maneuver.put("instruction", instruction.getTurnDescription(ResponseConverterTranslationMap.get("en_US")));
+        final TranslationMap navigateResponseConverterTranslationMap = new NavigateResponseConverterTranslationMap().doImport();
+        maneuver.put("instruction", instruction.getTurnDescription(navigateResponseConverterTranslationMap.get("en_US")));
 
     }
 

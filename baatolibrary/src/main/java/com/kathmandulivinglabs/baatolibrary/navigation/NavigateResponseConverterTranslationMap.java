@@ -11,9 +11,9 @@ import static com.graphhopper.util.Helper.getLocale;
  *
  * @author Robin Boldt
  */
-public class ResponseConverterTranslationMap extends TranslationMap {
+public class NavigateResponseConverterTranslationMap extends TranslationMap {
 
-    public ResponseConverterTranslationMap() {
+    public NavigateResponseConverterTranslationMap() {
         super();
     }
 

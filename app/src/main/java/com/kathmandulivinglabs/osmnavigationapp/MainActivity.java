@@ -10,6 +10,7 @@ import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.Geocode;
 import com.kathmandulivinglabs.baatolibrary.models.Geometry;
 
+import com.kathmandulivinglabs.baatolibrary.models.NavResponse;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoAutoComplete;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoNavigationRoute;
@@ -46,11 +47,9 @@ public class MainActivity extends AppCompatActivity {
                 .setInstructions(true)
                 .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
                     @Override
-                    public void onSuccess(DirectionsAPIResponse places) {
+                    public void onSuccess(DirectionsAPIResponse directionResponse) {
                         // success response here
-                        Log.d(TAG, "onSuccess: routes" + places.toString());
-
-//                        Log.d(TAG, "onSuccess:routes 1 " + places.getData().get(0).getInstructionList().toString());
+                        Log.d(TAG, "onSuccess: routes" + directionResponse.toString());
                     }
 
                     @Override
