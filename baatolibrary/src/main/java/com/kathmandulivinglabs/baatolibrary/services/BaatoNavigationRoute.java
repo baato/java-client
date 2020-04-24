@@ -4,9 +4,11 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kathmandulivinglabs.baatolibrary.application.App;
 import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 
+import com.kathmandulivinglabs.baatolibrary.navigation.NavigateResponseConverter;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
 
 import java.io.IOException;
@@ -115,5 +117,10 @@ public class BaatoNavigationRoute {
                         baatoRouteRequestListener.onFailed(t);
                     }
                 });
+
+    }
+
+    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode){
+        return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0),mode).toString();
     }
 }
