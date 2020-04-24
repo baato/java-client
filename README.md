@@ -160,7 +160,17 @@ dependencies {
 ```
 #### 6. Baato Navigation SDK
 
-Now that you have your route, you can navigate using NavigationLauncher. Follow the [Baato Navigation SDK](https://github.com/baato/navigation-sdk) for details.
+Now that you have your route, you can navigate using NavigationLauncher which requires the baato navigation sdk.
+Add the baato navigation sdk to build.gradle in your android project
+
+```
+// baato navigation SDK
+dependencies {
+  implementation 'com.github.baato.navigation-sdk:baato-navigation-android:${latest-version}'
+  implementation 'com.github.baato.navigation-sdk:baato-navigation-android-ui:${latest-version}'
+}
+```
+You can now launch the navigation UI and navigate through your app. 
 
 ```
 boolean simulateRoute=false;
@@ -170,6 +180,7 @@ NavigationLauncherOptions options = NavigationLauncherOptions.builder()
         .build();
 NavigationLauncher.startNavigation(YourActivity.this, options);
 ```
+Follow the [Baato Navigation SDK](https://github.com/baato/navigation-sdk) for details and latest version.
 
 ## Built With
 
