@@ -102,8 +102,7 @@ dependencies {
                     }
 
                     @Override
-                    public void onFailed(Throwable error) {
-                        Log.d(TAG, "onFailed:reverse " + error.getMessage());
+                    public void onFailed(Throwable error) { 
                     }
                 })
                 .doReverseGeoCode();
@@ -122,8 +121,7 @@ dependencies {
                     }
 
                     @Override
-                    public void onFailed(Throwable error) {
-                        Log.d(TAG, "onFailed: autocomplete" + error.getMessage());
+                    public void onFailed(Throwable error) {          
                     }
                 })
                 .doAutoComplete();
@@ -140,22 +138,40 @@ dependencies {
                 .setInstructions(true) //optional parameter
                 .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
                     @Override
-                    public void onSuccess(DirectionsAPIResponse places) {
-                        // success response here
-                        Log.d(TAG, "onSuccess: routes" + places.toString());
+                    public void onSuccess(DirectionsAPIResponse directionResponse) {
+                        Log.d(TAG, "onSuccess: routes" + directionResponse.toString());
                     }
 
                     @Override
-                    public void onFailed(Throwable error) {
-                        // failure response here
-                        Log.d(TAG, "onFailed:routes " + error.getMessage());
+                    public void onFailed(Throwable error) {          
                     }
                 })
                 .doRequest();
     }
+```
+#### 5. To use turn by turn navigation:
+
+ Get the directionResponse from step no 4 and follow the below steps:
+ 
+ ```
+ NavResponse navResponse = directionResponse.getData().get(0);
+ ObjectNode obj = NavigateResponseConverter.convertFromGHResponse(navResponse, Locale.ENGLISH, new  DistanceConfig(DistanceUtils.Unit.METRIC, translationMap, navigateResponseConverterTranslationMap, Locale.ENGLISH));  
+ DirectionsResponse directionsResponse = DirectionsResponse.fromJson(obj.toString());
+ currentRoute = directionsResponse.routes().get(0);
+```
+Now that you have your route, you can navigate using NavigationLauncher
+
+```
+boolean simulateRoute=false;
+NavigationLauncherOptions options = NavigationLauncherOptions.builder()
+        .directionsRoute(currentRoute)
+        .shouldSimulateRoute(simulateRoute) // boolean value set true for simulation
+        .build();
+NavigationLauncher.startNavigation(YourActivity.this, options);
 ```
 
 ## Built With
 
 * [Retrofit](https://github.com/square/retrofit) - Used to handle API requests
 * [Maven](https://maven.apache.org/) - Dependency Management
+* [Graphhopper](https://github.com/graphhopper/graphhopper) - Used to Handle navigation API response
