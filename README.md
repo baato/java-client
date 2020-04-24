@@ -171,6 +171,8 @@ dependencies {
   implementation 'com.github.baato.navigation-sdk:baato-navigation-android-ui:${latest-version}'
 }
 ```
+**Note:** Follow [Baato Navigation SDK](https://github.com/baato/navigation-sdk) for latest version and other details.
+
 You can now launch the navigation UI and navigate through your app. 
 
 ```
