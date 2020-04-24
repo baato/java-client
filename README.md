@@ -158,7 +158,9 @@ dependencies {
  DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
  DirectionsRoute currentRoute = directionsResponse.routes().get(0);
 ```
-Now that you have your route, you can navigate using NavigationLauncher
+#### 6. Baato Navigation SDK
+
+Now that you have your route, you can navigate using NavigationLauncher. Follow the [Baato Navigation SDK](https://github.com/baato/navigation-sdk) for details.
 
 ```
 boolean simulateRoute=false;
