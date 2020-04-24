@@ -160,7 +160,7 @@ dependencies {
 ```
 #### 6. Baato Navigation SDK
 
-Now that you have your route, you can use the [Baato Navigation SDK](https://github.com/baato/navigation-sdk)
+Now that you have your route, you can use the [Baato Navigation SDK](https://github.com/baato/navigation-sdk) for navigation.
 
 Add the following dependencies to build.gradle in your android project
 
