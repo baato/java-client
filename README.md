@@ -155,7 +155,7 @@ dependencies {
  
  ```
  NavResponse navResponse = directionResponse.getData().get(0);
- ObjectNode obj = NavigateResponseConverter.convertFromGHResponse(navResponse, Locale.ENGLISH, new  DistanceConfig(DistanceUtils.Unit.METRIC, translationMap, navigateResponseConverterTranslationMap, Locale.ENGLISH));  
+ ObjectNode obj = NavigateResponseConverter.convertFromGHResponse(navResponse);
  DirectionsResponse directionsResponse = DirectionsResponse.fromJson(obj.toString());
  currentRoute = directionsResponse.routes().get(0);
 ```
