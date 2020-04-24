@@ -5,13 +5,11 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.kathmandulivinglabs.baatolibrary.application.App;
-import com.kathmandulivinglabs.baatolibrary.models.Place;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;

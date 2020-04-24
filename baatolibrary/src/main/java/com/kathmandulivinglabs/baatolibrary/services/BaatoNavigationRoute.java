@@ -4,25 +4,12 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.graphhopper.util.TranslationMap;
 import com.kathmandulivinglabs.baatolibrary.application.App;
 import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.models.NavResponse;
-import com.kathmandulivinglabs.baatolibrary.models.Place;
-import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.navigation.DistanceConfig;
-import com.kathmandulivinglabs.baatolibrary.navigation.DistanceUtils;
-import com.kathmandulivinglabs.baatolibrary.navigation.NavigationResponseConverter;
-import com.kathmandulivinglabs.baatolibrary.navigation.ResponseConverterTranslationMap;
+
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,8 +22,7 @@ public class BaatoNavigationRoute {
     private String[] points;
     private Boolean alternatives;
     private Boolean instructions;
-    private TranslationMap translationMap;
-    private static final TranslationMap responseConverterTranslationMap = new ResponseConverterTranslationMap().doImport();
+
 
     public interface BaatoRouteRequestListener {
         /**
