@@ -151,7 +151,7 @@ dependencies {
 ```
 #### 5. To use turn by turn navigation:
 
- Get the directionResponse from step no 4 and follow the below steps:
+ Get the currentRoute from step no 4 and follow the below steps:
  
  ```
  String parsedNavigationResponse = BaatoNavigationRoute.getParsedNavResponse(directionResponse, navigationMode);
@@ -160,9 +160,9 @@ dependencies {
 ```
 #### 6. Baato Navigation SDK
 
-Now that you have your route, you can navigate using NavigationLauncher which requires the [Baato Navigation SDK](https://github.com/baato/navigation-sdk)
+Now that you have your route, you can use the [Baato Navigation SDK](https://github.com/baato/navigation-sdk)
 
-Add the baato navigation sdk to build.gradle in your android project
+Add the following dependencies to build.gradle in your android project
 
 ```
 // baato navigation SDK
@@ -171,8 +171,6 @@ dependencies {
   implementation 'com.github.baato.navigation-sdk:baato-navigation-android-ui:${latest-version}'
 }
 ```
-**Note:** Follow [Baato Navigation SDK](https://github.com/baato/navigation-sdk) for latest version and other details.
-
 You can now launch the navigation UI and navigate through your app. 
 
 ```
