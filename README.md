@@ -154,9 +154,8 @@ dependencies {
  Get the directionResponse from step no 4 and follow the below steps:
  
  ```
- NavResponse navResponse = directionResponse.getData().get(0);
- ObjectNode obj = NavigateResponseConverter.convertFromGHResponse(navResponse);
- DirectionsResponse directionsResponse = DirectionsResponse.fromJson(obj.toString());
+ String parsedNavigationResponse = BaatoNavigationRoute.getParsedNavResponse(directionResponse, navigationMode);
+ DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
  DirectionsRoute currentRoute = directionsResponse.routes().get(0);
 ```
 Now that you have your route, you can navigate using NavigationLauncher
