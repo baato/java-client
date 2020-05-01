@@ -60,7 +60,7 @@ dependencies {
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">178.128.59.143</domain>
+        <domain includeSubdomains="true">baato.io</domain>
     </domain-config>
 </network-security-config>
 ```
