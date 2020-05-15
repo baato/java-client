@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.kathmandulivinglabs.baatolibrary.application.App;
+import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
 
@@ -21,7 +22,7 @@ public class BaatoSearch {
     private BaatoSearchRequestListener baatoSearchRequestListener;
     private String accessToken, query;
     private String type;
-    private int radius = 0, limit = 0, placeId = 0;
+    private int radius = 0, limit = 0;
     private double lat = 0.00, lon = 0.00;
 
     public interface BaatoSearchRequestListener {
@@ -54,13 +55,6 @@ public class BaatoSearch {
         return this;
     }
 
-    /**
-     * Set the placeId.
-     */
-    public BaatoSearch setPlaceId(@NonNull int placeId) {
-        this.placeId = placeId;
-        return this;
-    }
 
     /**
      * Set the radius to search.
@@ -136,8 +130,7 @@ public class BaatoSearch {
             queryMap.put("key", accessToken);
         if (query != null)
             queryMap.put("q", query);
-        if (placeId != 0)
-            queryMap.put("placeId", placeId + "");
+
 
         //optionals
         if (type != null)

@@ -8,8 +8,11 @@ import androidx.annotation.NonNull;
 import com.kathmandulivinglabs.baatolibrary.application.App;
 import com.kathmandulivinglabs.baatolibrary.models.Geocode;
 
-import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,7 +32,7 @@ public class BaatoReverseGeoCode {
          * onSuccess method called after it is successful
          * onFailed method called if it can't search places
          */
-        void onSuccess(SearchAPIResponse places);
+        void onSuccess(PlaceAPIResponse places);
 
         void onFailed(Throwable error);
     }
@@ -75,9 +78,9 @@ public class BaatoReverseGeoCode {
 
     public void doReverseGeoCode() {
         QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
-        queryAPI.performReverseGeoCode(accessToken, geocode.lat, geocode.lon).enqueue(new Callback<SearchAPIResponse>() {
+        queryAPI.performReverseGeoCode(giveMeQueryFilter()).enqueue(new Callback<PlaceAPIResponse>() {
             @Override
-            public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {
+            public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
                     baatoSearchRequestListener.onSuccess(response.body());
                 else {
@@ -91,9 +94,26 @@ public class BaatoReverseGeoCode {
             }
 
             @Override
-            public void onFailure(Call<SearchAPIResponse> call, Throwable throwable) {
+            public void onFailure(Call<PlaceAPIResponse> call, Throwable throwable) {
                 baatoSearchRequestListener.onFailed(throwable);
             }
         });
+    }
+
+    private Map<String, String> giveMeQueryFilter() {
+        Map<String, String> queryMap = new HashMap<>();
+        //compulsory
+        if (accessToken != null)
+            queryMap.put("key", accessToken);
+        if (geocode.lat != 0.00)
+            queryMap.put("lat", geocode.lat + "");
+        if (geocode.lon != 0.00)
+            queryMap.put("lon", geocode.lon + "");
+
+        //optional
+        if (radius != 0)
+            queryMap.put("radius", radius + "");
+
+        return queryMap;
     }
 }

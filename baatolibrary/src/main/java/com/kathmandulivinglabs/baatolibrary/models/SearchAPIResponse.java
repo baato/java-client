@@ -7,7 +7,7 @@ public class SearchAPIResponse {
     private String timestamp;
     private Integer status;
     private String message;
-    private List<Place> data;
+    private List<SearchDataModel> data;
 
     public String getTimestamp() {
         return timestamp;
@@ -33,11 +33,11 @@ public class SearchAPIResponse {
         this.message = message;
     }
 
-    public List<Place> getData() {
+    public List<SearchDataModel> getData() {
         return data;
     }
 
-    public void setData(List<Place> data) {
+    public void setData(List<SearchDataModel> data) {
         this.data = data;
     }
 

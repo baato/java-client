@@ -5,12 +5,12 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.Geocode;
 import com.kathmandulivinglabs.baatolibrary.models.Geometry;
 
-import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoPlaces;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoNavigationRoute;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoReverseGeoCode;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         ToasterMessage.s(this, "Hello Good Morning");
         Geometry geometry = BaatoUtil.getGeoJsonFromEncodedPolyLine(encoded);
 
-        performRouting();
+//        performRouting();
         performReverseGeoCoding();
         performSearch();
         performAutoComplete();
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAccessToken(Constants.TOKEN)
                 .withListener(new BaatoReverseGeoCode.BaatoReverseGeoCodeRequestListener() {
                     @Override
-                    public void onSuccess(SearchAPIResponse places) {
+                    public void onSuccess(PlaceAPIResponse places) {
                         // success response here
                         Log.d(TAG, "onSuccess: reverse " + places.toString());
                     }
@@ -83,11 +83,10 @@ public class MainActivity extends AppCompatActivity {
     private void performAutoComplete() {
         new BaatoPlaces(this)
                 .setAccessToken(Constants.TOKEN)
-                .setQuery("Budhanilkantha")
-                .setLimit(2)
+                .setPlaceId(101499)
                 .withListener(new BaatoPlaces.BaatoPlacesListener() {
                     @Override
-                    public void onSuccess(AutoCompleteAPIResponse places) {
+                    public void onSuccess(PlaceAPIResponse places) {
                         //success response here
                         Log.d(TAG, "onSuccess: autocomplete" + places.toString());
                     }
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "onFailed: autocomplete" + error.getMessage());
                     }
                 })
-                .doAutoComplete();
+                .getPlaces();
     }
 
     private void performSearch() {

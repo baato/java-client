@@ -1,6 +1,5 @@
 package com.kathmandulivinglabs.baatolibrary.models;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Place {

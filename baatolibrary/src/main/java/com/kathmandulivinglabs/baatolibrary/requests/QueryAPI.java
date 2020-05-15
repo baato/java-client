@@ -1,8 +1,8 @@
 package com.kathmandulivinglabs.baatolibrary.requests;
 
-import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 
 import java.util.Map;
 
@@ -19,9 +19,9 @@ public interface QueryAPI {
     Call<SearchAPIResponse> searchQuery(@QueryMap Map<String, String> filters);
 
     @GET("reverse")
-    Call<SearchAPIResponse> performReverseGeoCode(@Query("key") String key, @Query("lat") double lat, @Query("lon") double lon);
+    Call<PlaceAPIResponse> performReverseGeoCode(@QueryMap Map<String, String> filter);
 
-    @GET("autocomplete")
-    Call<AutoCompleteAPIResponse> performAutoComplete(@QueryMap Map<String, String> filter);
+    @GET("places")
+    Call<PlaceAPIResponse> performPlacesQuery(@QueryMap Map<String, String> filter);
 
 }

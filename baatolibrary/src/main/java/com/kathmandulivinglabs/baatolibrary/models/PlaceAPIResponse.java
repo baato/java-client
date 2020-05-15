@@ -2,12 +2,12 @@ package com.kathmandulivinglabs.baatolibrary.models;
 
 import java.util.List;
 
-public class AutoCompleteAPIResponse {
+public class PlaceAPIResponse {
 
     private String timestamp;
     private Integer status;
     private String message;
-    private List<AutoCompleteDataModel> data;
+    private List<Place> data;
 
     public String getTimestamp() {
         return timestamp;
@@ -33,17 +33,17 @@ public class AutoCompleteAPIResponse {
         this.message = message;
     }
 
-    public List<AutoCompleteDataModel> getData() {
+    public List<Place> getData() {
         return data;
     }
 
-    public void setData(List<AutoCompleteDataModel> data) {
+    public void setData(List<Place> data) {
         this.data = data;
     }
 
     @Override
     public String toString() {
-        return "AutoCompleteAPIResponse{" +
+        return "PlaceAPIResponse{" +
                 "timestamp='" + timestamp + '\'' +
                 ", status=" + status +
                 ", message='" + message + '\'' +

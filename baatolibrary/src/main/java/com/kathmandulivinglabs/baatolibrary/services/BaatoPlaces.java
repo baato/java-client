@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.kathmandulivinglabs.baatolibrary.application.App;
-import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
+import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
 
 import java.io.IOException;
@@ -19,17 +19,16 @@ import retrofit2.Response;
 public class BaatoPlaces {
 
     private Context context;
-    private String accessToken, query;
+    private String accessToken;
     private BaatoPlacesListener baatoPlacesListener;
-    private int radius = 0, limit = 0;
-    private double lat = 0.00, lon = 0.00;
+    private int placeId = 0;
 
     public interface BaatoPlacesListener {
         /**
          * onSuccess method called after it is successful
          * onFailed method called if it can't places
          */
-        void onSuccess(AutoCompleteAPIResponse places);
+        void onSuccess(PlaceAPIResponse places);
 
         void onFailed(Throwable error);
     }
@@ -47,54 +46,29 @@ public class BaatoPlaces {
     }
 
     /**
-     * Set the query to search.
+     * Set the placeId.
      */
-    public BaatoPlaces setQuery(@NonNull String query) {
-        this.query = query;
-        return this;
-    }
-
-    /**
-     * Set the radius to search.
-     */
-    public BaatoPlaces setRadius(@NonNull int radius) {
-        this.radius = radius;
-        return this;
-    }
-
-    /**
-     * Set the limit to search.
-     */
-    public BaatoPlaces setLimit(@NonNull int limit) {
-        this.limit = limit;
-        return this;
-    }
-
-    /**
-     * Set the lat and long value.
-     */
-    public BaatoPlaces setLatLong(@NonNull double lat, double lon) {
-        this.lat = lat;
-        this.lon = lon;
+    public BaatoPlaces setPlaceId(@NonNull int placeId) {
+        this.placeId = placeId;
         return this;
     }
 
     /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
-     * @param baatoAutoCompleteListener the listener to be notified
+     * @param baatoPlacesListener the listener to be notified
      * @return this
      */
-    public BaatoPlaces withListener(BaatoPlacesListener baatoAutoCompleteListener) {
-        this.baatoPlacesListener = baatoAutoCompleteListener;
+    public BaatoPlaces withListener(BaatoPlacesListener baatoPlacesListener) {
+        this.baatoPlacesListener = baatoPlacesListener;
         return this;
     }
 
-    public void doAutoComplete() {
+    public void getPlaces() {
         QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
-        queryAPI.performAutoComplete(giveMeQueryFilter()).enqueue(new Callback<AutoCompleteAPIResponse>() {
+        queryAPI.performPlacesQuery(giveMeQueryFilter()).enqueue(new Callback<PlaceAPIResponse>() {
             @Override
-            public void onResponse(Call<AutoCompleteAPIResponse> call, Response<AutoCompleteAPIResponse> response) {
+            public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
                     baatoPlacesListener.onSuccess(response.body());
                 else {
@@ -107,7 +81,7 @@ public class BaatoPlaces {
             }
 
             @Override
-            public void onFailure(Call<AutoCompleteAPIResponse> call, Throwable throwable) {
+            public void onFailure(Call<PlaceAPIResponse> call, Throwable throwable) {
                 baatoPlacesListener.onFailed(throwable);
             }
         });
@@ -118,18 +92,9 @@ public class BaatoPlaces {
         //compulsory ones
         if (accessToken != null)
             queryMap.put("key", accessToken);
-        if (query != null)
-            queryMap.put("q", query);
+        if (placeId != 0)
+            queryMap.put("placeId", placeId + "");
 
-        //optionals
-        if (radius != 0)
-            queryMap.put("radius", radius + "");
-        if (limit != 0)
-            queryMap.put("limit", limit + "");
-        if (lat != 0.00)
-            queryMap.put("lat", lat + "");
-        if (lon != 0.00)
-            queryMap.put("lon", lon + "");
         return queryMap;
     }
 }
