@@ -8,7 +8,7 @@ The Java library makes it easy to consume the Baato API into existing native and
 
 * Search
 * Reverse Geocoding
-* Autocomplete
+* Places
 * Directions
 
 ### Getting Started
@@ -74,20 +74,20 @@ dependencies {
           .setAccessToken(YOUR_ACCESS_KEY)
           .setQuery(query)
           .setType("hospital") //optional parameter
-          .withListener(new BaatoSearch.BaatoSearchRequestListener() {
-              @Override
-              public void onSuccess(SearchAPIResponse places) {
-                  // get the list of search results here
-                  Log.d(TAG, "onSuccess:search " + places.toString());
-              }
+           .withListener(new BaatoSearch.BaatoSearchRequestListener() {
+               @Override
+               public void onSuccess(SearchAPIResponse places) {
+                   // get the list of search results here
+                   Log.d(TAG, "onSuccess:search " + places.toString());
+               }
 
-              @Override
-              public void onFailed(Throwable error) {
-                  // get the error messages here
-                  Log.d(TAG, "onFailed:search " + error.getMessage());
-              }
-          })
-          .doSearch();
+               @Override
+               public void onFailed(Throwable error) {
+                   // get the error messages here
+                   Log.d(TAG, "onFailed:search " + error.getMessage());
+               }
+           })
+           .doSearch();
 ```
  #### 2. Reverse GeoCode
  
@@ -97,34 +97,39 @@ dependencies {
                 .setAccessToken(YOUR_ACCESS_KEY)
                 .withListener(new BaatoReverseGeoCode.BaatoReverseGeoCodeRequestListener() {
                     @Override
-                    public void onSuccess(SearchAPIResponse places) {
+                    public void onSuccess(PlaceAPIResponse places) {
+                        // success response here
                         Log.d(TAG, "onSuccess: reverse " + places.toString());
                     }
 
                     @Override
-                    public void onFailed(Throwable error) { 
+                    public void onFailed(Throwable error) {
+                        // failure response here
+                        Log.d(TAG, "onFailed:reverse " + error.getMessage());
                     }
                 })
                 .doReverseGeoCode();
 ```
-#### 3. Autocomplete
+#### 3. Places
  
  ```
-  new BaatoAutoComplete(this)
+ new BaatoPlaces(this)
                 .setAccessToken(YOUR_ACCESS_KEY)
-                .setQuery(query)
-                .setLimit(5) //optional parameter
-                .withListener(new BaatoAutoComplete.BaatoAutoCompleteListener() {
+                .setPlaceId(placeId)
+                .withListener(new BaatoPlaces.BaatoPlacesListener() {
                     @Override
-                    public void onSuccess(AutoCompleteAPIResponse places) {
-                        Log.d(TAG, "onSuccess: autocomplete" + places.toString());
+                    public void onSuccess(PlaceAPIResponse places) {
+                        //success response here
+                        Log.d(TAG, "onSuccess: places" + places.toString());
                     }
 
                     @Override
-                    public void onFailed(Throwable error) {          
+                    public void onFailed(Throwable error) {
+                        //failure response here
+                        Log.d(TAG, "onFailed: places" + error.getMessage());
                     }
                 })
-                .doAutoComplete();
+                .doRequest();
 ```
 #### 4. Directions
  
