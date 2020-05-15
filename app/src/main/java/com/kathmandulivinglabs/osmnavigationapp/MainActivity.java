@@ -30,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
         ToasterMessage.s(this, "Hello Good Morning");
         Geometry geometry = BaatoUtil.getGeoJsonFromEncodedPolyLine(encoded);
 
-//        performRouting();
+        performRouting();
         performReverseGeoCoding();
         performSearch();
-        performAutoComplete();
+        getPlaces();
     }
 
     private void performRouting() {
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 .doReverseGeoCode();
     }
 
-    private void performAutoComplete() {
+    private void getPlaces() {
         new BaatoPlaces(this)
                 .setAccessToken(Constants.TOKEN)
                 .setPlaceId(101499)
@@ -88,16 +88,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {
                         //success response here
-                        Log.d(TAG, "onSuccess: autocomplete" + places.toString());
+                        Log.d(TAG, "onSuccess: places" + places.toString());
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
                         //failure response here
-                        Log.d(TAG, "onFailed: autocomplete" + error.getMessage());
+                        Log.d(TAG, "onFailed: places" + error.getMessage());
                     }
                 })
-                .getPlaces();
+                .doRequest();
     }
 
     private void performSearch() {

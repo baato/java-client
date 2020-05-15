@@ -64,7 +64,7 @@ public class BaatoPlaces {
         return this;
     }
 
-    public void getPlaces() {
+    public void doRequest() {
         QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
         queryAPI.performPlacesQuery(giveMeQueryFilter()).enqueue(new Callback<PlaceAPIResponse>() {
             @Override
