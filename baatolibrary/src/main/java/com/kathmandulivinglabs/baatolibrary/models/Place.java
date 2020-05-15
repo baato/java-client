@@ -1,53 +1,41 @@
 package com.kathmandulivinglabs.baatolibrary.models;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Place {
-    private Long placeId;
-    private String osmType;
-    private String address;
-    private String classification;
-    private String type;
-    private Integer searchRank;
-    private Integer addressRank;
-    private Geocode centroid;
     private String license;
-    private List<String> tags;
-    private String country;
+
+    private String score;
+
+    private String address;
+
+    private Geocode centroid;
+
+    private String placeId;
+
     private String name;
 
-    @Override
-    public String toString() {
-        return "Place{" +
-                "placeId=" + placeId +
-                ", osmType='" + osmType + '\'' +
-                ", address='" + address + '\'' +
-                ", classification='" + classification + '\'' +
-                ", type='" + type + '\'' +
-                ", searchRank=" + searchRank +
-                ", addressRank=" + addressRank +
-                ", centroid=" + centroid.toString() +
-                ", license='" + license + '\'' +
-                ", tags=" + tags +
-                ", country='" + country + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+    private Geometry geometry;
+
+    private String type;
+
+    private List<String> tags;
+
+    public String getLicense() {
+        return license;
     }
 
-    public Long getPlaceId() {
-        return placeId;
+    public void setLicense(String license) {
+        this.license = license;
     }
 
-    public void setPlaceId(Long placeId) {
-        this.placeId = placeId;
+    public String getScore() {
+        return score;
     }
 
-    public String getOsmType() {
-        return osmType;
-    }
-
-    public void setOsmType(String osmType) {
-        this.osmType = osmType;
+    public void setScore(String score) {
+        this.score = score;
     }
 
     public String getAddress() {
@@ -58,12 +46,36 @@ public class Place {
         this.address = address;
     }
 
-    public String getClassification() {
-        return classification;
+    public Geocode getCentroid() {
+        return centroid;
     }
 
-    public void setClassification(String classification) {
-        this.classification = classification;
+    public void setCentroid(Geocode centroid) {
+        this.centroid = centroid;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
     }
 
     public String getType() {
@@ -74,30 +86,6 @@ public class Place {
         this.type = type;
     }
 
-    public Integer getSearchRank() {
-        return searchRank;
-    }
-
-    public void setSearchRank(Integer searchRank) {
-        this.searchRank = searchRank;
-    }
-
-    public Integer getAddressRank() {
-        return addressRank;
-    }
-
-    public void setAddressRank(Integer addressRank) {
-        this.addressRank = addressRank;
-    }
-
-    public Geocode getCentroid() {
-        return centroid;
-    }
-
-    public void setCentroid(Geocode centroid) {
-        this.centroid = centroid;
-    }
-
     public List<String> getTags() {
         return tags;
     }
@@ -106,19 +94,18 @@ public class Place {
         this.tags = tags;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public String toString() {
+        return "Place{" +
+                "license='" + license + '\'' +
+                ", score='" + score + '\'' +
+                ", address='" + address + '\'' +
+                ", centroid=" + centroid +
+                ", placeId='" + placeId + '\'' +
+                ", name='" + name + '\'' +
+                ", geometry=" + geometry +
+                ", type='" + type + '\'' +
+                ", tags=" + tags +
+                '}';
     }
 }

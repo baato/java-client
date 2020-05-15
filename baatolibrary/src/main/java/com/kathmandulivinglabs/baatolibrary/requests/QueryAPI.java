@@ -2,10 +2,8 @@ package com.kathmandulivinglabs.baatolibrary.requests;
 
 import com.kathmandulivinglabs.baatolibrary.models.AutoCompleteAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.models.Place;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;

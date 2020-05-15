@@ -10,9 +10,8 @@ import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.Geocode;
 import com.kathmandulivinglabs.baatolibrary.models.Geometry;
 
-import com.kathmandulivinglabs.baatolibrary.models.NavResponse;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoAutoComplete;
+import com.kathmandulivinglabs.baatolibrary.services.BaatoPlaces;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoNavigationRoute;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoReverseGeoCode;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoSearch;
@@ -82,11 +81,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void performAutoComplete() {
-        new BaatoAutoComplete(this)
+        new BaatoPlaces(this)
                 .setAccessToken(Constants.TOKEN)
                 .setQuery("Budhanilkantha")
                 .setLimit(2)
-                .withListener(new BaatoAutoComplete.BaatoAutoCompleteListener() {
+                .withListener(new BaatoPlaces.BaatoPlacesListener() {
                     @Override
                     public void onSuccess(AutoCompleteAPIResponse places) {
                         //success response here
