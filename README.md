@@ -71,7 +71,7 @@ dependencies {
  
 ```
  new BaatoSearch(this)
-           .setAccessToken(YOUR_ACCESS_KEY)
+          .setAccessToken(YOUR_ACCESS_KEY)
           .setQuery(query)
           .setType("hospital") //optional parameter
            .withListener(new BaatoSearch.BaatoSearchRequestListener() {
@@ -129,7 +129,7 @@ dependencies {
                         Log.d(TAG, "onFailed: places" + error.getMessage());
                     }
                 })
-                .getPlaces();
+                .doRequest();
 ```
 #### 4. Directions
  
