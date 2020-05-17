@@ -7,13 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.models.Geocode;
+import com.kathmandulivinglabs.baatolibrary.models.LatLon;
 import com.kathmandulivinglabs.baatolibrary.models.Geometry;
 
 import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoPlaces;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoNavigationRoute;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoReverseGeoCode;
+import com.kathmandulivinglabs.baatolibrary.services.BaatoPlace;
+import com.kathmandulivinglabs.baatolibrary.services.BaatoRouting;
+import com.kathmandulivinglabs.baatolibrary.services.BaatoReverse;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoSearch;
 import com.kathmandulivinglabs.baatolibrary.services.ToasterMessage;
 import com.kathmandulivinglabs.baatolibrary.utilities.BaatoUtil;
@@ -38,13 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void performRouting() {
         String points[] = new String[]{"27.73405,85.33685", "27.7177,85.3278"};
-        new BaatoNavigationRoute(this)
+        new BaatoRouting(this)
                 .setPoints(points)
                 .setAccessToken(Constants.TOKEN)
                 .setMode("foot")
                 .setAlternatives(false)
                 .setInstructions(true)
-                .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
+                .withListener(new BaatoRouting.BaatoRoutingRequestListener() {
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
                         // success response here
@@ -61,10 +61,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void performReverseGeoCoding() {
-        new BaatoReverseGeoCode(this)
-                .setGeoCode(new Geocode(27.73405, 85.33685))
+        new BaatoReverse(this)
+                .setLatLon(new LatLon(27.73405, 85.33685))
+                .setAPIVersion("2")
                 .setAccessToken(Constants.TOKEN)
-                .withListener(new BaatoReverseGeoCode.BaatoReverseGeoCodeRequestListener() {
+                .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {
                         // success response here
@@ -77,14 +78,14 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "onFailed:reverse " + error.getMessage());
                     }
                 })
-                .doReverseGeoCode();
+                .doRequest();
     }
 
     private void getPlaces() {
-        new BaatoPlaces(this)
+        new BaatoPlace(this)
                 .setAccessToken(Constants.TOKEN)
                 .setPlaceId(101499)
-                .withListener(new BaatoPlaces.BaatoPlacesListener() {
+                .withListener(new BaatoPlace.BaatoPlaceListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {
                         //success response here
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "onFailed:search " + error.getMessage());
                     }
                 })
-                .doSearch();
+                .doRequest();
     }
 
 }

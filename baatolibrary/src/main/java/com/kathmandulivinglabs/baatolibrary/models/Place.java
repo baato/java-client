@@ -9,7 +9,7 @@ public class Place {
 
     private String address;
 
-    private Geocode centroid;
+    private LatLon centroid;
 
     private String placeId;
 
@@ -45,11 +45,11 @@ public class Place {
         this.address = address;
     }
 
-    public Geocode getCentroid() {
+    public LatLon getCentroid() {
         return centroid;
     }
 
-    public void setCentroid(Geocode centroid) {
+    public void setCentroid(LatLon centroid) {
         this.centroid = centroid;
     }
 

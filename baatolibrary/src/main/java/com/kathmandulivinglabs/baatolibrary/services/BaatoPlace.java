@@ -1,12 +1,14 @@
 package com.kathmandulivinglabs.baatolibrary.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.kathmandulivinglabs.baatolibrary.application.App;
 import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
+import com.kathmandulivinglabs.baatolibrary.utilities.Keys;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,14 +18,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BaatoPlaces {
+import static android.content.ContentValues.TAG;
+
+public class BaatoPlace {
 
     private Context context;
     private String accessToken;
-    private BaatoPlacesListener baatoPlacesListener;
+    private String apiVersion = "1";
+    private BaatoPlaceListener baatoPlaceListener;
     private int placeId = 0;
 
-    public interface BaatoPlacesListener {
+    public interface BaatoPlaceListener {
         /**
          * onSuccess method called after it is successful
          * onFailed method called if it can't places
@@ -33,14 +38,14 @@ public class BaatoPlaces {
         void onFailed(Throwable error);
     }
 
-    public BaatoPlaces(Context context) {
+    public BaatoPlace(Context context) {
         this.context = context;
     }
 
     /**
      * Set the accessToken.
      */
-    public BaatoPlaces setAccessToken(@NonNull String accessToken) {
+    public BaatoPlace setAccessToken(@NonNull String accessToken) {
         this.accessToken = accessToken;
         return this;
     }
@@ -48,32 +53,40 @@ public class BaatoPlaces {
     /**
      * Set the placeId.
      */
-    public BaatoPlaces setPlaceId(@NonNull int placeId) {
+    public BaatoPlace setPlaceId(@NonNull int placeId) {
         this.placeId = placeId;
+        return this;
+    }
+
+    /**
+     * Set the apiVersion. By default it takes version "1"
+     */
+    public BaatoPlace setAPIVersion(@NonNull String apiVersion) {
+        this.apiVersion = apiVersion;
         return this;
     }
 
     /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
-     * @param baatoPlacesListener the listener to be notified
+     * @param baatoPlaceListener the listener to be notified
      * @return this
      */
-    public BaatoPlaces withListener(BaatoPlacesListener baatoPlacesListener) {
-        this.baatoPlacesListener = baatoPlacesListener;
+    public BaatoPlace withListener(BaatoPlaceListener baatoPlaceListener) {
+        this.baatoPlaceListener = baatoPlaceListener;
         return this;
     }
 
     public void doRequest() {
-        QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
+        QueryAPI queryAPI = App.retrofitV2(apiVersion).create(QueryAPI.class);
         queryAPI.performPlacesQuery(giveMeQueryFilter()).enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
-                    baatoPlacesListener.onSuccess(response.body());
+                    baatoPlaceListener.onSuccess(response.body());
                 else {
                     try {
-                        baatoPlacesListener.onFailed(new Throwable(response.errorBody().string()));
+                        baatoPlaceListener.onFailed(new Throwable(response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -82,7 +95,7 @@ public class BaatoPlaces {
 
             @Override
             public void onFailure(Call<PlaceAPIResponse> call, Throwable throwable) {
-                baatoPlacesListener.onFailed(throwable);
+                baatoPlaceListener.onFailed(throwable);
             }
         });
     }
@@ -94,7 +107,6 @@ public class BaatoPlaces {
             queryMap.put("key", accessToken);
         if (placeId != 0)
             queryMap.put("placeId", placeId + "");
-
         return queryMap;
     }
 }

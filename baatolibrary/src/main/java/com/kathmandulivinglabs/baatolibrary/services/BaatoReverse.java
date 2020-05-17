@@ -6,10 +6,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.kathmandulivinglabs.baatolibrary.application.App;
-import com.kathmandulivinglabs.baatolibrary.models.Geocode;
+import com.kathmandulivinglabs.baatolibrary.models.LatLon;
 
 import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
+import com.kathmandulivinglabs.baatolibrary.utilities.Keys;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,16 +19,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BaatoReverseGeoCode {
+public class BaatoReverse {
 
     private static final String TAG = "BaatoReverseGeoCode";
     private Context context;
-    private BaatoReverseGeoCodeRequestListener baatoSearchRequestListener;
+    private BaatoReverseRequestListener baatoReverseRequestListener;
     private String accessToken;
+    private String apiVersion = "1";
     private int radius;
-    private Geocode geocode;
+    private LatLon latLon;
 
-    public interface BaatoReverseGeoCodeRequestListener {
+    public interface BaatoReverseRequestListener {
         /**
          * onSuccess method called after it is successful
          * onFailed method called if it can't search places
@@ -37,30 +39,38 @@ public class BaatoReverseGeoCode {
         void onFailed(Throwable error);
     }
 
-    public BaatoReverseGeoCode(Context context) {
+    public BaatoReverse(Context context) {
         this.context = context;
     }
 
     /**
      * Set the accessToken.
      */
-    public BaatoReverseGeoCode setAccessToken(@NonNull String accessToken) {
+    public BaatoReverse setAccessToken(@NonNull String accessToken) {
         this.accessToken = accessToken;
+        return this;
+    }
+
+    /**
+     * Set the apiVersion. By default it takes version "1"
+     */
+    public BaatoReverse setAPIVersion(@NonNull String apiVersion) {
+        this.apiVersion = apiVersion;
         return this;
     }
 
     /**
      * Set the geocode to search.
      */
-    public BaatoReverseGeoCode setGeoCode(@NonNull Geocode geoCode) {
-        this.geocode = geoCode;
+    public BaatoReverse setLatLon(@NonNull LatLon latLon) {
+        this.latLon = latLon;
         return this;
     }
 
     /**
      * Set the radius to search.
      */
-    public BaatoReverseGeoCode setRadius(@NonNull int radius) {
+    public BaatoReverse setRadius(@NonNull int radius) {
         this.radius = radius;
         return this;
     }
@@ -68,24 +78,24 @@ public class BaatoReverseGeoCode {
     /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
-     * @param baatoSearchRequestListener the listener to be notified
+     * @param baatoReverseRequestListener the listener to be notified
      * @return this
      */
-    public BaatoReverseGeoCode withListener(BaatoReverseGeoCodeRequestListener baatoSearchRequestListener) {
-        this.baatoSearchRequestListener = baatoSearchRequestListener;
+    public BaatoReverse withListener(BaatoReverseRequestListener baatoReverseRequestListener) {
+        this.baatoReverseRequestListener = baatoReverseRequestListener;
         return this;
     }
 
-    public void doReverseGeoCode() {
-        QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
+    public void doRequest() {
+        QueryAPI queryAPI = App.retrofitV2(apiVersion).create(QueryAPI.class);
         queryAPI.performReverseGeoCode(giveMeQueryFilter()).enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
-                    baatoSearchRequestListener.onSuccess(response.body());
+                    baatoReverseRequestListener.onSuccess(response.body());
                 else {
                     try {
-                        baatoSearchRequestListener.onFailed(new Throwable(response.errorBody().string()));
+                        baatoReverseRequestListener.onFailed(new Throwable(response.errorBody().string()));
                         Log.d(TAG, "onResponse: ");
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -95,7 +105,7 @@ public class BaatoReverseGeoCode {
 
             @Override
             public void onFailure(Call<PlaceAPIResponse> call, Throwable throwable) {
-                baatoSearchRequestListener.onFailed(throwable);
+                baatoReverseRequestListener.onFailed(throwable);
             }
         });
     }
@@ -105,10 +115,10 @@ public class BaatoReverseGeoCode {
         //compulsory
         if (accessToken != null)
             queryMap.put("key", accessToken);
-        if (geocode.lat != 0.00)
-            queryMap.put("lat", geocode.lat + "");
-        if (geocode.lon != 0.00)
-            queryMap.put("lon", geocode.lon + "");
+        if (latLon.lat != 0.00)
+            queryMap.put("lat", latLon.lat + "");
+        if (latLon.lon != 0.00)
+            queryMap.put("lon", latLon.lon + "");
 
         //optional
         if (radius != 0)

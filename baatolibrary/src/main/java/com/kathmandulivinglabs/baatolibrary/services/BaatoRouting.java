@@ -1,10 +1,10 @@
 package com.kathmandulivinglabs.baatolibrary.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kathmandulivinglabs.baatolibrary.application.App;
 import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
 
@@ -17,16 +17,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BaatoNavigationRoute {
+import static android.content.ContentValues.TAG;
+
+public class BaatoRouting {
     private Context context;
-    private BaatoRouteRequestListener baatoRouteRequestListener;
+    private BaatoRoutingRequestListener baatoRoutingRequestListener;
     private String accessToken, query, mode;
+    private String apiVersion = "1";
     private String[] points;
     private Boolean alternatives;
     private Boolean instructions;
 
 
-    public interface BaatoRouteRequestListener {
+    public interface BaatoRoutingRequestListener {
         /**
          * onSuccess method called after it is successful
          * onFailed method called if it can't places
@@ -36,22 +39,30 @@ public class BaatoNavigationRoute {
         void onFailed(Throwable error);
     }
 
-    public BaatoNavigationRoute(Context context) {
+    public BaatoRouting(Context context) {
         this.context = context;
     }
 
     /**
      * Set the accessToken.
      */
-    public BaatoNavigationRoute setAccessToken(@NonNull String accessToken) {
+    public BaatoRouting setAccessToken(@NonNull String accessToken) {
         this.accessToken = accessToken;
+        return this;
+    }
+
+    /**
+     * Set the apiVersion. By default it takes version "1"
+     */
+    public BaatoRouting setAPIVersion(@NonNull String apiVersion) {
+        this.apiVersion = apiVersion;
         return this;
     }
 
     /**
      * Set the mode.
      */
-    public BaatoNavigationRoute setMode(@NonNull String mode) {
+    public BaatoRouting setMode(@NonNull String mode) {
         this.mode = mode;
         return this;
     }
@@ -59,7 +70,7 @@ public class BaatoNavigationRoute {
     /**
      * Set the query to search.
      */
-    public BaatoNavigationRoute setAlternatives(@NonNull Boolean alternatives) {
+    public BaatoRouting setAlternatives(@NonNull Boolean alternatives) {
         this.alternatives = alternatives;
         return this;
     }
@@ -67,7 +78,7 @@ public class BaatoNavigationRoute {
     /**
      * Set true to get instruction list
      */
-    public BaatoNavigationRoute setInstructions(Boolean instructions) {
+    public BaatoRouting setInstructions(Boolean instructions) {
         this.instructions = instructions;
         return this;
     }
@@ -75,37 +86,34 @@ public class BaatoNavigationRoute {
     /**
      * Set the query to search.
      */
-    public BaatoNavigationRoute setPoints(@NonNull String[] points) {
+    public BaatoRouting setPoints(@NonNull String[] points) {
         this.points = points;
         return this;
     }
 
 
-
     /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
-     * @param baatoRouteRequestListener the listener to be notified
+     * @param baatoRoutingRequestListener the listener to be notified
      * @return this
      */
-    public BaatoNavigationRoute withListener(BaatoRouteRequestListener baatoRouteRequestListener) {
-        this.baatoRouteRequestListener = baatoRouteRequestListener;
+    public BaatoRouting withListener(BaatoRoutingRequestListener baatoRoutingRequestListener) {
+        this.baatoRoutingRequestListener = baatoRoutingRequestListener;
         return this;
     }
 
     public void doRequest() {
-        QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
-        queryAPI.getDirections(accessToken,points,mode,alternatives,instructions)
+        QueryAPI queryAPI = App.retrofitV2(apiVersion).create(QueryAPI.class);
+        queryAPI.getDirections(accessToken, points, mode, alternatives, instructions)
                 .enqueue(new Callback<DirectionsAPIResponse>() {
                     @Override
                     public void onResponse(Call<DirectionsAPIResponse> call, Response<DirectionsAPIResponse> response) {
-                        baatoRouteRequestListener.onFailed(new Throwable(String.valueOf(call.request())));
                         if (response.isSuccessful() && response.body() != null) {
-                            baatoRouteRequestListener.onSuccess(response.body());
-                        }
-                        else {
+                            baatoRoutingRequestListener.onSuccess(response.body());
+                        } else {
                             try {
-                                baatoRouteRequestListener.onFailed(new Throwable(response.errorBody().string()));
+                                baatoRoutingRequestListener.onFailed(new Throwable(response.errorBody().string()));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -114,13 +122,13 @@ public class BaatoNavigationRoute {
 
                     @Override
                     public void onFailure(Call<DirectionsAPIResponse> call, Throwable t) {
-                        baatoRouteRequestListener.onFailed(t);
+                        baatoRoutingRequestListener.onFailed(t);
                     }
                 });
 
     }
 
-    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode){
-        return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0),mode).toString();
+    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode) {
+        return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode).toString();
     }
 }

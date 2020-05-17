@@ -51,9 +51,9 @@ public class App extends Application {
         return retrofit;
     }
 
-    public static Retrofit retrofitV2() {
+    public static Retrofit retrofitV2(String apiVersion) {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://baato.io/api/v1/")
+                .baseUrl("http://baato.io/api/v" + apiVersion + "/")
                 .addConverterFactory(GsonConverterFactory.create());
 
 

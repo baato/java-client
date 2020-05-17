@@ -1,6 +1,7 @@
 package com.kathmandulivinglabs.baatolibrary.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -8,6 +9,7 @@ import com.kathmandulivinglabs.baatolibrary.application.App;
 import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.requests.QueryAPI;
+import com.kathmandulivinglabs.baatolibrary.utilities.Keys;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,11 +19,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.ContentValues.TAG;
+
 public class BaatoSearch {
     private Context context;
     private BaatoSearchRequestListener baatoSearchRequestListener;
     private String accessToken, query;
     private String type;
+    private String apiVersion = "1";
     private int radius = 0, limit = 0;
     private double lat = 0.00, lon = 0.00;
 
@@ -44,6 +49,14 @@ public class BaatoSearch {
      */
     public BaatoSearch setAccessToken(@NonNull String accessToken) {
         this.accessToken = accessToken;
+        return this;
+    }
+
+    /**
+     * Set the apiVersion. By default it takes version "1"
+     */
+    public BaatoSearch setAPIVersion(@NonNull String apiVersion) {
+        this.apiVersion = apiVersion;
         return this;
     }
 
@@ -100,8 +113,8 @@ public class BaatoSearch {
         return this;
     }
 
-    public void doSearch() {
-        QueryAPI queryAPI = App.retrofitV2().create(QueryAPI.class);
+    public void doRequest() {
+        QueryAPI queryAPI = App.retrofitV2(apiVersion).create(QueryAPI.class);
         queryAPI.searchQuery(giveMeQueryFilter()).enqueue(new Callback<SearchAPIResponse>() {
             @Override
             public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {

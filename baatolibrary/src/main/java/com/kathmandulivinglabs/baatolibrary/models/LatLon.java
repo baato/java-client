@@ -1,16 +1,16 @@
 package com.kathmandulivinglabs.baatolibrary.models;
 
-public class Geocode {
+public class LatLon {
     public double lat,lon;
 
-    public Geocode(double lat, double lon) {
+    public LatLon(double lat, double lon) {
         this.lat = lat;
         this.lon = lon;
     }
 
     @Override
     public String toString() {
-        return "Geocode{" +
+        return "LatLon{" +
                 "lat=" + lat +
                 ", lon=" + lon +
                 '}';
