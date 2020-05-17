@@ -163,7 +163,7 @@ dependencies {
  Get the currentRoute from step no 4 and follow the below steps:
  
  ```
- String parsedNavigationResponse = BaatoNavigationRoute.getParsedNavResponse(directionResponse, navigationMode);
+ String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode);
  DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
  DirectionsRoute currentRoute = directionsResponse.routes().get(0);
 ```
