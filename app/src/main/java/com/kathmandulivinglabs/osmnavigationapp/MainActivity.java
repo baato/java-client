@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private void performReverseGeoCoding() {
         new BaatoReverse(this)
                 .setLatLon(new LatLon(27.73405, 85.33685))
-                .setAPIVersion("2")
+                .setAPIVersion("1")
                 .setAccessToken(Constants.TOKEN)
                 .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
@@ -87,15 +87,15 @@ public class MainActivity extends AppCompatActivity {
                 .setPlaceId(101499)
                 .withListener(new BaatoPlace.BaatoPlaceListener() {
                     @Override
-                    public void onSuccess(PlaceAPIResponse places) {
+                    public void onSuccess(PlaceAPIResponse place) {
                         //success response here
-                        Log.d(TAG, "onSuccess: places" + places.toString());
+                        Log.d(TAG, "onSuccess: place" + place.toString());
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
                         //failure response here
-                        Log.d(TAG, "onFailed: places" + error.getMessage());
+                        Log.d(TAG, "onFailed: place" + error.getMessage());
                     }
                 })
                 .doRequest();
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     private void performSearch() {
         new BaatoSearch(this)
                 .setAccessToken(Constants.TOKEN)
+                .setAPIVersion("1")
                 .setQuery("Kathmandu")
                 .setLimit(5)
                 .withListener(new BaatoSearch.BaatoSearchRequestListener() {

@@ -1,14 +1,14 @@
 package com.kathmandulivinglabs.baatolibrary.models;
 
 public class SearchDataModel {
-    private float placeId;
+    private int placeId;
     private String name;
     private String address;
-    private float score;
+    private double score;
     private String type;
 
     // Getter Methods
-    public float getPlaceId() {
+    public int getPlaceId() {
         return placeId;
     }
 
@@ -20,12 +20,12 @@ public class SearchDataModel {
         return address;
     }
 
-    public float getScore() {
+    public double getScore() {
         return score;
     }
 
     // Setter Methods
-    public void setPlaceId(float placeId) {
+    public void setPlaceId(int placeId) {
         this.placeId = placeId;
     }
 
@@ -37,7 +37,7 @@ public class SearchDataModel {
         this.address = address;
     }
 
-    public void setScore(float score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

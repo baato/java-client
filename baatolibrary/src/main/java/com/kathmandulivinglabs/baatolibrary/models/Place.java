@@ -5,13 +5,13 @@ import java.util.List;
 public class Place {
     private String license;
 
-    private String score;
+    private Object score;
 
     private String address;
 
     private LatLon centroid;
 
-    private String placeId;
+    private int placeId;
 
     private String name;
 
@@ -29,11 +29,11 @@ public class Place {
         this.license = license;
     }
 
-    public String getScore() {
+    public Object getScore() {
         return score;
     }
 
-    public void setScore(String score) {
+    public void setScore(Object score) {
         this.score = score;
     }
 
@@ -53,11 +53,11 @@ public class Place {
         this.centroid = centroid;
     }
 
-    public String getPlaceId() {
+    public int getPlaceId() {
         return placeId;
     }
 
-    public void setPlaceId(String placeId) {
+    public void setPlaceId(int placeId) {
         this.placeId = placeId;
     }
 
