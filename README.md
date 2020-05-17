@@ -71,10 +71,10 @@ dependencies {
  
 ```
  new BaatoSearch(this)
-          .setAccessToken(YOUR_ACCESS_KEY)
-          .setAPIVersion("1") // optional, default will be "1" if not set
-          .setQuery(query)
-          .setType("hospital") //optional parameter
+           .setAccessToken(YOUR_ACCESS_KEY)
+           .setQuery(query)
+           .setType("hospital") //optional parameter
+           .setAPIVersion("1") // optional, default will be "1" if not set
            .withListener(new BaatoSearch.BaatoSearchRequestListener() {
                @Override
                public void onSuccess(SearchAPIResponse places) {
