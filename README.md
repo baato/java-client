@@ -72,6 +72,7 @@ dependencies {
 ```
  new BaatoSearch(this)
           .setAccessToken(YOUR_ACCESS_KEY)
+          .setAPIVersion("1") // optional, default will be "1" if not set
           .setQuery(query)
           .setType("hospital") //optional parameter
            .withListener(new BaatoSearch.BaatoSearchRequestListener() {
@@ -87,15 +88,15 @@ dependencies {
                    Log.d(TAG, "onFailed:search " + error.getMessage());
                }
            })
-           .doSearch();
+           .doRequest();
 ```
  #### 2. Reverse GeoCode
  
  ```
-  new BaatoReverseGeoCode(this)
-                .setGeoCode(new Geocode(lat, lon))
+   new BaatoReverse(this)
+                .setLatLon(new LatLon(lat, lon))
                 .setAccessToken(YOUR_ACCESS_KEY)
-                .withListener(new BaatoReverseGeoCode.BaatoReverseGeoCodeRequestListener() {
+                .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {
                         // success response here
@@ -108,25 +109,25 @@ dependencies {
                         Log.d(TAG, "onFailed:reverse " + error.getMessage());
                     }
                 })
-                .doReverseGeoCode();
+                .doRequest();
 ```
 #### 3. Places
  
  ```
- new BaatoPlaces(this)
+ new BaatoPlace(this)
                 .setAccessToken(YOUR_ACCESS_KEY)
                 .setPlaceId(placeId)
-                .withListener(new BaatoPlaces.BaatoPlacesListener() {
+                .withListener(new BaatoPlace.BaatoPlaceListener() {
                     @Override
-                    public void onSuccess(PlaceAPIResponse places) {
+                    public void onSuccess(PlaceAPIResponse place) {
                         //success response here
-                        Log.d(TAG, "onSuccess: places" + places.toString());
+                        Log.d(TAG, "onSuccess: place" + place.toString());
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
                         //failure response here
-                        Log.d(TAG, "onFailed: places" + error.getMessage());
+                        Log.d(TAG, "onFailed: place" + error.getMessage());
                     }
                 })
                 .doRequest();
@@ -135,20 +136,23 @@ dependencies {
  
  ```
     String points[] = new String[]{"27.73405,85.33685", "27.7177,85.3278"};
-        new BaatoNavigationRoute(this)
+        new BaatoRouting(this)
                 .setPoints(points)
                 .setAccessToken(YOUR_ACCESS_KEY)
                 .setMode(mode) //eg bike, car, foot
                 .setAlternatives(false) //optional parameter
                 .setInstructions(true) //optional parameter
-                .withListener(new BaatoNavigationRoute.BaatoRouteRequestListener() {
+                .withListener(new BaatoRouting.BaatoRoutingRequestListener() {
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
+                        // success response here
                         Log.d(TAG, "onSuccess: routes" + directionResponse.toString());
                     }
 
                     @Override
-                    public void onFailed(Throwable error) {          
+                    public void onFailed(Throwable error) {
+                        // failure response here
+                        Log.d(TAG, "onFailed:routes " + error.getMessage());
                     }
                 })
                 .doRequest();
