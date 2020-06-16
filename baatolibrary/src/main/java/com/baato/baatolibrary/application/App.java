@@ -30,7 +30,7 @@ public class App extends Application {
 
     public static Retrofit retrofitV2(String apiVersion) {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://baato.io/api/v" + apiVersion + "/")
+                .baseUrl("https://api.baato.io/api/v" + apiVersion + "/")
                 .addConverterFactory(GsonConverterFactory.create());
 
 
