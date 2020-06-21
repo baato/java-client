@@ -39,32 +39,6 @@ dependencies {
 }
 ```
 
-### Prerequisites
-
-#### To run on devices Android 9 and above,
-
-1.Add a Network Security Configuration file
- 
-```
-<?xml version="1.0" encoding="utf-8"?>
-<manifest ... >
-    <application android:networkSecurityConfig="@xml/network_security_config"
-                    ... >
-        ...
-    </application>
-</manifest>
-```
-2.In the res/xml/network_security_config.xml file, you can add localhost to the permitted cleartext traffic domain by adding:
-
-```
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">baato.io</domain>
-    </domain-config>
-</network-security-config>
-```
-
 ### Implementation
 
  #### 1. Search 
