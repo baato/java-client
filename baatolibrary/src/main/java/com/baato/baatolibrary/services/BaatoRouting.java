@@ -21,6 +21,7 @@ public class BaatoRouting {
     private BaatoRoutingRequestListener baatoRoutingRequestListener;
     private String accessToken, query, mode;
     private String apiVersion = "1";
+    private String apiBaseUrl = "https://api.baato.io/api/v";
     private String[] points;
     private Boolean alternatives;
     private Boolean instructions;
@@ -55,6 +56,15 @@ public class BaatoRouting {
         this.apiVersion = apiVersion;
         return this;
     }
+
+    /**
+     * Set the apiBaseURL.
+     */
+    public BaatoRouting setAPIBaseURL(@NonNull String apiBaseURL) {
+        this.apiBaseUrl = apiBaseURL;
+        return this;
+    }
+
 
     /**
      * Set the mode.
@@ -101,7 +111,7 @@ public class BaatoRouting {
     }
 
     public void doRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion).create(BaatoAPI.class);
+        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
         baatoAPI.getDirections(accessToken, points, mode, alternatives, instructions)
                 .enqueue(new Callback<DirectionsAPIResponse>() {
                     @Override

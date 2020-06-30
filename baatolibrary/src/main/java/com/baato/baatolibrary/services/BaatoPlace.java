@@ -21,6 +21,7 @@ public class BaatoPlace {
     private Context context;
     private String accessToken;
     private String apiVersion = "1";
+    private String apiBaseUrl = "https://api.baato.io/api/v";
     private BaatoPlaceListener baatoPlaceListener;
     private int placeId = 0;
 
@@ -63,6 +64,14 @@ public class BaatoPlace {
     }
 
     /**
+     * Set the apiBaseURL.
+     */
+    public BaatoPlace setAPIBaseURL(@NonNull String apiBaseURL) {
+        this.apiBaseUrl = apiBaseURL;
+        return this;
+    }
+
+    /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
      * @param baatoPlaceListener the listener to be notified
@@ -74,7 +83,7 @@ public class BaatoPlace {
     }
 
     public void doRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion).create(BaatoAPI.class);
+        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
         baatoAPI.performPlacesQuery(giveMeQueryFilter()).enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {

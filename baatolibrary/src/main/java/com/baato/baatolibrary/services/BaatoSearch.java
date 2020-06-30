@@ -22,6 +22,7 @@ public class BaatoSearch {
     private String accessToken, query;
     private String type;
     private String apiVersion = "1";
+    private String apiBaseUrl = "https://api.baato.io/api/v";
     private int radius = 0, limit = 0;
     private double lat = 0.00, lon = 0.00;
 
@@ -54,6 +55,15 @@ public class BaatoSearch {
         this.apiVersion = apiVersion;
         return this;
     }
+
+    /**
+     * Set the apiBaseURL.
+     */
+    public BaatoSearch setAPIBaseURL(@NonNull String apiBaseURL) {
+        this.apiBaseUrl = apiBaseURL;
+        return this;
+    }
+
 
     /**
      * Set the query to search.
@@ -109,7 +119,7 @@ public class BaatoSearch {
     }
 
     public void doRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion).create(BaatoAPI.class);
+        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
         baatoAPI.searchQuery(giveMeQueryFilter()).enqueue(new Callback<SearchAPIResponse>() {
             @Override
             public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {

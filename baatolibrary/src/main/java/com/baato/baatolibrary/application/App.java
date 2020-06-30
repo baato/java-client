@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class App extends Application {
     private static TinyDB tinyDB;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -28,9 +29,11 @@ public class App extends Application {
         return tinyDB;
     }
 
-    public static Retrofit retrofitV2(String apiVersion) {
+
+    public static Retrofit retrofitV2(String apiVersion, String apiBaseURL) {
+
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.baato.io/api/v" + apiVersion + "/")
+                .baseUrl(apiBaseURL+ apiVersion + "/")
                 .addConverterFactory(GsonConverterFactory.create());
 
 
