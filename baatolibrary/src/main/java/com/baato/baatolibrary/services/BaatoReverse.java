@@ -24,8 +24,8 @@ public class BaatoReverse {
     private Context context;
     private BaatoReverseRequestListener baatoReverseRequestListener;
     private String accessToken;
-    private String apiVersion = "1";
-    private String apiBaseUrl = "https://api.baato.io/api/v";
+    private String apiVersion = "v1";
+    private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius;
     private LatLon latLon;
 

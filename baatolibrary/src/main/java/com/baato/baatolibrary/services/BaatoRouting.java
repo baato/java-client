@@ -20,8 +20,8 @@ public class BaatoRouting {
     private Context context;
     private BaatoRoutingRequestListener baatoRoutingRequestListener;
     private String accessToken, query, mode;
-    private String apiVersion = "1";
-    private String apiBaseUrl = "https://api.baato.io/api/v";
+    private String apiVersion = "v1";
+    private String apiBaseUrl = "https://api.baato.io/api/";
     private String[] points;
     private Boolean alternatives;
     private Boolean instructions;

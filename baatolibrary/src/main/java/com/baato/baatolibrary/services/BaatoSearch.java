@@ -21,8 +21,8 @@ public class BaatoSearch {
     private BaatoSearchRequestListener baatoSearchRequestListener;
     private String accessToken, query;
     private String type;
-    private String apiVersion = "1";
-    private String apiBaseUrl = "https://api.baato.io/api/v";
+    private String apiVersion = "v1";
+    private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius = 0, limit = 0;
     private double lat = 0.00, lon = 0.00;
 
