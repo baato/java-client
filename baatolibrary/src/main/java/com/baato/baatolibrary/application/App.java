@@ -33,7 +33,7 @@ public class App extends Application {
     public static Retrofit retrofitV2(String apiVersion, String apiBaseURL) {
 
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(apiBaseURL+ apiVersion + "/")
+                .baseUrl(apiBaseURL+ "v" + apiVersion + "/")
                 .addConverterFactory(GsonConverterFactory.create());
 
 

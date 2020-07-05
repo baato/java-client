@@ -1,6 +1,7 @@
 package com.baato.baatolibrary.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -21,7 +22,7 @@ public class BaatoSearch {
     private BaatoSearchRequestListener baatoSearchRequestListener;
     private String accessToken, query;
     private String type;
-    private String apiVersion = "v1";
+    private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius = 0, limit = 0;
     private double lat = 0.00, lon = 0.00;
