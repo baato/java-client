@@ -531,7 +531,7 @@ public class NavigateResponseConverter {
 
         // Speak 80m instructions 80 before the turn
         // Note: distanceAlongGeometry: "how far from the upcoming maneuver the voice instruction should begin"
-        double distanceAlongGeometry = Helper.round(Math.min(distance, 80), 1);
+        double distanceAlongGeometry = Helper.round(Math.min(distance, 25), 1);
         thenVoiceInstruction = thenVoiceInstruction.replace("unknown instruction sign '4'","you will arrive your destination.");
         if (nextInstruction.getSign() == 4) {
             thenVoiceInstruction = "you will arrive";
