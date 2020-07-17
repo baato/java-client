@@ -130,7 +130,6 @@ dependencies {
                     }
                 })
                 .doRequest();
-    }
 ```
 #### 5. To use turn by turn navigation:
 
