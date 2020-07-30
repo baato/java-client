@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -31,9 +32,14 @@ public class App extends Application {
 
 
     public static Retrofit retrofitV2(String apiVersion, String apiBaseURL) {
-
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .writeTimeout(1, TimeUnit.MINUTES)
+                .build();
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(apiBaseURL+ "v" + apiVersion + "/")
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create());
 
 
