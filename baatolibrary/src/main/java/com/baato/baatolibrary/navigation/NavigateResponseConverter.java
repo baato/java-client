@@ -171,7 +171,7 @@ public class NavigateResponseConverter {
     }
 
     private static void putRouteInformation(ObjectNode pathJson, int routeNr, Locale locale, DistanceConfig distanceConfig, PointList polyline) {
-        ArrayList<Instruction> instructions = (ArrayList<Instruction>) ghResponse.getInstructionList();
+        ArrayList<InstructionResponse> instructions = (ArrayList<InstructionResponse>) ghResponse.getInstructionList();
 //        pathJson.put("geometry",ghResponse.getEncoded_polyline());
         pathJson.put("geometry", WebHelper.encodePolyline(polyline,false, 1e6));
 //        pathJson.put("geometry", polyline);
@@ -187,18 +187,18 @@ public class NavigateResponseConverter {
             ObjectNode instructionJson = steps.addObject();
 
             putInstruction(instructions, i, locale, instructionJson, isFirstInstructionOfLeg, distanceConfig);
-            Instruction instruction = instructions.get(i);
+            InstructionResponse instruction = instructions.get(i);
             time += instruction.getTime();
             distance += instruction.getDistance();
 //            Log.wtf("ins", String.valueOf(instruction.getPoints()));
             isFirstInstructionOfLeg = false;
-            if (instruction.getSign() == Instruction.REACHED_VIA || instruction.getSign() == Instruction.FINISH) {
+            if (instruction.getSign() == InstructionResponse.REACHED_VIA || instruction.getSign() == InstructionResponse.FINISH) {
                 putLegInformation(legJson, routeNr, time, distance);
                 isFirstInstructionOfLeg = true;
                 time = 0;
                 distance = 0;
 
-                if (instruction.getSign() == Instruction.REACHED_VIA) {
+                if (instruction.getSign() == InstructionResponse.REACHED_VIA) {
                     // Create new leg and steps after a via points
                     legJson = legsJson.addObject();
                     steps = legJson.putArray("steps");
@@ -270,8 +270,8 @@ public class NavigateResponseConverter {
         legJson.put("distance", Helper.round(distance, 1));
     }
 
-    private static void putInstruction(ArrayList<Instruction> instructions, int index, Locale locale, ObjectNode instructionJson, boolean isFirstInstructionOfLeg, DistanceConfig distanceConfig) {
-        Instruction instruction = instructions.get(index);
+    private static void putInstruction(ArrayList<InstructionResponse> instructions, int index, Locale locale, ObjectNode instructionJson, boolean isFirstInstructionOfLeg, DistanceConfig distanceConfig) {
+        InstructionResponse instruction = instructions.get(index);
         ArrayNode intersections = instructionJson.putArray("intersections");
 //        getIntersections(intersections, instruction);
 //        ObjectNode intersection = intersections.addObject();
@@ -319,13 +319,13 @@ public class NavigateResponseConverter {
             putBannerInstructions(instructions, distance, index, Locale.ENGLISH,trMap,bannerInstructions);
         }
     }
-    private static boolean isFirstInstruction(Instruction instruction){
+    private static boolean isFirstInstruction(InstructionResponse instruction){
         return getPreviousInstruction(instruction) == null;
     }
-    private static boolean isLastInstruction(Instruction instruction){
+    private static boolean isLastInstruction(InstructionResponse instruction){
         return getNextInstruction(instruction) == null;
     }
-    private static int getInstructionIndex(Instruction instruction){
+    private static int getInstructionIndex(InstructionResponse instruction){
         int index = -1;
         for(int i = 0; i< ghResponse.getInstructionList().size(); i++){
             if (String.valueOf(ghResponse.getInstructionList().get(i)).equals(instruction.toString()))
@@ -333,7 +333,7 @@ public class NavigateResponseConverter {
         }
         return index;
     }
-    private synchronized static void getIntersections (ArrayNode instersections, Instruction instruction) {
+    private synchronized static void getIntersections (ArrayNode instersections, InstructionResponse instruction) {
         MapObj mapObj = computeInterval(instruction);
         int rangeStart = mapObj.getStart();
         int rangeEnd = mapObj.getEnd()-1;
@@ -349,7 +349,7 @@ public class NavigateResponseConverter {
             createDummyIntersection(intersection,instruction);
         }
     }
-    private static double returnIntersections(Instruction instruction){
+    private static double returnIntersections(InstructionResponse instruction){
         ObjectNode jsonObj = JsonNodeFactory.instance.objectNode();
 //        List<StepIntersection> stepIntersections = new ArrayList<>();
         ArrayNode intersection = jsonObj.putArray("intersections");
@@ -381,7 +381,7 @@ public class NavigateResponseConverter {
         bearings.add(calculateBearing(coordinate.get(0),coordinate.get(1),nextCoordinate.get(0),nextCoordinate.get(1)));
         putLocation(coordinate.get(0),coordinate.get(1),intersection);
     }
-    private static void createDummyIntersection (ObjectNode intersection, Instruction instruction) {
+    private static void createDummyIntersection (ObjectNode intersection, InstructionResponse instruction) {
         double bearing = getBearingBefore(instruction);
 
 
@@ -402,17 +402,17 @@ public class NavigateResponseConverter {
     }
 
     @Nullable
-    private static Instruction getPreviousInstruction(Instruction instruction) {
+    private static InstructionResponse getPreviousInstruction(InstructionResponse instruction) {
         int index = getInstructionIndex(instruction);
         return index != 0 ? ghResponse.getInstructionList().get(index - 1) : null;
     }
     @Nullable
-    private static Instruction getNextInstruction(Instruction instruction) {
+    private static InstructionResponse getNextInstruction(InstructionResponse instruction) {
         int index = getInstructionIndex(instruction);
         return index != ghResponse.getInstructionList().size()-1 ? ghResponse.getInstructionList().get(index+1) : null;
     }
 
-    private static synchronized MapObj computeInterval(Instruction instruction){
+    private static synchronized MapObj computeInterval(InstructionResponse instruction){
         int size = instruction.getPoints().getSize();
 //        int geometrySize = allCord.size();
 //        int index = -1;
@@ -470,7 +470,7 @@ public class NavigateResponseConverter {
         return (int) Math.round((brng + 360) % 360) | 0;
     }
 
-    private static double getBearingBefore(Instruction instruction){
+    private static double getBearingBefore(InstructionResponse instruction){
         MapObj mapObj = computeInterval(instruction);
         double[] geom = new double[4];
         if (isFirstInstruction(instruction))
@@ -493,7 +493,7 @@ public class NavigateResponseConverter {
         }
     }
     //    @RequiresApi(api = Build.VERSION_CODES.N)
-    private static double getBearingAfter(Instruction instruction) {
+    private static double getBearingAfter(InstructionResponse instruction) {
 //        int index = getInstructionIndex(instruction);
         MapObj mapObj = computeInterval(instruction);
         double[] geom = new double[4];
@@ -514,8 +514,8 @@ public class NavigateResponseConverter {
     }
 
     @SuppressLint("NewApi")
-    private static double getLastBearingOfPreviousInstruction(Instruction instruction){
-        Instruction previousInstruction = getPreviousInstruction(instruction);
+    private static double getLastBearingOfPreviousInstruction(InstructionResponse instruction){
+        InstructionResponse previousInstruction = getPreviousInstruction(instruction);
 
         if (hasIntersections(previousInstruction)) {
             returnIntersections(previousInstruction);
@@ -523,11 +523,11 @@ public class NavigateResponseConverter {
         return 0;
 
     }
-    private static boolean hasIntersections(Instruction instruction){
+    private static boolean hasIntersections(InstructionResponse instruction){
         MapObj mapObj = computeInterval(instruction);
         return (mapObj.getEnd() - mapObj.getStart() -1)>0;
     }
-    private static void putVoiceInstructions(ArrayList<Instruction> instructions, double distance, int index, Locale locale, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap, ArrayNode voiceInstructions, DistanceConfig distanceConfig) {
+    private static void putVoiceInstructions(ArrayList<InstructionResponse> instructions, double distance, int index, Locale locale, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap, ArrayNode voiceInstructions, DistanceConfig distanceConfig) {
         /*
             A VoiceInstruction Object looks like this
             {
@@ -537,7 +537,7 @@ public class NavigateResponseConverter {
             }
         */
 
-        Instruction nextInstruction = instructions.get(index + 1);
+        InstructionResponse nextInstruction = instructions.get(index + 1);
         String turnDescription = nextInstruction.getTurnDescription(translationMap.getWithFallBack(locale));
         String thenVoiceInstruction = getThenVoiceInstructionpart(instructions, index, locale, translationMap, navigateResponseConverterTranslationMap);
         List<VoiceInstructionConfig.VoiceInstructionValue> voiceValues = distanceConfig.getVoiceInstructionsForDistance(distance, turnDescription, thenVoiceInstruction);
@@ -545,7 +545,7 @@ public class NavigateResponseConverter {
         for (VoiceInstructionConfig.VoiceInstructionValue voiceValue : voiceValues) {
             String turnDesc = voiceValue.turnDescription;
             if (nextInstruction.getSign() == 4){
-                turnDesc = voiceValue.turnDescription.replace("unknown instruction sign '4'", "you will arrive your destination.");
+                turnDesc = voiceValue.turnDescription.replace("unknown instruction sign '4'", "you will arrive at your destination.");
             }
 //            Log.wtf("turn desc", turnDesc);
             putSingleVoiceInstruction(voiceValue.spokenDistance, turnDesc, voiceInstructions);
@@ -553,20 +553,20 @@ public class NavigateResponseConverter {
 
         // Speak 80m instructions 80 before the turn
         // Note: distanceAlongGeometry: "how far from the upcoming maneuver the voice instruction should begin"
-        double distanceAlongGeometry = Helper.round(Math.min(distance, 25), 1);
-        thenVoiceInstruction = thenVoiceInstruction.replace("unknown instruction sign '4'","you will arrive your destination.");
+        double distanceAlongGeometry = Helper.round(Math.min(distance, 50), 1);
+        thenVoiceInstruction = thenVoiceInstruction.replace("unknown instruction sign '4'","you will arrive at your destination.");
         if (nextInstruction.getSign() == 4) {
             thenVoiceInstruction = "you will arrive";
         }
         String description = turnDescription + thenVoiceInstruction;
         // Special case for the arrive instruction
         if (index + 2 == instructions.size()) {
-            distanceAlongGeometry = Helper.round(Math.min(distance, 5), 1);
+            distanceAlongGeometry = Helper.round(Math.min(distance, 20), 1);
             description = "You have arrived at your destination";
         }
         String value = getTranslatedDistance((int) distanceAlongGeometry);
 //        Log.wtf("turn desc then", description);
-        description = description.replace("unknown instruction sign '6'", "Continue on " + instructions.get(index).getName());
+//        description = description.replace("unknown instruction sign '6'", "Continue on " + instructions.get(index).getName());
 //        description = description.replace("then unknown instruction sign '4'", "you will arrive your destination.");
         putSingleVoiceInstruction(distanceAlongGeometry, description, voiceInstructions);
     }
@@ -600,12 +600,12 @@ public class NavigateResponseConverter {
      * <p>
      * For instruction i+1 distance > VOICE_INSTRUCTION_MERGE_TRESHHOLD an empty String will be returned
      */
-    private static String getThenVoiceInstructionpart(ArrayList<Instruction> instructions, int index, Locale locale, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap) {
+    private static String getThenVoiceInstructionpart(ArrayList<InstructionResponse> instructions, int index, Locale locale, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap) {
         if (instructions.size() > index + 2) {
-            Instruction firstInstruction = instructions.get(index + 1);
+            InstructionResponse firstInstruction = instructions.get(index + 1);
             if (firstInstruction.getDistance() < VOICE_INSTRUCTION_MERGE_TRESHHOLD) {
-                Instruction secondInstruction = instructions.get(index + 2);
-                if (secondInstruction.getSign() != Instruction.REACHED_VIA)
+                InstructionResponse secondInstruction = instructions.get(index + 2);
+                if (secondInstruction.getSign() != InstructionResponse.REACHED_VIA)
                     return ", " + navigateResponseConverterTranslationMap.getWithFallBack(locale).tr("then") + " " + secondInstruction.getTurnDescription(translationMap.getWithFallBack(locale));
             }
         }
@@ -618,7 +618,7 @@ public class NavigateResponseConverter {
      * <p>
      * Between two instructions we can show multiple banner instructions, you can control when they pop up using distanceAlongGeometry.
      */
-    private static void putBannerInstructions(ArrayList<Instruction> instructions, double distance, int index, Locale locale, TranslationMap translationMap, ArrayNode bannerInstructions) {
+    private static void putBannerInstructions(ArrayList<InstructionResponse> instructions, double distance, int index, Locale locale, TranslationMap translationMap, ArrayNode bannerInstructions) {
         /*
         A BannerInstruction looks like this
         distanceAlongGeometry: 107,
@@ -646,7 +646,7 @@ public class NavigateResponseConverter {
 
         bannerInstruction.putNull("secondary");
 
-        if (instructions.size() > index + 2 && instructions.get(index + 2).getSign() != Instruction.REACHED_VIA && instructions.get(index+2).getDistance() < 60) {
+        if (instructions.size() > index + 2 && instructions.get(index + 2).getSign() != InstructionResponse.REACHED_VIA && instructions.get(index+2).getDistance() < 60) {
             // Sub shows the instruction after the current one
             ObjectNode sub = bannerInstruction.putObject("sub");
 
@@ -654,7 +654,7 @@ public class NavigateResponseConverter {
         }
     }
 
-    private static void putSingleBannerInstruction(Instruction instruction, Locale locale, TranslationMap translationMap, ObjectNode singleBannerInstruction) {
+    private static void putSingleBannerInstruction(InstructionResponse instruction, Locale locale, TranslationMap translationMap, ObjectNode singleBannerInstruction) {
         String bannerInstructionName = instruction.getName();
         if (bannerInstructionName == null || bannerInstructionName.isEmpty()) {
             // Fix for final instruction and for instructions without name
@@ -681,21 +681,19 @@ public class NavigateResponseConverter {
         if (modifier != null)
             singleBannerInstruction.put("modifier", modifier);
 
-        if (instruction.getSign() == Instruction.USE_ROUNDABOUT) {
-            if (instruction instanceof RoundaboutInstruction) {
-                double turnAngle = ((RoundaboutInstruction) instruction).getTurnAngle();
-                if (Double.isNaN(turnAngle)) {
-                    singleBannerInstruction.putNull("degrees");
-                } else {
-                    double degree = (Math.abs(turnAngle) * 180) / Math.PI;
-                    singleBannerInstruction.put("degrees", degree);
-                }
+        if (instruction.getSign() == InstructionResponse.USE_ROUNDABOUT) {
+            double turnAngle = instruction.getTurnAngle();
+            if (Double.isNaN(turnAngle)) {
+                singleBannerInstruction.putNull("degrees");
+            } else {
+                double degree = (Math.abs(turnAngle) * 180) / Math.PI;
+                singleBannerInstruction.put("degrees", degree);
             }
         }
     }
 
     @SuppressLint("NewApi")
-    private static void putManeuver(Instruction instruction, ObjectNode instructionJson, Locale locale, boolean isFirstInstructionOfLeg) {
+    private static void putManeuver(InstructionResponse instruction, ObjectNode instructionJson, Locale locale, boolean isFirstInstructionOfLeg) {
         ObjectNode maneuver = instructionJson.putObject("maneuver");
 //        maneuver.put("bearing_after", 0);
 //        maneuver.put("bearing_before", 0);
@@ -715,8 +713,8 @@ public class NavigateResponseConverter {
 
         maneuver.put("type", getTurnType(instruction, isFirstInstructionOfLeg));
         // exit number
-        if (instruction instanceof RoundaboutInstruction)
-            maneuver.put("exit", ((RoundaboutInstruction) instruction).getExitNumber());
+        if (instruction.getSign() ==  InstructionResponse.USE_ROUNDABOUT || instruction.getSign() ==  InstructionResponse.LEAVE_ROUNDABOUT  )
+            maneuver.put("exit", instruction.getExitNumber());
         final TranslationMap navigateResponseConverterTranslationMap = new NavigateResponseConverterTranslationMap().doImport();
         maneuver.put("instruction", instruction.getTurnDescription(navigateResponseConverterTranslationMap.get("en_US")));
 
@@ -731,16 +729,16 @@ public class NavigateResponseConverter {
      * <p>
      * You can find all maneuver types at: https://www.mapbox.com/api-documentation/#maneuver-types
      */
-    private static String getTurnType(Instruction instruction, boolean isFirstInstructionOfLeg) {
+    private static String getTurnType(InstructionResponse instruction, boolean isFirstInstructionOfLeg) {
         if (isFirstInstructionOfLeg) {
             return "depart";
         } else {
             switch (instruction.getSign()) {
-                case Instruction.FINISH:
+                case InstructionResponse.FINISH:
 //                    return "arrive";
-                case Instruction.REACHED_VIA:
+                case InstructionResponse.REACHED_VIA:
                     return "arrive";
-                case Instruction.USE_ROUNDABOUT:
+                case InstructionResponse.USE_ROUNDABOUT:
                     return "roundabout";
                 default:
                     return "turn";
@@ -753,29 +751,29 @@ public class NavigateResponseConverter {
      * <p>
      * Find modifier values here: https://www.mapbox.com/api-documentation/#stepmaneuver-object
      */
-    private static String getModifier(Instruction instruction) {
+    private static String getModifier(InstructionResponse instruction) {
         switch (instruction.getSign()) {
-            case Instruction.CONTINUE_ON_STREET:
+            case InstructionResponse.CONTINUE_ON_STREET:
                 return "straight";
-            case Instruction.U_TURN_LEFT:
-            case Instruction.U_TURN_RIGHT:
-            case Instruction.U_TURN_UNKNOWN:
+            case InstructionResponse.U_TURN_LEFT:
+            case InstructionResponse.U_TURN_RIGHT:
+            case InstructionResponse.U_TURN_UNKNOWN:
                 return "uturn";
-            case Instruction.KEEP_LEFT:
-            case Instruction.TURN_SLIGHT_LEFT:
+            case InstructionResponse.KEEP_LEFT:
+            case InstructionResponse.TURN_SLIGHT_LEFT:
                 return "slight left";
-            case Instruction.TURN_LEFT:
+            case InstructionResponse.TURN_LEFT:
                 return "left";
-            case Instruction.TURN_SHARP_LEFT:
+            case InstructionResponse.TURN_SHARP_LEFT:
                 return "sharp left";
-            case Instruction.KEEP_RIGHT:
-            case Instruction.TURN_SLIGHT_RIGHT:
+            case InstructionResponse.KEEP_RIGHT:
+            case InstructionResponse.TURN_SLIGHT_RIGHT:
                 return "slight right";
-            case Instruction.TURN_RIGHT:
+            case InstructionResponse.TURN_RIGHT:
                 return "right";
-            case Instruction.TURN_SHARP_RIGHT:
+            case InstructionResponse.TURN_SHARP_RIGHT:
                 return "sharp right";
-            case Instruction.USE_ROUNDABOUT:
+            case InstructionResponse.USE_ROUNDABOUT:
                 // TODO: This might be an issue in left-handed traffic, because there it schould be left
                 return "left";
             default:

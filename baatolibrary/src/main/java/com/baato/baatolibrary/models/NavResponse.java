@@ -1,6 +1,6 @@
 package com.baato.baatolibrary.models;
 
-import com.graphhopper.util.Instruction;
+import com.baato.baatolibrary.navigation.InstructionResponse;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class NavResponse {
     private double routeWeight;
     private double distanceInMeters;
     private long timeInMs;
-    private List<Instruction> instructionList = null;
+    private List<InstructionResponse> instructionList = null;
 
     public String getEncoded_polyline () {
         return encodedPolyline;
@@ -44,16 +44,16 @@ public class NavResponse {
         this.timeInMs = timeInMs;
     }
 
-    public List<Instruction> getInstructionList () {
+    public List<InstructionResponse> getInstructionList () {
         return instructionList;
     }
 
-    public void setInstructionList (List <Instruction> instructionList) {
+    public void setInstructionList (List <InstructionResponse> instructionList) {
         this.instructionList = instructionList;
     }
 
     public NavResponse(String encoded_polyline, double distanceInMeters, long timeInMs, List<
-            Instruction> instructionList){
+            InstructionResponse> instructionList){
         this.encodedPolyline = encoded_polyline;
         this.distanceInMeters = distanceInMeters;
         this.timeInMs = timeInMs;
