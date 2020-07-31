@@ -5,6 +5,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.baato.baatolibrary.utilities.Retry;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -36,12 +38,12 @@ public class App extends Application {
                 .connectTimeout(1, TimeUnit.MINUTES)
                 .readTimeout(1, TimeUnit.MINUTES)
                 .writeTimeout(1, TimeUnit.MINUTES)
+                .addInterceptor(new Retry(3))
                 .build();
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(apiBaseURL+ "v" + apiVersion + "/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create());
-
 
         Retrofit retrofitV2 = builder.build();
         return retrofitV2;
