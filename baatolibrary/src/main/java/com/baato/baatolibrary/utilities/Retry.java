@@ -22,7 +22,6 @@ public class Retry implements Interceptor {
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
         Response response = chain.proceed(request);
-        Log.i("Retry","num:"+retryNum);
         while (!response.isSuccessful() && retryNum < maxRetry) {
             retryNum++;
             Log.i("Retry","num:"+retryNum);

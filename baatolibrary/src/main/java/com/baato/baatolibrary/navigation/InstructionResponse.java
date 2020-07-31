@@ -61,7 +61,7 @@ public class InstructionResponse {
     private Boolean exited;
     @SerializedName("turnAngle")
     @Expose
-    private Double turnAngle;
+    private String turnAngle;
 
     public BaatoPoints getPoints() {
         return points;
@@ -144,10 +144,10 @@ public class InstructionResponse {
     }
 
     public Double getTurnAngle() {
-        return turnAngle;
+        return turnAngle.matches("\\d([\\d.]*\\d)?") ? Double.parseDouble(turnAngle) : 0.00;
     }
 
-    public void setTurnAngle(Double turnAngle) {
+    public void setTurnAngle(String turnAngle) {
         this.turnAngle = turnAngle;
     }
     public class BaatoPoints {
