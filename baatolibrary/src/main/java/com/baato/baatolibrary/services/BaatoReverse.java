@@ -28,6 +28,7 @@ public class BaatoReverse {
     private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius;
     private LatLon latLon;
+    private Call<PlaceAPIResponse> placeAPIResponseCall;
 
     public interface BaatoReverseRequestListener {
         /**
@@ -97,7 +98,8 @@ public class BaatoReverse {
 
     public void doRequest() {
         BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        baatoAPI.performReverseGeoCode(giveMeQueryFilter()).enqueue(new Callback<PlaceAPIResponse>() {
+        placeAPIResponseCall=baatoAPI.performReverseGeoCode(giveMeQueryFilter());
+        placeAPIResponseCall.enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
@@ -119,8 +121,7 @@ public class BaatoReverse {
         });
     }
     public void cancelRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        baatoAPI.performReverseGeoCode(giveMeQueryFilter()).cancel();
+        placeAPIResponseCall.cancel();
     }
 
     private Map<String, String> giveMeQueryFilter() {

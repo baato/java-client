@@ -24,7 +24,7 @@ public class BaatoPlace {
     private String apiBaseUrl = "https://api.baato.io/api/";
     private BaatoPlaceListener baatoPlaceListener;
     private int placeId = 0;
-
+    private Call<PlaceAPIResponse> placeAPIResponseCall;
     public interface BaatoPlaceListener {
         /**
          * onSuccess method called after it is successful
@@ -84,7 +84,8 @@ public class BaatoPlace {
 
     public void doRequest() {
         BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        baatoAPI.performPlacesQuery(giveMeQueryFilter()).enqueue(new Callback<PlaceAPIResponse>() {
+        placeAPIResponseCall = baatoAPI.performPlacesQuery(giveMeQueryFilter());
+        placeAPIResponseCall.enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
@@ -105,8 +106,7 @@ public class BaatoPlace {
         });
     }
     public void cancelRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        baatoAPI.performPlacesQuery(giveMeQueryFilter()).cancel();
+       placeAPIResponseCall.cancel();
     }
     private Map<String, String> giveMeQueryFilter() {
         Map<String, String> queryMap = new HashMap<>();

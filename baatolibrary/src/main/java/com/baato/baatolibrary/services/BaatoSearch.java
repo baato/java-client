@@ -26,6 +26,7 @@ public class BaatoSearch {
     private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius = 0, limit = 0;
     private double lat = 0.00, lon = 0.00;
+    private Call<SearchAPIResponse> searchAPIResponseCall;
 
     public interface BaatoSearchRequestListener {
         /**
@@ -121,7 +122,8 @@ public class BaatoSearch {
 
     public void doRequest() {
         BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        baatoAPI.searchQuery(giveMeQueryFilter()).enqueue(new Callback<SearchAPIResponse>() {
+        searchAPIResponseCall = baatoAPI.searchQuery(giveMeQueryFilter());
+        searchAPIResponseCall.enqueue(new Callback<SearchAPIResponse>() {
             @Override
             public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
@@ -143,8 +145,7 @@ public class BaatoSearch {
     }
 
     public void cancelRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        baatoAPI.searchQuery(giveMeQueryFilter()).cancel();
+       searchAPIResponseCall.cancel();
     }
     private Map<String, String> giveMeQueryFilter() {
         Map<String, String> queryMap = new HashMap<>();

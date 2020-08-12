@@ -25,6 +25,7 @@ public class BaatoRouting {
     private String[] points;
     private Boolean alternatives;
     private Boolean instructions;
+    private Call<DirectionsAPIResponse> directionsAPIResponseCall;
 
 
     public interface BaatoRoutingRequestListener {
@@ -112,7 +113,8 @@ public class BaatoRouting {
 
     public void doRequest() {
         BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        baatoAPI.getDirections(accessToken, points, mode, alternatives, instructions)
+        directionsAPIResponseCall = baatoAPI.getDirections(accessToken, points, mode, alternatives, instructions);
+        directionsAPIResponseCall
                 .enqueue(new Callback<DirectionsAPIResponse>() {
                     @Override
                     public void onResponse(Call<DirectionsAPIResponse> call, Response<DirectionsAPIResponse> response) {
@@ -135,8 +137,7 @@ public class BaatoRouting {
 
     }
     public void cancelRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        baatoAPI.getDirections(accessToken, points, mode, alternatives, instructions).cancel();
+        directionsAPIResponseCall.cancel();
     }
 
     public static String getParsedNavResponse(DirectionsAPIResponse response, String mode) {
