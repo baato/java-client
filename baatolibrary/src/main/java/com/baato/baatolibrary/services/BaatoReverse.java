@@ -118,6 +118,10 @@ public class BaatoReverse {
             }
         });
     }
+    public void cancelRequest() {
+        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
+        baatoAPI.performReverseGeoCode(giveMeQueryFilter()).cancel();
+    }
 
     private Map<String, String> giveMeQueryFilter() {
         Map<String, String> queryMap = new HashMap<>();

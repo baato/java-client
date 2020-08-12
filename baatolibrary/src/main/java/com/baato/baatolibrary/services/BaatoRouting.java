@@ -134,6 +134,10 @@ public class BaatoRouting {
                 });
 
     }
+    public void cancelRequest() {
+        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
+        baatoAPI.getDirections(accessToken, points, mode, alternatives, instructions).cancel();
+    }
 
     public static String getParsedNavResponse(DirectionsAPIResponse response, String mode) {
         return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode).toString();

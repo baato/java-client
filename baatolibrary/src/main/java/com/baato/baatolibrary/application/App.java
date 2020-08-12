@@ -35,10 +35,10 @@ public class App extends Application {
 
     public static Retrofit retrofitV2(String apiVersion, String apiBaseURL) {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .connectTimeout(1, TimeUnit.MINUTES)
-                .readTimeout(1, TimeUnit.MINUTES)
-                .writeTimeout(1, TimeUnit.MINUTES)
-                .addInterceptor(new Retry(3))
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .addInterceptor(new Retry(4))
                 .build();
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(apiBaseURL+ "v" + apiVersion + "/")

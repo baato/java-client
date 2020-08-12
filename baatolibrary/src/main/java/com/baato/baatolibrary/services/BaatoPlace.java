@@ -104,7 +104,10 @@ public class BaatoPlace {
             }
         });
     }
-
+    public void cancelRequest() {
+        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
+        baatoAPI.performPlacesQuery(giveMeQueryFilter()).cancel();
+    }
     private Map<String, String> giveMeQueryFilter() {
         Map<String, String> queryMap = new HashMap<>();
         //compulsory ones
