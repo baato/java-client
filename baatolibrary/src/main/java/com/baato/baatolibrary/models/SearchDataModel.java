@@ -1,10 +1,11 @@
 package com.baato.baatolibrary.models;
 
+
 public class SearchDataModel {
     private int placeId;
     private String name;
     private String address;
-    private double score;
+    private double score, radialDistanceInKm;
     private String type;
 
     // Getter Methods
@@ -49,6 +50,14 @@ public class SearchDataModel {
         this.type = type;
     }
 
+    public double getRadialDistanceInKm() {
+        return radialDistanceInKm;
+    }
+
+    public void setRadialDistanceInKm(double radialDistanceInKm) {
+        this.radialDistanceInKm = radialDistanceInKm;
+    }
+
     @Override
     public String toString() {
         return "SearchDataModel{" +
@@ -57,6 +66,7 @@ public class SearchDataModel {
                 ", address='" + address + '\'' +
                 ", score=" + score +
                 ", type='" + type + '\'' +
+                ", radialDistanceInKm='" + radialDistanceInKm + '\'' +
                 '}';
     }
 }
