@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ToasterMessage.s(this, "Hello Good Morning");
         Geometry geometry = BaatoUtil.getGeoJsonFromEncodedPolyLine(encoded);
-        BaatoTranslationMap trMap = new BaatoTranslationMap().doImport("locale/");
+        BaatoTranslationMap trMap = new BaatoTranslationMap().doImport(getApplicationContext());
         performRouting();
         performReverseGeoCoding();
         performSearch();

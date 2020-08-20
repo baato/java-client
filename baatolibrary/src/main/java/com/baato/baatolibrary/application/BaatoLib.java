@@ -21,8 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BaatoLib extends Application {
     private static TinyDB tinyDB;
-    @SuppressLint("StaticFieldLeak")
-    private static Context mContext;
+//    @SuppressLint("StaticFieldLeak")
+//    private static Context mContext;
 
 
     @Override
@@ -30,7 +30,7 @@ public class BaatoLib extends Application {
         super.onCreate();
         //tiny db config
         tinyDB = new TinyDB(getApplicationContext());
-        mContext = this;
+//        mContext = this;
     }
 
     public static TinyDB db() {
@@ -65,7 +65,7 @@ public class BaatoLib extends Application {
         }
         return isConnected;
     }
-    public static Context getContext(){
-        return mContext;
-    }
+//    public static Context getContext(){
+//        return mContext;
+//    }
 }

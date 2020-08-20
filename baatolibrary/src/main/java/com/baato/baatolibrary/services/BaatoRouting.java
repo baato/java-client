@@ -64,6 +64,10 @@ public class BaatoRouting {
         this.locale = locale;
         return this;
     }
+    public BaatoRouting setContext(Context context) {
+        this.context = context;
+        return this;
+    }
 
     /**
      * Set the apiBaseURL.
@@ -148,11 +152,10 @@ public class BaatoRouting {
         directionsAPIResponseCall.cancel();
     }
 
-    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode, Locale locale) {
-        return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode, locale).toString();
+    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode, Context context) {
+        return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode,context).toString();
     }
-
-    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode) {
-        return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode).toString();
-    }
+//    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode) {
+//        return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode).toString();
+//    }
 }

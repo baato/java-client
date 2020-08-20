@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.Nullable;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.baato.baatolibrary.models.NavResponse;
@@ -108,18 +109,18 @@ public class NavigateResponseConverter {
     /**
      * Converts a GHResponse into a json that follows the Mapbox API specification
      */
-    public static ObjectNode convertFromGHResponse(NavResponse ghResponsee, String type) {
+    public static ObjectNode convertFromGHResponse(NavResponse ghResponsee, String type, Context context) {
         ghResponse = ghResponsee;
         mtrMap = new NavigateResponseConverterTranslationMap(locale.getLanguage()).doImport();
-        trMap = new BaatoTranslationMap().doImport("locale/");
+        trMap = new BaatoTranslationMap().doImport(context);
         return navConverter(type);
     }
-    public static ObjectNode convertFromGHResponse(NavResponse ghResponsee, String type, Locale localevar) {
+    public static ObjectNode convertFromGHResponse(NavResponse ghResponsee, String type, Locale localevar, Context context) {
         ObjectNode json = JsonNodeFactory.instance.objectNode();
         ghResponse = ghResponsee;
         locale = localevar;
         mtrMap = new NavigateResponseConverterTranslationMap(locale.getLanguage()).doImport();
-        trMap = new BaatoTranslationMap().doImport("locale/");
+        trMap = new BaatoTranslationMap().doImport(context);
         return  navConverter(type);
 //        if (ghResponse.hasErrors())
 //            throw new IllegalStateException("If the response has errors, you should use the method NavigateResponseConverter#convertFromGHResponseError");

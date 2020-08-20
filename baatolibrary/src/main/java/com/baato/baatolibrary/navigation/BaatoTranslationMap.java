@@ -1,5 +1,6 @@
 package com.baato.baatolibrary.navigation;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.util.Log;
@@ -32,18 +33,18 @@ public class BaatoTranslationMap {
         return Helper.isEmpty(phrase) ? 0 : phrase.trim().split(splitter).length;
     }
 
-    public BaatoTranslationMap doImport(String folder) {
-//        AssetManager gi = BaatoLib.getContext().getAssets();
-        Resources resources = BaatoLib.getContext().getResources();
+    public BaatoTranslationMap doImport(Context context) {
+        AssetManager gi = context.getAssets();
+//        Resources resources = context.getResources();
 
         try {
             Iterator var2 = LOCALES.iterator();
             while(var2.hasNext()) {
                 String locale = (String)var2.next();
                 BaatoTranslationMap.TranslationHashMap trMap = new BaatoTranslationMap.TranslationHashMap(Helper.getLocale(locale));
-                int identifier = resources.getIdentifier(locale.toLowerCase(),"raw", BaatoLib.getContext().getPackageName());
-//                InputStream is = gi.open(folder+locale + ".txt");
-                InputStream is = resources.openRawResource(identifier);
+//                int identifier = resources.getIdentifier(locale.toLowerCase(),"raw", context.getPackageName());
+                InputStream is = gi.open("locale/"+locale + ".txt");
+//                InputStream is = resources.openRawResource(identifier);
                 trMap.doImport(is);
                 this.add(trMap);
             }
