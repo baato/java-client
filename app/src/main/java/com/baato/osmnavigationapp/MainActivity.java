@@ -11,6 +11,7 @@ import com.baato.baatolibrary.models.LatLon;
 import com.baato.baatolibrary.models.Geometry;
 
 import com.baato.baatolibrary.models.PlaceAPIResponse;
+import com.baato.baatolibrary.navigation.BaatoTranslationMap;
 import com.baato.baatolibrary.services.BaatoPlace;
 import com.baato.baatolibrary.services.BaatoRouting;
 import com.baato.baatolibrary.services.BaatoReverse;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ToasterMessage.s(this, "Hello Good Morning");
         Geometry geometry = BaatoUtil.getGeoJsonFromEncodedPolyLine(encoded);
-
+        BaatoTranslationMap trMap = new BaatoTranslationMap().doImport("locale/");
         performRouting();
         performReverseGeoCoding();
         performSearch();
