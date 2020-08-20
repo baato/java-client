@@ -1,4 +1,4 @@
-# Baato navigation translation, cannot be used in library project
+# Baato navigation translation
 
 continue=continue
 continue_onto=continue onto %1$s

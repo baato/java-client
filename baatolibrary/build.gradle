@@ -22,13 +22,14 @@ android {
         }
     }
 
-    sourceSets {
-        main {
-            assets {
-                srcDirs 'src/main/assets'
-            }
-        }
-    }
+//    sourceSets {
+//        main {
+//            assets {
+//                srcDirs 'src/main/assets'
+//            }
+//            res.srcDirs 'src/main/res'
+//        }
+//    }
 
 }
 

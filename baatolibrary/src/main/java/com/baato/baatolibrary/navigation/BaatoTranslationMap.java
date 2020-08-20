@@ -1,10 +1,13 @@
 package com.baato.baatolibrary.navigation;
 
 import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.util.Log;
 
 import com.baato.baatolibrary.application.BaatoLib;
 import com.graphhopper.util.Helper;
 import com.graphhopper.util.Translation;
+import com.kathmandulivinglabs.navigationlibrary.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+
 
 public class BaatoTranslationMap {
     private static final List<String> LOCALES = Arrays.asList("en_US","ne");
@@ -30,14 +34,16 @@ public class BaatoTranslationMap {
 
     public BaatoTranslationMap doImport(String folder) {
         AssetManager gi = BaatoLib.getContext().getAssets();
+        Resources resources = BaatoLib.getContext().getResources();
+
         try {
             Iterator var2 = LOCALES.iterator();
-
             while(var2.hasNext()) {
                 String locale = (String)var2.next();
                 BaatoTranslationMap.TranslationHashMap trMap = new BaatoTranslationMap.TranslationHashMap(Helper.getLocale(locale));
-
-                InputStream is = gi.open(folder+locale + ".txt");
+                int identifier = resources.getIdentifier(locale.toLowerCase(),"raw", BaatoLib.getContext().getPackageName());
+//                InputStream is = gi.open(folder+locale + ".txt");
+                InputStream is = resources.openRawResource(identifier);
                 trMap.doImport(is);
                 this.add(trMap);
             }
