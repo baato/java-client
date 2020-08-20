@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.baato.baatolibrary.application.App;
+import com.baato.baatolibrary.application.BaatoLib;
 import com.baato.baatolibrary.models.DirectionsAPIResponse;
 
 import com.baato.baatolibrary.navigation.NavigateResponseConverter;
@@ -120,7 +120,7 @@ public class BaatoRouting {
     }
 
     public void doRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
+        BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
         directionsAPIResponseCall = baatoAPI.getDirections(accessToken, points, mode, alternatives, instructions);
         directionsAPIResponseCall
                 .enqueue(new Callback<DirectionsAPIResponse>() {

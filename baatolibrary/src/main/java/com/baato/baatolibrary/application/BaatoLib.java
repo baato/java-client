@@ -19,7 +19,7 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class App extends Application {
+public class BaatoLib extends Application {
     private static TinyDB tinyDB;
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;

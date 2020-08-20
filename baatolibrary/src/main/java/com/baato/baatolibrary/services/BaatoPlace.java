@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.baato.baatolibrary.application.App;
+import com.baato.baatolibrary.application.BaatoLib;
 import com.baato.baatolibrary.models.PlaceAPIResponse;
 import com.baato.baatolibrary.requests.BaatoAPI;
 
@@ -83,7 +83,7 @@ public class BaatoPlace {
     }
 
     public void doRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
+        BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
         placeAPIResponseCall = baatoAPI.performPlacesQuery(giveMeQueryFilter());
         placeAPIResponseCall.enqueue(new Callback<PlaceAPIResponse>() {
             @Override

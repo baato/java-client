@@ -1,9 +1,8 @@
 package com.baato.baatolibrary.navigation;
 
 import android.content.res.AssetManager;
-import android.util.Log;
 
-import com.baato.baatolibrary.application.App;
+import com.baato.baatolibrary.application.BaatoLib;
 import com.graphhopper.util.Helper;
 import com.graphhopper.util.Translation;
 
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 public class BaatoTranslationMap {
     private static final List<String> LOCALES = Arrays.asList("en_US","ne");
@@ -31,7 +29,7 @@ public class BaatoTranslationMap {
     }
 
     public BaatoTranslationMap doImport(String folder) {
-        AssetManager gi = App.getContext().getAssets();
+        AssetManager gi = BaatoLib.getContext().getAssets();
         try {
             Iterator var2 = LOCALES.iterator();
 

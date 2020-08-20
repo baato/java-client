@@ -1,11 +1,10 @@
 package com.baato.baatolibrary.services;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.baato.baatolibrary.application.App;
+import com.baato.baatolibrary.application.BaatoLib;
 import com.baato.baatolibrary.models.SearchAPIResponse;
 import com.baato.baatolibrary.requests.BaatoAPI;
 
@@ -121,7 +120,7 @@ public class BaatoSearch {
     }
 
     public void doRequest() {
-        BaatoAPI baatoAPI = App.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
+        BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
         searchAPIResponseCall = baatoAPI.searchQuery(giveMeQueryFilter());
         searchAPIResponseCall.enqueue(new Callback<SearchAPIResponse>() {
             @Override
