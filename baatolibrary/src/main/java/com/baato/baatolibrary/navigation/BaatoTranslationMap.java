@@ -33,7 +33,7 @@ public class BaatoTranslationMap {
     }
 
     public BaatoTranslationMap doImport(String folder) {
-        AssetManager gi = BaatoLib.getContext().getAssets();
+//        AssetManager gi = BaatoLib.getContext().getAssets();
         Resources resources = BaatoLib.getContext().getResources();
 
         try {
