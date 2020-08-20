@@ -1,14 +1,12 @@
 package com.baato.baatolibrary.navigation;
 
-import com.graphhopper.util.TranslationMap;
-
 import java.util.Locale;
 
 public class ConditionalDistanceVoiceInstructionConfig extends VoiceInstructionConfig {
     private final int[] distanceAlongGeometry; // distances in meter in which the instruction should be spoken
     private final int[] distanceVoiceValue; // distances in required unit. f.e: 1km, 300m or 2mi
 
-    public ConditionalDistanceVoiceInstructionConfig(String key, TranslationMap navigateResponseConverterTranslationMap, Locale locale, int[] distanceAlongGeometry, int[] distanceVoiceValue) {
+    public ConditionalDistanceVoiceInstructionConfig(String key, BaatoTranslationMap navigateResponseConverterTranslationMap, Locale locale, int[] distanceAlongGeometry, int[] distanceVoiceValue) {
         super(key, navigateResponseConverterTranslationMap, locale);
         this.distanceAlongGeometry = distanceAlongGeometry;
         this.distanceVoiceValue = distanceVoiceValue;

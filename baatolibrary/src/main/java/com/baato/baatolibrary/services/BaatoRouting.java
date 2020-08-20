@@ -11,6 +11,7 @@ import com.baato.baatolibrary.navigation.NavigateResponseConverter;
 import com.baato.baatolibrary.requests.BaatoAPI;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +27,7 @@ public class BaatoRouting {
     private Boolean alternatives;
     private Boolean instructions;
     private Call<DirectionsAPIResponse> directionsAPIResponseCall;
+    private Locale locale;
 
 
     public interface BaatoRoutingRequestListener {
@@ -58,6 +60,11 @@ public class BaatoRouting {
         return this;
     }
 
+    public BaatoRouting setLocale(Locale locale) {
+        this.locale = locale;
+        return this;
+    }
+
     /**
      * Set the apiBaseURL.
      */
@@ -74,6 +81,7 @@ public class BaatoRouting {
         this.mode = mode;
         return this;
     }
+
 
     /**
      * Set the query to search.
@@ -138,6 +146,10 @@ public class BaatoRouting {
     }
     public void cancelRequest() {
         directionsAPIResponseCall.cancel();
+    }
+
+    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode, Locale locale) {
+        return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode, locale).toString();
     }
 
     public static String getParsedNavResponse(DirectionsAPIResponse response, String mode) {

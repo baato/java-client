@@ -1,7 +1,9 @@
 package com.baato.baatolibrary.application;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -19,6 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class App extends Application {
     private static TinyDB tinyDB;
+    @SuppressLint("StaticFieldLeak")
+    private static Context mContext;
 
 
     @Override
@@ -26,6 +30,7 @@ public class App extends Application {
         super.onCreate();
         //tiny db config
         tinyDB = new TinyDB(getApplicationContext());
+        mContext = this;
     }
 
     public static TinyDB db() {
@@ -59,5 +64,8 @@ public class App extends Application {
             isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
         }
         return isConnected;
+    }
+    public static Context getContext(){
+        return mContext;
     }
 }

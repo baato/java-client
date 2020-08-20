@@ -1,6 +1,5 @@
 package com.baato.baatolibrary.navigation;
 
-import com.graphhopper.util.TranslationMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +11,7 @@ import static com.baato.baatolibrary.navigation.DistanceUtils.UnitTranslationKey
 public class DistanceConfig extends DistanceUtils {
     final List<VoiceInstructionConfig> voiceInstructions;
 
-    public DistanceConfig(DistanceUtils.Unit unit, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap, Locale locale) {
+    public DistanceConfig(DistanceUtils.Unit unit,  BaatoTranslationMap translationMap, BaatoTranslationMap navigateResponseConverterTranslationMap, Locale locale) {
         if (unit == DistanceUtils.Unit.METRIC) {
             voiceInstructions = Arrays.asList(
                     new InitialVoiceInstructionConfig(FOR_HIGHER_DISTANCE_PLURAL.metric, translationMap, navigateResponseConverterTranslationMap, locale, 4250, 250, unit),

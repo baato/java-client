@@ -30,11 +30,8 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphhopper.GHResponse;
 import com.graphhopper.util.Helper;
-import com.graphhopper.util.Instruction;
 import com.graphhopper.util.PointList;
-import com.graphhopper.util.RoundaboutInstruction;
-import com.graphhopper.util.TranslationMap;
-//import com.mapbox.api.directions.v5.models.StepIntersection;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,10 +93,13 @@ public class NavigateResponseConverter {
     private static NavResponse ghResponse = new NavResponse();
     private static List<List<Double>> allCord = new ArrayList<>();
     private static boolean pointadded = false;
-    private static final TranslationMap trMap = new TranslationMap().doImport();
-    private static  final  TranslationMap mtrMap = new NavigateResponseConverterTranslationMap().doImport();
+
+    //    private static TranslationMap trMap = new TranslationMap().doImport();
+    private static BaatoTranslationMap trMap;
+    private static BaatoTranslationMap mtrMap;
     private static String uuid = UUID.randomUUID().toString().replaceAll("-", "");
     private static String mode = "driving";
+    private static Locale locale = new Locale("en_US");
     private enum Profile {
         CAR,
         BIKE,
@@ -110,13 +110,26 @@ public class NavigateResponseConverter {
      * Converts a GHResponse into a json that follows the Mapbox API specification
      */
     public static ObjectNode convertFromGHResponse(NavResponse ghResponsee, String type) {
+        ghResponse = ghResponsee;
+        mtrMap = new NavigateResponseConverterTranslationMap(locale.getLanguage()).doImport();
+        trMap = new BaatoTranslationMap().doImport("locale/");
+        return navConverter(type);
+    }
+    public static ObjectNode convertFromGHResponse(NavResponse ghResponsee, String type, Locale localevar) {
         ObjectNode json = JsonNodeFactory.instance.objectNode();
         ghResponse = ghResponsee;
-
+        locale = localevar;
+        mtrMap = new NavigateResponseConverterTranslationMap(locale.getLanguage()).doImport();
+        trMap = new BaatoTranslationMap().doImport("locale/");
+        return  navConverter(type);
 //        if (ghResponse.hasErrors())
 //            throw new IllegalStateException("If the response has errors, you should use the method NavigateResponseConverter#convertFromGHResponseError");
 
 //        PointList waypoints = ghResponse.getPath().getWaypoints();
+
+    }
+    private static ObjectNode navConverter(String type) {
+        ObjectNode json = JsonNodeFactory.instance.objectNode();
         PointList routePoints = new PointList(10,false);
 
 
@@ -144,10 +157,11 @@ public class NavigateResponseConverter {
         allCord = waypointsg;
         ObjectNode pathJson = routesJson.addObject();
         for (int i = 0; i < waypointsg.size(); i++) {routePoints.add(waypointsg.get(i).get(0), waypointsg.get(i).get(1));}
-        putRouteInformation(pathJson,0, Locale.ENGLISH, new DistanceConfig(DistanceUtils.Unit.METRIC, trMap, mtrMap, Locale.ENGLISH), routePoints);
+//        putRouteInformation(pathJson,0, Locale.ENGLISH, new DistanceConfig(DistanceUtils.Unit.METRIC, trMap, mtrMap, Locale.ENGLISH), routePoints);
+        putRouteInformation(pathJson,0, locale, new DistanceConfig(DistanceUtils.Unit.METRIC, trMap, mtrMap, locale), routePoints);
         final ArrayNode waypointsJson = json.putArray("waypoints");
         getWaypoints(waypointsJson, waypointsg, 0);
-        getWaypoints(waypointsJson, waypointsg, ghResponsee.getInstructionList().size()-1);
+        getWaypoints(waypointsJson, waypointsg, ghResponse.getInstructionList().size()-1);
         json.put("code", "Ok");
         // TODO: Maybe we need a different format... uuid: "cji4ja4f8004o6xrsta8w4p4h"
         json.put("uuid", uuid);
@@ -213,7 +227,7 @@ public class NavigateResponseConverter {
         pathJson.put("duration", convertToSeconds(ghResponse.getTimeInMs()));
         pathJson.put("distance", Helper.round(ghResponse.getDistanceInMeters(), 1));
         pathJson.put("routeOptions",getRouteOptions("pk.xxx"));
-        pathJson.put("voiceLocale", "en-US");
+        pathJson.put("voiceLocale", locale.toLanguageTag());
     }
     private static ObjectNode getRouteOptions(String accessKey){
         ObjectNode json = JsonNodeFactory.instance.objectNode();
@@ -223,7 +237,8 @@ public class NavigateResponseConverter {
         ArrayNode coordinates = json.putArray("coordinates");
         getCord(coordinates);
 //        json.put("coordinates",getCord(coordinates));
-        json.put("language", String.valueOf(Locale.ENGLISH));
+//        json.put("language", String.valueOf(Locale.ENGLISH));
+        json.put("language", String.valueOf(locale));
         json.put("bearings", ";");
         json.put("continueStraight", true);
         json.put("roundaboutExits", true);
@@ -315,8 +330,10 @@ public class NavigateResponseConverter {
         ArrayNode voiceInstructions = instructionJson.putArray("voiceInstructions");
         ArrayNode bannerInstructions = instructionJson.putArray("bannerInstructions");
         if (!isLastInstruction(instruction)) {
-            putVoiceInstructions(instructions, distance, index, Locale.ENGLISH,trMap,mtrMap,voiceInstructions, distanceConfig);
-            putBannerInstructions(instructions, distance, index, Locale.ENGLISH,trMap,bannerInstructions);
+//            putVoiceInstructions(instructions, distance, index, Locale.ENGLISH,trMap,mtrMap,voiceInstructions, distanceConfig);
+//            putBannerInstructions(instructions, distance, index, Locale.ENGLISH,trMap,bannerInstructions);
+            putVoiceInstructions(instructions, distance, index, locale,trMap,mtrMap,voiceInstructions, distanceConfig);
+            putBannerInstructions(instructions, distance, index, locale,trMap,bannerInstructions);
         }
     }
     private static boolean isFirstInstruction(InstructionResponse instruction){
@@ -527,7 +544,7 @@ public class NavigateResponseConverter {
         MapObj mapObj = computeInterval(instruction);
         return (mapObj.getEnd() - mapObj.getStart() -1)>0;
     }
-    private static void putVoiceInstructions(ArrayList<InstructionResponse> instructions, double distance, int index, Locale locale, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap, ArrayNode voiceInstructions, DistanceConfig distanceConfig) {
+    private static void putVoiceInstructions(ArrayList<InstructionResponse> instructions, double distance, int index, Locale locale, BaatoTranslationMap translationMap, BaatoTranslationMap navigateResponseConverterTranslationMap, ArrayNode voiceInstructions, DistanceConfig distanceConfig) {
         /*
             A VoiceInstruction Object looks like this
             {
@@ -553,7 +570,7 @@ public class NavigateResponseConverter {
 
         // Speak 80m instructions 80 before the turn
         // Note: distanceAlongGeometry: "how far from the upcoming maneuver the voice instruction should begin"
-        double distanceAlongGeometry = Helper.round(Math.min(distance, 50), 1);
+        double distanceAlongGeometry = Helper.round(Math.min(distance, 70), 1);
         thenVoiceInstruction = thenVoiceInstruction.replace("unknown instruction sign '4'","you will arrive at your destination.");
         if (nextInstruction.getSign() == 4) {
             thenVoiceInstruction = "you will arrive";
@@ -562,7 +579,10 @@ public class NavigateResponseConverter {
         // Special case for the arrive instruction
         if (index + 2 == instructions.size()) {
             distanceAlongGeometry = Helper.round(Math.min(distance, 20), 1);
-            description = "You have arrived at your destination";
+            if (locale.getLanguage().equals("ne"))
+                description = "तपाईं आफ्नो गन्तव्यमा पुग्नुभयो";
+            else
+                description = "You have arrived at your destination";
         }
         String value = getTranslatedDistance((int) distanceAlongGeometry);
 //        Log.wtf("turn desc then", description);
@@ -600,7 +620,7 @@ public class NavigateResponseConverter {
      * <p>
      * For instruction i+1 distance > VOICE_INSTRUCTION_MERGE_TRESHHOLD an empty String will be returned
      */
-    private static String getThenVoiceInstructionpart(ArrayList<InstructionResponse> instructions, int index, Locale locale, TranslationMap translationMap, TranslationMap navigateResponseConverterTranslationMap) {
+    private static String getThenVoiceInstructionpart(ArrayList<InstructionResponse> instructions, int index, Locale locale, BaatoTranslationMap translationMap, BaatoTranslationMap navigateResponseConverterTranslationMap) {
         if (instructions.size() > index + 2) {
             InstructionResponse firstInstruction = instructions.get(index + 1);
             if (firstInstruction.getDistance() < VOICE_INSTRUCTION_MERGE_TRESHHOLD) {
@@ -618,7 +638,7 @@ public class NavigateResponseConverter {
      * <p>
      * Between two instructions we can show multiple banner instructions, you can control when they pop up using distanceAlongGeometry.
      */
-    private static void putBannerInstructions(ArrayList<InstructionResponse> instructions, double distance, int index, Locale locale, TranslationMap translationMap, ArrayNode bannerInstructions) {
+    private static void putBannerInstructions(ArrayList<InstructionResponse> instructions, double distance, int index, Locale locale, BaatoTranslationMap translationMap, ArrayNode bannerInstructions) {
         /*
         A BannerInstruction looks like this
         distanceAlongGeometry: 107,
@@ -654,7 +674,7 @@ public class NavigateResponseConverter {
         }
     }
 
-    private static void putSingleBannerInstruction(InstructionResponse instruction, Locale locale, TranslationMap translationMap, ObjectNode singleBannerInstruction) {
+    private static void putSingleBannerInstruction(InstructionResponse instruction, Locale locale, BaatoTranslationMap translationMap, ObjectNode singleBannerInstruction) {
         String bannerInstructionName = instruction.getName();
         if (bannerInstructionName == null || bannerInstructionName.isEmpty()) {
             // Fix for final instruction and for instructions without name
@@ -715,9 +735,9 @@ public class NavigateResponseConverter {
         // exit number
         if (instruction.getSign() ==  InstructionResponse.USE_ROUNDABOUT || instruction.getSign() ==  InstructionResponse.LEAVE_ROUNDABOUT  )
             maneuver.put("exit", instruction.getExitNumber());
-        final TranslationMap navigateResponseConverterTranslationMap = new NavigateResponseConverterTranslationMap().doImport();
-        maneuver.put("instruction", instruction.getTurnDescription(navigateResponseConverterTranslationMap.get("en_US")));
-
+//        final BaatoTranslationMap navigateResponseConverterTranslationMap = new NavigateResponseConverterTranslationMap(locale.getLanguage()).doImport();
+//        maneuver.put("instruction", instruction.getTurnDescription(navigateResponseConverterTranslationMap.get("en_US")));
+        maneuver.put("instruction", instruction.getTurnDescription(trMap.get(locale.getLanguage())));
     }
 
     /**
