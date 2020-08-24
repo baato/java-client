@@ -107,7 +107,6 @@ public class BaatoReverse {
                 else {
                     try {
                         baatoReverseRequestListener.onFailed(new Throwable(response.errorBody().string()));
-                        cancelRequest();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

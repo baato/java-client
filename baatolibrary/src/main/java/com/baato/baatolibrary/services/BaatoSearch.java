@@ -130,7 +130,6 @@ public class BaatoSearch {
                 else {
                     try {
                         baatoSearchRequestListener.onFailed(new Throwable(response.errorBody().string()));
-                        cancelRequest();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

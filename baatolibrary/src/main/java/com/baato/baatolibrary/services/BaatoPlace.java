@@ -95,7 +95,6 @@ public class BaatoPlace {
                 else {
                     try {
                         baatoPlaceListener.onFailed(new Throwable(response.errorBody().string()));
-                        cancelRequest();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

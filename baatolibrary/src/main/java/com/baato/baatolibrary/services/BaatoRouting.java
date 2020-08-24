@@ -135,7 +135,6 @@ public class BaatoRouting {
                         } else {
                             try {
                                 baatoRoutingRequestListener.onFailed(new Throwable(response.errorBody().string()));
-                                cancelRequest();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
