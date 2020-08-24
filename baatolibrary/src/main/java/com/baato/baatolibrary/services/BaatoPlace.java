@@ -7,8 +7,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.baato.baatolibrary.application.BaatoLib;
+import com.baato.baatolibrary.models.ErrorResponse;
 import com.baato.baatolibrary.models.PlaceAPIResponse;
 import com.baato.baatolibrary.requests.BaatoAPI;
+import com.baato.baatolibrary.utilities.ErrorUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -93,11 +95,8 @@ public class BaatoPlace {
                 if (response.isSuccessful() && response.body() != null)
                     baatoPlaceListener.onSuccess(response.body());
                 else {
-                    try {
-                        baatoPlaceListener.onFailed(new Throwable(response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
+                    baatoPlaceListener.onFailed(new Throwable(errorResponse.getMessage()));
                 }
             }
 

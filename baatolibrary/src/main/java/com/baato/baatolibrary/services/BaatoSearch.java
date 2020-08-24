@@ -5,8 +5,10 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.baato.baatolibrary.application.BaatoLib;
+import com.baato.baatolibrary.models.ErrorResponse;
 import com.baato.baatolibrary.models.SearchAPIResponse;
 import com.baato.baatolibrary.requests.BaatoAPI;
+import com.baato.baatolibrary.utilities.ErrorUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -128,11 +130,9 @@ public class BaatoSearch {
                 if (response.isSuccessful() && response.body() != null)
                     baatoSearchRequestListener.onSuccess(response.body());
                 else {
-                    try {
-                        baatoSearchRequestListener.onFailed(new Throwable(response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
+                    baatoSearchRequestListener.onFailed(new Throwable(errorResponse.getMessage()));
+//                        baatoSearchRequestListener.onFailed(new Throwable(response.errorBody().string()));
                 }
             }
 

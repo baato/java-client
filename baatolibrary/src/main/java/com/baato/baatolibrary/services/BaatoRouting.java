@@ -7,8 +7,10 @@ import androidx.annotation.NonNull;
 import com.baato.baatolibrary.application.BaatoLib;
 import com.baato.baatolibrary.models.DirectionsAPIResponse;
 
+import com.baato.baatolibrary.models.ErrorResponse;
 import com.baato.baatolibrary.navigation.NavigateResponseConverter;
 import com.baato.baatolibrary.requests.BaatoAPI;
+import com.baato.baatolibrary.utilities.ErrorUtils;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -133,11 +135,9 @@ public class BaatoRouting {
                         if (response.isSuccessful() && response.body() != null) {
                             baatoRoutingRequestListener.onSuccess(response.body());
                         } else {
-                            try {
-                                baatoRoutingRequestListener.onFailed(new Throwable(response.errorBody().string()));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
+                            baatoRoutingRequestListener.onFailed(new Throwable(errorResponse.getMessage()));
+//                                baatoRoutingRequestListener.onFailed(new Throwable(response.errorBody().string()));
                         }
                     }
 

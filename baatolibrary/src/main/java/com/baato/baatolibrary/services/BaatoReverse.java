@@ -6,10 +6,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.baato.baatolibrary.application.BaatoLib;
+import com.baato.baatolibrary.models.ErrorResponse;
 import com.baato.baatolibrary.models.PlaceAPIResponse;
 import com.baato.baatolibrary.models.LatLon;
 
 import com.baato.baatolibrary.requests.BaatoAPI;
+import com.baato.baatolibrary.utilities.ErrorUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -106,7 +108,9 @@ public class BaatoReverse {
                     baatoReverseRequestListener.onSuccess(response.body());
                 else {
                     try {
-                        baatoReverseRequestListener.onFailed(new Throwable(response.errorBody().string()));
+                        ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
+                        baatoReverseRequestListener.onFailed(new Throwable(errorResponse.getMessage()));
+//                        baatoReverseRequestListener.onFailed(new Throwable(response.errorBody().string()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
