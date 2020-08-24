@@ -1,6 +1,8 @@
 package com.baato.baatolibrary.services;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -93,6 +95,7 @@ public class BaatoPlace {
                 else {
                     try {
                         baatoPlaceListener.onFailed(new Throwable(response.errorBody().string()));
+                        cancelRequest();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
