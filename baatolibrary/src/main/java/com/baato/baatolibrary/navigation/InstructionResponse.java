@@ -332,6 +332,9 @@ public class InstructionResponse {
                     case 3:
                         dir = tr.tr("turn_sharp_right", new Object[0]);
                         break;
+                    case 4:
+                        dir = tr.tr("arrive", new Object[0]);
+                        break;
                     case 7:
                         dir = tr.tr("keep_right", new Object[0]);
                         break;
