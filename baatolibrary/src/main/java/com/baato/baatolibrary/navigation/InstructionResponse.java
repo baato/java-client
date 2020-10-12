@@ -266,6 +266,18 @@ public class InstructionResponse {
         @Expose
         private Double lastHeading;
 
+        @SerializedName("landmark")
+        @Expose
+        private String landmark;
+
+        public String getLandmark() {
+            return landmark;
+        }
+
+        public void setLandmark(String landmark) {
+            this.landmark = landmark;
+        }
+
         public Double getHeading() {
             return heading;
         }

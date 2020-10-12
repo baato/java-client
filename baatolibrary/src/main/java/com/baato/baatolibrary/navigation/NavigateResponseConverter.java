@@ -584,6 +584,14 @@ public class NavigateResponseConverter {
             else
                 description = "You have arrived at your destination";
         }
+        if(ghResponse.getInstructionList().get(index + 1).getExtraInfoJSON().getLandmark() != null) {
+            String extraInfo = ghResponse.getInstructionList().get(index + 1).getExtraInfoJSON().getLandmark();
+            if (locale.getLanguage().equals("ne"))
+                extraInfo = "तपाईं " + extraInfo + " भएर जानुहुनेछ";
+            else
+                extraInfo = "you will pass by " + extraInfo;
+            description = description + ", " + extraInfo;
+        }
         String value = getTranslatedDistance((int) distanceAlongGeometry);
 //        Log.wtf("turn desc then", description);
 //        description = description.replace("unknown instruction sign '6'", "Continue on " + instructions.get(index).getName());
