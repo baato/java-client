@@ -6,6 +6,8 @@ import com.graphhopper.util.Helper;
 import com.graphhopper.util.Instruction;
 import com.graphhopper.util.Translation;
 
+import java.util.List;
+
 public class InstructionResponse {
     public static final int UNKNOWN = -99;
     public static final int U_TURN_UNKNOWN = -98;
@@ -269,6 +271,18 @@ public class InstructionResponse {
         @SerializedName("landmark")
         @Expose
         private String landmark;
+
+        @SerializedName("landmark_centroid")
+        @Expose
+        private List<Double> landmarkCentroid = null;
+
+        public List<Double> getLandmarkCentroid() {
+            return landmarkCentroid;
+        }
+
+        public void setLandmarkCentroid(List<Double> landmarkCentroid) {
+            this.landmarkCentroid = landmarkCentroid;
+        }
 
         public String getLandmark() {
             return landmark;
