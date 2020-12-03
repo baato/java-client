@@ -49,6 +49,7 @@ dependencies {
            .setQuery(query)
            .setType("hospital") //optional parameter
            .setAPIVersion("1") // optional, default will be "1" if not set
+           .setLimit(5) //optional parameter
            .withListener(new BaatoSearch.BaatoSearchRequestListener() {
                @Override
                public void onSuccess(SearchAPIResponse places) {
@@ -70,6 +71,7 @@ dependencies {
    new BaatoReverse(this)
                 .setLatLon(new LatLon(lat, lon))
                 .setAccessToken(YOUR_ACCESS_KEY)
+                .setLimit(5) //optional parameter
                 .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {

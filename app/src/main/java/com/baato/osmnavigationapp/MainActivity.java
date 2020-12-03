@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 .setLatLon(new LatLon(27.73405, 85.33685))
                 .setAPIVersion("1")
                 .setAccessToken(Constants.TOKEN)
+                .setLimit(5)
                 .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {

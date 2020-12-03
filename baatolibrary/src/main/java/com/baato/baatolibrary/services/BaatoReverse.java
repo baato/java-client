@@ -28,7 +28,7 @@ public class BaatoReverse {
     private String accessToken;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
-    private int radius;
+    private int radius, limit = 0;
     private LatLon latLon;
     private Call<PlaceAPIResponse> placeAPIResponseCall;
 
@@ -88,6 +88,14 @@ public class BaatoReverse {
     }
 
     /**
+     * Set the limit to search.
+     */
+    public BaatoReverse setLimit(@NonNull int limit) {
+        this.limit = limit;
+        return this;
+    }
+
+    /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
      * @param baatoReverseRequestListener the listener to be notified
@@ -132,6 +140,8 @@ public class BaatoReverse {
         //compulsory
         if (accessToken != null)
             queryMap.put("key", accessToken);
+        if (limit != 0)
+            queryMap.put("limit", limit + "");
         if (latLon.lat != 0.00)
             queryMap.put("lat", latLon.lat + "");
         if (latLon.lon != 0.00)
