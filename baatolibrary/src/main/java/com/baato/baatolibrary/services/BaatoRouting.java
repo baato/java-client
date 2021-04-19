@@ -2,6 +2,7 @@ package com.baato.baatolibrary.services;
 
 import android.content.Context;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
 import com.baato.baatolibrary.application.BaatoLib;
@@ -19,6 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Keep
 public class BaatoRouting {
     private Context context;
     private BaatoRoutingRequestListener baatoRoutingRequestListener;
