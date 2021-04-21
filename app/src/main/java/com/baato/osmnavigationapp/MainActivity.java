@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
         Geometry geometry = BaatoUtil.getGeoJsonFromEncodedPolyLine(encoded);
         BaatoTranslationMap trMap = new BaatoTranslationMap().doImport(getApplicationContext());
         performRouting();
-        performReverseGeoCoding();
-        performSearch();
-        getPlaces();
+//        performReverseGeoCoding();
+//        performSearch();
+//        getPlaces();
     }
 
     private void performRouting() {
