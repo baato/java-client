@@ -165,7 +165,14 @@ NavigationLauncherOptions options = NavigationLauncherOptions.builder()
         .build();
 NavigationLauncher.startNavigation(YourActivity.this, options);
 ```
+ProGuard
+------------
 
+If your project uses ProGuard, add the following rules:
+
+```bash
+-keep class com.baato.baatolibrary.models.** { *; }
+```
 ## Built With
 
 * [Retrofit](https://github.com/square/retrofit) - Used to handle API requests
