@@ -16,7 +16,6 @@ import com.baato.baatolibrary.services.BaatoPlace;
 import com.baato.baatolibrary.services.BaatoRouting;
 import com.baato.baatolibrary.services.BaatoReverse;
 import com.baato.baatolibrary.services.BaatoSearch;
-import com.baato.baatolibrary.services.ToasterMessage;
 import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.kathmandulivinglabs.osmnavigationapp.R;
 
@@ -29,13 +28,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ToasterMessage.s(this, "Hello Good Morning");
-        Geometry geometry = BaatoUtil.getGeoJsonFromEncodedPolyLine(encoded);
-        BaatoTranslationMap trMap = new BaatoTranslationMap().doImport(getApplicationContext());
         performRouting();
-//        performReverseGeoCoding();
-//        performSearch();
-//        getPlaces();
+        performReverseGeoCoding();
+        performSearch();
+        getPlaces();
     }
 
     private void performRouting() {
