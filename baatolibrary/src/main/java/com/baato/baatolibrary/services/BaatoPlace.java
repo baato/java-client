@@ -11,6 +11,7 @@ import com.baato.baatolibrary.application.BaatoLib;
 import com.baato.baatolibrary.models.ErrorResponse;
 import com.baato.baatolibrary.models.PlaceAPIResponse;
 import com.baato.baatolibrary.requests.BaatoAPI;
+import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.baato.baatolibrary.utilities.ErrorUtils;
 
 import java.io.IOException;
@@ -25,12 +26,13 @@ import retrofit2.Response;
 public class BaatoPlace {
 
     private Context context;
-    private String accessToken;
+    private String accessToken, securityCode;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private BaatoPlaceListener baatoPlaceListener;
     private int placeId = 0;
     private Call<PlaceAPIResponse> placeAPIResponseCall;
+
     public interface BaatoPlaceListener {
         /**
          * onSuccess method called after it is successful
@@ -78,6 +80,14 @@ public class BaatoPlace {
     }
 
     /**
+     * Set the securityCode is security enabled.
+     */
+    public BaatoPlace setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
+        return this;
+    }
+
+    /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
      * @param baatoPlaceListener the listener to be notified
@@ -90,14 +100,14 @@ public class BaatoPlace {
 
     public void doRequest() {
         BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        placeAPIResponseCall = baatoAPI.performPlacesQuery(giveMeQueryFilter());
+        placeAPIResponseCall = baatoAPI.performPlacesQuery(giveMeQueryFilter(context));
         placeAPIResponseCall.enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
                     baatoPlaceListener.onSuccess(response.body());
                 else {
-                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
+                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl, context.getPackageName());
                     baatoPlaceListener.onFailed(new Throwable(errorResponse.getMessage()));
                 }
             }
@@ -108,16 +118,22 @@ public class BaatoPlace {
             }
         });
     }
+
     public void cancelRequest() {
-       placeAPIResponseCall.cancel();
+        placeAPIResponseCall.cancel();
     }
-    private Map<String, String> giveMeQueryFilter() {
+
+    private Map<String, String> giveMeQueryFilter(Context context) {
         Map<String, String> queryMap = new HashMap<>();
         //compulsory ones
         if (accessToken != null)
             queryMap.put("key", accessToken);
         if (placeId != 0)
             queryMap.put("placeId", placeId + "");
+
+        //optional ones
+        if (securityCode != null && !securityCode.isEmpty())
+            queryMap.put("hash", BaatoUtil.generateHash(context.getPackageName(), accessToken, securityCode));
         return queryMap;
     }
 }

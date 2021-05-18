@@ -33,6 +33,4 @@ dependencies {
 
     // baato library
     implementation project(':baatolibrary')
-
-//    implementation 'com.github.baato:java-client:1.0.1'
 }

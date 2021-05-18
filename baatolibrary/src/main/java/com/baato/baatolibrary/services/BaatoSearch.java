@@ -9,9 +9,9 @@ import com.baato.baatolibrary.application.BaatoLib;
 import com.baato.baatolibrary.models.ErrorResponse;
 import com.baato.baatolibrary.models.SearchAPIResponse;
 import com.baato.baatolibrary.requests.BaatoAPI;
+import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.baato.baatolibrary.utilities.ErrorUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public class BaatoSearch {
     private Context context;
     private BaatoSearchRequestListener baatoSearchRequestListener;
     private String accessToken, query;
-    private String type;
+    private String type, securityCode;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius = 0, limit = 0;
@@ -50,6 +50,14 @@ public class BaatoSearch {
      */
     public BaatoSearch setAccessToken(@NonNull String accessToken) {
         this.accessToken = accessToken;
+        return this;
+    }
+
+    /**
+     * Set the securityCode is security enabled.
+     */
+    public BaatoSearch setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
         return this;
     }
 
@@ -125,16 +133,15 @@ public class BaatoSearch {
 
     public void doRequest() {
         BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        searchAPIResponseCall = baatoAPI.searchQuery(giveMeQueryFilter());
+        searchAPIResponseCall = baatoAPI.searchQuery(giveMeQueryFilter(context));
         searchAPIResponseCall.enqueue(new Callback<SearchAPIResponse>() {
             @Override
             public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
                     baatoSearchRequestListener.onSuccess(response.body());
                 else {
-                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
+                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl, context.getPackageName());
                     baatoSearchRequestListener.onFailed(new Throwable(errorResponse.getMessage()));
-//                        baatoSearchRequestListener.onFailed(new Throwable(response.errorBody().string()));
                 }
             }
 
@@ -146,9 +153,10 @@ public class BaatoSearch {
     }
 
     public void cancelRequest() {
-       searchAPIResponseCall.cancel();
+        searchAPIResponseCall.cancel();
     }
-    private Map<String, String> giveMeQueryFilter() {
+
+    private Map<String, String> giveMeQueryFilter(Context context) {
         Map<String, String> queryMap = new HashMap<>();
         //compulsory ones
         if (accessToken != null)
@@ -156,8 +164,9 @@ public class BaatoSearch {
         if (query != null)
             queryMap.put("q", query);
 
-
         //optionals
+        if (securityCode != null && !securityCode.isEmpty())
+            queryMap.put("hash", BaatoUtil.generateHash(context.getPackageName(), accessToken, securityCode));
         if (type != null)
             queryMap.put("type", type);
         if (radius != 0)
