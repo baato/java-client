@@ -1,21 +1,15 @@
 package com.baato.baatolibrary.application;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.baato.baatolibrary.utilities.Retry;
+import com.baato.baatolibrary.utilities.RetryInterceptor;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -43,7 +37,7 @@ public class BaatoLib extends Application {
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .readTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
-                .addInterceptor(new Retry(4))
+                .addInterceptor(new RetryInterceptor(4))
                 .build();
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(apiBaseURL+ "v" + apiVersion + "/")

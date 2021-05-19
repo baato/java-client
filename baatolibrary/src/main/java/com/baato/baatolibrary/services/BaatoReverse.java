@@ -1,7 +1,6 @@
 package com.baato.baatolibrary.services;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -12,6 +11,7 @@ import com.baato.baatolibrary.models.PlaceAPIResponse;
 import com.baato.baatolibrary.models.LatLon;
 
 import com.baato.baatolibrary.requests.BaatoAPI;
+import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.baato.baatolibrary.utilities.ErrorUtils;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class BaatoReverse {
     private static final String TAG = "BaatoReverseGeoCode";
     private Context context;
     private BaatoReverseRequestListener baatoReverseRequestListener;
-    private String accessToken;
+    private String accessToken, securityCode;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius, limit = 0;
@@ -98,6 +98,14 @@ public class BaatoReverse {
     }
 
     /**
+     * Set the securityCode is security enabled.
+     */
+    public BaatoReverse setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
+        return this;
+    }
+
+    /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
      * @param baatoReverseRequestListener the listener to be notified
@@ -110,7 +118,7 @@ public class BaatoReverse {
 
     public void doRequest() {
         BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        placeAPIResponseCall=baatoAPI.performReverseGeoCode(giveMeQueryFilter());
+        placeAPIResponseCall = baatoAPI.performReverseGeoCode(giveMeQueryFilter(context));
         placeAPIResponseCall.enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
@@ -120,7 +128,6 @@ public class BaatoReverse {
                     try {
                         ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
                         baatoReverseRequestListener.onFailed(new Throwable(errorResponse.getMessage()));
-//                        baatoReverseRequestListener.onFailed(new Throwable(response.errorBody().string()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -133,11 +140,12 @@ public class BaatoReverse {
             }
         });
     }
+
     public void cancelRequest() {
         placeAPIResponseCall.cancel();
     }
 
-    private Map<String, String> giveMeQueryFilter() {
+    private Map<String, String> giveMeQueryFilter(Context context) {
         Map<String, String> queryMap = new HashMap<>();
         //compulsory
         if (accessToken != null)
@@ -150,6 +158,8 @@ public class BaatoReverse {
             queryMap.put("lon", latLon.lon + "");
 
         //optional
+        if (securityCode != null && !securityCode.isEmpty())
+            queryMap.put("hash", BaatoUtil.generateHash(context.getPackageName(), accessToken, securityCode));
         if (radius != 0)
             queryMap.put("radius", radius + "");
 

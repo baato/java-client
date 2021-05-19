@@ -13,7 +13,7 @@ import retrofit2.http.QueryMap;
 
 public interface BaatoAPI {
     @GET("directions")
-    Call<DirectionsAPIResponse> getDirections(@Query("key") String key, @Query("points[]") String[] points, @Query("mode") String mode, @Query("alternatives") Boolean alternatives, @Query("instructions") Boolean instructions);
+    Call<DirectionsAPIResponse> getDirections(@QueryMap Map<String, Object> filters, @Query("points[]") String[] points);
 
     @GET("search")
     Call<SearchAPIResponse> searchQuery(@QueryMap Map<String, String> filters);

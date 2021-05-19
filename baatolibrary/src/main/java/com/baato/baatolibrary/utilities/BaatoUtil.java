@@ -1,24 +1,30 @@
 package com.baato.baatolibrary.utilities;
 
-import android.util.Log;
-
 import com.baato.baatolibrary.models.Geometry;
+
+import org.apache.commons.codec.digest.HmacAlgorithms;
+import org.apache.commons.codec.digest.HmacUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 public class BaatoUtil {
     public static Geometry getGeoJsonFromEncodedPolyLine(String encoded) {
         return new Geometry("LineString", decodePolyline(encoded, false));
     }
 
+    public static String generateHash(String packageName, String accessToken, String secret) {
+        byte[] key = secret.getBytes();
+
+        HmacUtils hm256 = new HmacUtils(HmacAlgorithms.HMAC_SHA_512, key);
+        // hm256 object can be used again and again
+        return hm256.hmacHex(packageName+accessToken);
+    }
+
     public static List<List<Double>> decodePolyline(String encoded, boolean is3D) {
         List<List<Double>> pointList = new ArrayList<>();
         int index = 0;
         int len = encoded.length();
-        Log.d(TAG, "decodePolyline: "+len);
         int lat = 0, lng = 0, ele = 0;
         while (index < len) {
             // latitude

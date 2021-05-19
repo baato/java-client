@@ -1,7 +1,5 @@
 package com.baato.baatolibrary.utilities;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
@@ -11,10 +9,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class Retry implements Interceptor {
+public class RetryInterceptor implements Interceptor {
     public int maxRetry; // maximum number of retries
     private int retryNum = 0; // If set to 3 retry, the maximum possible request 4 times (default 1 + 3 retry)
-    public Retry(int maxRetry) {
+    public RetryInterceptor(int maxRetry) {
         this.maxRetry = maxRetry;
     }
 
