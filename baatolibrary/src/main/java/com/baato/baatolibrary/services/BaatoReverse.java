@@ -126,7 +126,7 @@ public class BaatoReverse {
                     baatoReverseRequestListener.onSuccess(response.body());
                 else {
                     try {
-                        ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl, context.getPackageName());
+                        ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
                         baatoReverseRequestListener.onFailed(new Throwable(errorResponse.getMessage()));
                     } catch (Exception e) {
                         e.printStackTrace();

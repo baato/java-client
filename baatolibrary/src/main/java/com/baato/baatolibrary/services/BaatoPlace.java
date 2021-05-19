@@ -107,7 +107,7 @@ public class BaatoPlace {
                 if (response.isSuccessful() && response.body() != null)
                     baatoPlaceListener.onSuccess(response.body());
                 else {
-                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl, context.getPackageName());
+                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
                     baatoPlaceListener.onFailed(new Throwable(errorResponse.getMessage()));
                 }
             }

@@ -150,7 +150,7 @@ public class BaatoRouting {
                         if (response.isSuccessful() && response.body() != null) {
                             baatoRoutingRequestListener.onSuccess(response.body());
                         } else {
-                            ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl, context.getPackageName());
+                            ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
                             baatoRoutingRequestListener.onFailed(new Throwable(errorResponse.getMessage()));
                         }
                     }

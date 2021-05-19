@@ -11,7 +11,7 @@ import retrofit2.Converter;
 import retrofit2.Response;
 
 public class ErrorUtils {
-    public static ErrorResponse parseError(Response<?> response, String apiVersion, String apiBaseURL,String appId) {
+    public static ErrorResponse parseError(Response<?> response, String apiVersion, String apiBaseURL) {
         Converter<ResponseBody, ErrorResponse> converter =
                 BaatoLib.retrofitV2(apiVersion,apiBaseURL)
                         .responseBodyConverter(ErrorResponse.class, new Annotation[0]);

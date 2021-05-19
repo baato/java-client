@@ -140,7 +140,7 @@ public class BaatoSearch {
                 if (response.isSuccessful() && response.body() != null)
                     baatoSearchRequestListener.onSuccess(response.body());
                 else {
-                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl, context.getPackageName());
+                    ErrorResponse errorResponse = ErrorUtils.parseError(response, apiVersion, apiBaseUrl);
                     baatoSearchRequestListener.onFailed(new Throwable(errorResponse.getMessage()));
                 }
             }
