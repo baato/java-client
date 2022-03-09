@@ -3,6 +3,7 @@ package com.baato.baatolibrary.models;
 
 public class SearchDataModel {
     private int placeId;
+    private long osmId;
     private String name;
     private String address;
     private double score, radialDistanceInKm;
@@ -11,6 +12,10 @@ public class SearchDataModel {
     // Getter Methods
     public int getPlaceId() {
         return placeId;
+    }
+
+    public long getOsmId() {
+        return osmId;
     }
 
     public String getName() {
@@ -28,6 +33,10 @@ public class SearchDataModel {
     // Setter Methods
     public void setPlaceId(int placeId) {
         this.placeId = placeId;
+    }
+
+    public void setOsmId(long osmId) {
+        this.osmId = osmId;
     }
 
     public void setName(String name) {
@@ -62,6 +71,7 @@ public class SearchDataModel {
     public String toString() {
         return "SearchDataModel{" +
                 "placeId=" + placeId +
+                ", osmId='" + osmId + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", score=" + score +

@@ -45,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
                         // success response here
-                        Log.d(TAG, "onSuccess: routes" + directionResponse.toString());
+                        Log.d(TAG, "onSuccess: routes " + directionResponse.toString());
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
                         // failure response here
-                        Log.d(TAG, "onFailed:routes " + error.getMessage());
+                        Log.d(TAG, "onFailed: routes " + error.getMessage());
                     }
                 })
                 .doRequest();
@@ -87,13 +87,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(PlaceAPIResponse place) {
                         //success response here
-                        Log.d(TAG, "onSuccess: place" + place.toString());
+                        Log.d(TAG, "onSuccess: place " + place.toString());
                     }
 
                     @Override
                     public void onFailed(Throwable error) {
                         //failure response here
-                        Log.d(TAG, "onFailed: place" + error.getMessage());
+                        Log.d(TAG, "onFailed: place " + error.getMessage());
                     }
                 })
                 .doRequest();

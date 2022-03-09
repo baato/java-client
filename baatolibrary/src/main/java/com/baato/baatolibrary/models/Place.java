@@ -13,6 +13,8 @@ public class Place {
 
     private int placeId;
 
+    private long osmId;
+
     private String name;
 
     private Geometry geometry;
@@ -20,6 +22,14 @@ public class Place {
     private String type;
 
     private List<String> tags;
+
+    public long getOsmId() {
+        return osmId;
+    }
+
+    public void setOsmId(long osmId) {
+        this.osmId = osmId;
+    }
 
     public String getLicense() {
         return license;
@@ -101,6 +111,7 @@ public class Place {
                 ", address='" + address + '\'' +
                 ", centroid=" + centroid +
                 ", placeId='" + placeId + '\'' +
+                ", osmId='" + osmId + '\'' +
                 ", name='" + name + '\'' +
                 ", geometry=" + geometry +
                 ", type='" + type + '\'' +
