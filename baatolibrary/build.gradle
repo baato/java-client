@@ -1,16 +1,3 @@
-plugins {
-    id 'maven-publish'
-}
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = 'com.baato'
-            artifactId = 'baatolibrary'
-            version = '1.3'
-        }
-    }
-}
-
 apply plugin: 'com.android.library'
 
 android {

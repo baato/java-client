@@ -4,7 +4,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.4'
@@ -12,6 +12,10 @@ buildscript {
         // in the individual module build.gradle files
         classpath 'digital.wup:android-maven-publish:3.6.0'
     }
+}
+
+plugins {
+    id 'maven-publish'
 }
 
 allprojects {
