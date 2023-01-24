@@ -7,10 +7,6 @@ android {
     compileSdkVersion 32
     buildToolsVersion "29.0.3"
 
-//    buildFeatures {
-//        viewBinding = true
-//    }
-//
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 32
@@ -20,7 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
-//
+
     buildTypes {
         release {
             minifyEnabled false
@@ -31,15 +27,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    kotlinOptions {
-//        jvmTarget = '1.8'
-//    }
-//    publishing {
-//        singleVariant('release') {
-//            withSourcesJar()
-//            withJavadocJar()
-//        }
-//    }
+
     namespace 'com.baato.baatolibrary'
 }
 
@@ -71,7 +59,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'com.github.baato'
             artifactId = 'java-client'
-            version = '1.4.0'
+            version = '1.4.5'
 
             afterEvaluate {
                 from components.release
