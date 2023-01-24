@@ -8,7 +8,6 @@ import android.util.Log;
 import com.baato.baatolibrary.application.BaatoLib;
 import com.graphhopper.util.Helper;
 import com.graphhopper.util.Translation;
-import com.kathmandulivinglabs.navigationlibrary.R;
 
 import java.io.IOException;
 import java.io.InputStream;
