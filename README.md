@@ -18,6 +18,7 @@ The Java library makes it easy to consume the Baato API into existing native and
 ```
 allprojects{
  repositories {
+  mavenCentral()
   maven { url 'https://jitpack.io' }
  }
 }
