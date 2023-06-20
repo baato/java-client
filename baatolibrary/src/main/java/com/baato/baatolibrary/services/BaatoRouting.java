@@ -7,14 +7,13 @@ import androidx.annotation.NonNull;
 
 import com.baato.baatolibrary.application.BaatoLib;
 import com.baato.baatolibrary.models.DirectionsAPIResponse;
-
 import com.baato.baatolibrary.models.ErrorResponse;
+import com.baato.baatolibrary.models.NavResponse;
 import com.baato.baatolibrary.navigation.NavigateResponseConverter;
 import com.baato.baatolibrary.requests.BaatoAPI;
 import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.baato.baatolibrary.utilities.ErrorUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -22,8 +21,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 @Keep
 public class BaatoRouting {
@@ -171,8 +168,16 @@ public class BaatoRouting {
         return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode, locale, context).toString();
     }
 
+    public static String getParsedNavResponse(NavResponse response, String mode, Locale locale, Context context) {
+        return NavigateResponseConverter.convertFromGHResponse(response, mode, locale, context).toString();
+    }
+
     public static String getParsedNavResponse(DirectionsAPIResponse response, String mode, Context context) {
         return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode, context).toString();
+    }
+
+    public static String getParsedNavResponse(NavResponse response, String mode, Context context) {
+        return NavigateResponseConverter.convertFromGHResponse(response, mode, context).toString();
     }
 
     private Map<String, Object> giveMeQueryFilter(Context context) {
