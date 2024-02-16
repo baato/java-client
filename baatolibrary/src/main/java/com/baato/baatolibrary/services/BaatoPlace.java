@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class BaatoPlace {
 
     private Context context;
-    private String accessToken, securityCode;
+    private String accessToken, securityCode,bundleIdentifier,sessionId;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private BaatoPlaceListener baatoPlaceListener;
@@ -86,7 +86,20 @@ public class BaatoPlace {
         this.securityCode = securityCode;
         return this;
     }
-
+    /**
+     * Set the package name.
+     */
+    public BaatoPlace setBundleIdentifier(String bundleIdentifier) {
+        this.bundleIdentifier = bundleIdentifier;
+        return this;
+    }
+    /**
+     * Set the session Id.
+     */
+    public BaatoPlace setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+        return this;
+    }
     /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
      *
@@ -100,7 +113,7 @@ public class BaatoPlace {
 
     public void doRequest() {
         BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        placeAPIResponseCall = baatoAPI.performPlacesQuery(giveMeQueryFilter(context));
+        placeAPIResponseCall = baatoAPI.performPlacesQuery(sessionId,bundleIdentifier,giveMeQueryFilter(context));
         placeAPIResponseCall.enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {

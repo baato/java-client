@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.baato.baatolibrary.utilities.LoggingInterceptor;
 import com.baato.baatolibrary.utilities.RetryInterceptor;
 
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,7 @@ public class BaatoLib extends Application {
                 .readTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .addInterceptor(new RetryInterceptor(4))
+//                .addInterceptor(new LoggingInterceptor())
                 .build();
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(apiBaseURL+ "v" + apiVersion + "/")

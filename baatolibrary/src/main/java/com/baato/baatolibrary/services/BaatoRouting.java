@@ -11,6 +11,7 @@ import com.baato.baatolibrary.models.ErrorResponse;
 import com.baato.baatolibrary.models.NavResponse;
 import com.baato.baatolibrary.navigation.NavigateResponseConverter;
 import com.baato.baatolibrary.requests.BaatoAPI;
+import com.baato.baatolibrary.utilities.BaatoNavMode;
 import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.baato.baatolibrary.utilities.ErrorUtils;
 
@@ -26,7 +27,8 @@ import retrofit2.Response;
 public class BaatoRouting {
     private Context context;
     private BaatoRoutingRequestListener baatoRoutingRequestListener;
-    private String accessToken, securityCode, mode;
+    private String accessToken, securityCode,bundleIdentifier,sessionId,mode;
+//    private BaatoNavMode mode;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private String[] points;
@@ -34,7 +36,6 @@ public class BaatoRouting {
     private Boolean instructions;
     private Call<DirectionsAPIResponse> directionsAPIResponseCall;
     private Locale locale;
-
 
     public interface BaatoRoutingRequestListener {
         /**
@@ -55,6 +56,20 @@ public class BaatoRouting {
      */
     public BaatoRouting setAccessToken(@NonNull String accessToken) {
         this.accessToken = accessToken;
+        return this;
+    }
+    /**
+     * Set the package name.
+     */
+    public BaatoRouting setBundleIdentifier(String bundleIdentifier) {
+        this.bundleIdentifier = bundleIdentifier;
+        return this;
+    }
+    /**
+     * Set the session Id.
+     */
+    public BaatoRouting setSessionId(String sessionId) {
+        this.sessionId = sessionId;
         return this;
     }
 
@@ -88,8 +103,8 @@ public class BaatoRouting {
     /**
      * Set the mode.
      */
-    public BaatoRouting setMode(@NonNull String mode) {
-        this.mode = mode;
+    public BaatoRouting setMode(@NonNull BaatoNavMode mode) {
+        this.mode = mode.toString().toLowerCase();
         return this;
     }
 
@@ -139,7 +154,7 @@ public class BaatoRouting {
 
     public void doRequest() {
         BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        directionsAPIResponseCall = baatoAPI.getDirections(giveMeQueryFilter(context), points);
+        directionsAPIResponseCall = baatoAPI.getDirections(sessionId,bundleIdentifier,giveMeQueryFilter(context), points);
         directionsAPIResponseCall
                 .enqueue(new Callback<DirectionsAPIResponse>() {
                     @Override

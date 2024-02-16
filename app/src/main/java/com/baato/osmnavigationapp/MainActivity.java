@@ -1,6 +1,7 @@
 package com.baato.osmnavigationapp;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,21 +17,31 @@ import com.baato.baatolibrary.services.BaatoPlace;
 import com.baato.baatolibrary.services.BaatoRouting;
 import com.baato.baatolibrary.services.BaatoReverse;
 import com.baato.baatolibrary.services.BaatoSearch;
+import com.baato.baatolibrary.utilities.BaatoNavMode;
 import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.kathmandulivinglabs.osmnavigationapp.R;
 
+import java.util.UUID;
+
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "apple";
+    private static final String TAG = "Baato-JAVA-CLIENT";
+    private String sessionId;
+    private String bundleIdentifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sessionId = UUID.randomUUID().toString();
+        bundleIdentifier = MainActivity.this.getPackageName();
+
         performRouting();
         performReverseGeoCoding();
         performSearch();
         getPlaces();
+
     }
 
     private void performRouting() {
@@ -38,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
         new BaatoRouting(this)
                 .setPoints(points)
                 .setAccessToken(Constants.TOKEN)
-                .setMode("foot")
+                .setSessionId(sessionId)
+                .setBundleIdentifier(bundleIdentifier)
+                .setMode(BaatoNavMode.BIKE)
                 .setAlternatives(false)
                 .setInstructions(false)
                 .withListener(new BaatoRouting.BaatoRoutingRequestListener() {
@@ -62,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 .setLatLon(new LatLon(27.73405, 85.33685))
                 .setAPIVersion("1")
                 .setAccessToken(Constants.TOKEN)
+                .setSessionId(sessionId)
+                .setBundleIdentifier(bundleIdentifier)
                 .setLimit(5)
                 .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
@@ -83,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
         new BaatoPlace(this)
                 .setAccessToken(Constants.TOKEN)
                 .setPlaceId(101499)
+                .setSessionId(sessionId)
+                .setBundleIdentifier(bundleIdentifier)
                 .withListener(new BaatoPlace.BaatoPlaceListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse place) {
@@ -104,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 .setAccessToken(Constants.TOKEN)
                 .setAPIVersion("1")
                 .setQuery("Kathmandu")
+                .setSessionId(sessionId)
+                .setBundleIdentifier(bundleIdentifier)
                 .setLimit(5)
                 .withListener(new BaatoSearch.BaatoSearchRequestListener() {
                     @Override
