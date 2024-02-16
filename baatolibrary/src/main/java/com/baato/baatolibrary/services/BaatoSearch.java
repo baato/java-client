@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class BaatoSearch {
     private Context context;
     private BaatoSearchRequestListener baatoSearchRequestListener;
-    private String accessToken, query;
+    private String accessToken, query,bundleIdentifier,sessionId;
     private String type, securityCode;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
@@ -50,6 +50,20 @@ public class BaatoSearch {
      */
     public BaatoSearch setAccessToken(@NonNull String accessToken) {
         this.accessToken = accessToken;
+        return this;
+    }
+    /**
+     * Set the package name.
+     */
+    public BaatoSearch setBundleIdentifier(String bundleIdentifier) {
+        this.bundleIdentifier = bundleIdentifier;
+        return this;
+    }
+    /**
+     * Set the session Id.
+     */
+    public BaatoSearch setSessionId(String sessionId) {
+        this.sessionId = sessionId;
         return this;
     }
 
@@ -133,7 +147,7 @@ public class BaatoSearch {
 
     public void doRequest() {
         BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        searchAPIResponseCall = baatoAPI.searchQuery(giveMeQueryFilter(context));
+        searchAPIResponseCall = baatoAPI.searchQuery(sessionId,bundleIdentifier,giveMeQueryFilter(context));
         searchAPIResponseCall.enqueue(new Callback<SearchAPIResponse>() {
             @Override
             public void onResponse(Call<SearchAPIResponse> call, Response<SearchAPIResponse> response) {

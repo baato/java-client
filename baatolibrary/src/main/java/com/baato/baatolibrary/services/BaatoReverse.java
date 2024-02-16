@@ -27,7 +27,7 @@ public class BaatoReverse {
     private static final String TAG = "BaatoReverseGeoCode";
     private Context context;
     private BaatoReverseRequestListener baatoReverseRequestListener;
-    private String accessToken, securityCode;
+    private String accessToken, securityCode,bundleIdentifier,sessionId;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius, limit = 0;
@@ -104,6 +104,20 @@ public class BaatoReverse {
         this.securityCode = securityCode;
         return this;
     }
+    /**
+     * Set the package name.
+     */
+    public BaatoReverse setBundleIdentifier(String bundleIdentifier) {
+        this.bundleIdentifier = bundleIdentifier;
+        return this;
+    }
+    /**
+     * Set the session Id.
+     */
+    public BaatoReverse setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+        return this;
+    }
 
     /**
      * Method to set the UpdateListener for the AppUpdaterUtils actions
@@ -118,7 +132,7 @@ public class BaatoReverse {
 
     public void doRequest() {
         BaatoAPI baatoAPI = BaatoLib.retrofitV2(apiVersion, apiBaseUrl).create(BaatoAPI.class);
-        placeAPIResponseCall = baatoAPI.performReverseGeoCode(giveMeQueryFilter(context));
+        placeAPIResponseCall = baatoAPI.performReverseGeoCode(sessionId,bundleIdentifier,giveMeQueryFilter(context));
         placeAPIResponseCall.enqueue(new Callback<PlaceAPIResponse>() {
             @Override
             public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
