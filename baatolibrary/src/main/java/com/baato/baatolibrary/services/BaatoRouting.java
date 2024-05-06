@@ -4,12 +4,14 @@ import android.content.Context;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.baato.baatolibrary.application.BaatoLib;
 import com.baato.baatolibrary.models.DirectionsAPIResponse;
 import com.baato.baatolibrary.models.ErrorResponse;
 import com.baato.baatolibrary.models.NavResponse;
 import com.baato.baatolibrary.navigation.NavigateResponseConverter;
+import com.baato.baatolibrary.navigation.NavigateResponseConverterMapLibre;
 import com.baato.baatolibrary.requests.BaatoAPI;
 import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.baato.baatolibrary.utilities.ErrorUtils;
@@ -57,6 +59,7 @@ public class BaatoRouting {
         this.accessToken = accessToken;
         return this;
     }
+
 
     /**
      * Set the apiVersion. By default it takes version "1"
@@ -164,19 +167,31 @@ public class BaatoRouting {
         directionsAPIResponseCall.cancel();
     }
 
-    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode, Locale locale, Context context) {
+    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode, Locale locale, Context context, boolean forMapLibre) {
+        if (forMapLibre) {
+            return NavigateResponseConverterMapLibre.convertFromGHResponse(response.getData().get(0), mode, locale, context).toString();
+        }
         return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode, locale, context).toString();
     }
 
-    public static String getParsedNavResponse(NavResponse response, String mode, Locale locale, Context context) {
+    public static String getParsedNavResponse(NavResponse response, String mode, Locale locale, Context context, boolean forMapLibre) {
+        if (forMapLibre) {
+            return NavigateResponseConverterMapLibre.convertFromGHResponse(response, mode, locale, context).toString();
+        }
         return NavigateResponseConverter.convertFromGHResponse(response, mode, locale, context).toString();
     }
 
-    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode, Context context) {
+    public static String getParsedNavResponse(DirectionsAPIResponse response, String mode, Context context, boolean forMapLibre) {
+        if (forMapLibre) {
+            return NavigateResponseConverterMapLibre.convertFromGHResponse(response.getData().get(0), mode, context).toString();
+        }
         return NavigateResponseConverter.convertFromGHResponse(response.getData().get(0), mode, context).toString();
     }
 
-    public static String getParsedNavResponse(NavResponse response, String mode, Context context) {
+    public static String getParsedNavResponse(NavResponse response, String mode, Context context, boolean forMapLibre) {
+        if (forMapLibre) {
+            return NavigateResponseConverterMapLibre.convertFromGHResponse(response, mode, context).toString();
+        }
         return NavigateResponseConverter.convertFromGHResponse(response, mode, context).toString();
     }
 
@@ -192,6 +207,8 @@ public class BaatoRouting {
         if (alternatives != null)
             queryMap.put("alternatives", alternatives);
 
+//        if(forMapbox!=null)
+//            queryMap.put("forMapbox", forMapbox);
         //optionals
         if (securityCode != null && !securityCode.isEmpty())
             queryMap.put("hash", BaatoUtil.generateHash(context.getPackageName(), accessToken, securityCode));
