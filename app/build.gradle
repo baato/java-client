@@ -36,6 +36,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // baato library
-    implementation project(':baatolibrary')
-//    implementation 'com.github.baato:java-client:1.4.6'
+//    implementation project(':baatolibrary')
+    implementation 'com.github.baato:java-client:1.4.6'
 }

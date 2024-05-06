@@ -59,7 +59,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'com.github.baato'
             artifactId = 'java-client'
-            version = '1.4.5'
+            version = '1.4.10'
 
             afterEvaluate {
                 from project.components.findByName('release')
