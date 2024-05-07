@@ -134,6 +134,8 @@ dependencies {
                 })
                 .doRequest();
 ```
+
+
 #### 5. To use turn by turn navigation:
 
  Get the currentRoute from step no 4 and follow the below steps:
@@ -143,6 +145,14 @@ dependencies {
  DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
  DirectionsRoute currentRoute = directionsResponse.routes().get(0);
 ```
+
+####  To get routeString compatible to maplibre
+
+```
+BaatoRouting.getParsedNavResponse(response,navigationMode, Locale("en"), context, true )
+ ```
+Here a boolean value ```true``` is forMaplibre compatible. If you use Baato's navigation SDK you can set it to ```false```.
+
 #### 6. Baato Navigation SDK
 
 Now that you have your route, you can use the [Baato Navigation SDK](https://github.com/baato/navigation-sdk) for navigation.
