@@ -10,6 +10,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.baato.baatolibrary.models.NavResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -211,36 +212,61 @@ public class NavigateResponseConverterMapLibre {
         pathJson.put("weight", Helper.round(weight, 1));
         pathJson.put("duration", convertToSeconds(ghResponse.getTimeInMs()));
         pathJson.put("distance", Helper.round(ghResponse.getDistanceInMeters(), 1));
-        pathJson.put("routeOptions",getRouteOptions("pk.xxx"));
+        pathJson.set("routeOptions",getRouteOptions("pk.xxx"));
 
         pathJson.put("voiceLocale", locale.toLanguageTag());
     }
-    private static ObjectNode getRouteOptions(String accessKey){
-        ObjectNode json = JsonNodeFactory.instance.objectNode();
+    //    private static ObjectNode getRouteOptions(String accessKey){
+//        ObjectNode json = JsonNodeFactory.instance.objectNode();
+//        json.put("baseUrl", "https://api.baato.io");
+//        json.put("user", "mapbox");
+//        json.put("profile", mode);
+//        ArrayNode coordinates = json.putArray("coordinates");
+//        getCord(coordinates);
+////        json.put("coordinates",getCord(coordinates));
+////        json.put("language", String.valueOf(Locale.ENGLISH));
+//        json.put("language", String.valueOf(locale));
+//        json.put("bearings", ";");
+//        json.put("continueStraight", true);
+//        json.put("roundaboutExits", true);
+//        json.put("geometries", "polyline6");
+//        json.put("overview", "full");
+//        json.put("steps", true);
+//        json.put("annotations", "");
+//        json.put("voiceInstructions", true);
+//        json.put("bannerInstructions", true);
+//        json.put("voiceUnits", String.valueOf(DistanceUtils.Unit.METRIC));
+//        json.put("access_token",accessKey);
+//        json.put("uuid",uuid);
+//        return  json;
+////        json.put("coordinates", path.)
+//
+//    }
+    private static ObjectNode getRouteOptions(String accessKey) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode json = mapper.createObjectNode();
         json.put("baseUrl", "https://api.baato.io");
         json.put("user", "mapbox");
         json.put("profile", mode);
         ArrayNode coordinates = json.putArray("coordinates");
         getCord(coordinates);
-//        json.put("coordinates",getCord(coordinates));
-//        json.put("language", String.valueOf(Locale.ENGLISH));
         json.put("language", String.valueOf(locale));
-        json.put("bearings", ";");
-        json.put("continueStraight", true);
-        json.put("roundaboutExits", true);
+        json.put("bearings", ";;");
+        json.put("continue_straight", true);
+        json.put("roundabout_exits", true);
         json.put("geometries", "polyline6");
         json.put("overview", "full");
         json.put("steps", true);
         json.put("annotations", "");
-        json.put("voiceInstructions", true);
-        json.put("bannerInstructions", true);
-        json.put("voiceUnits", String.valueOf(DistanceUtils.Unit.METRIC));
-        json.put("access_token",accessKey);
-        json.put("uuid",uuid);
-        return  json;
-//        json.put("coordinates", path.)
-
+        json.put("alternatives", true);
+        json.put("voice_instructions", true);
+        json.put("banner_instructions", true);
+        json.put("voice_units", String.valueOf(DistanceUtils.Unit.METRIC));
+        json.put("access_token", accessKey);
+        json.put("uuid", uuid);
+        return json;
     }
+
     private static void getCord(ArrayNode coordinates){
         double a1 = allCord.get(0).get(1);
         double a2 = allCord.get(0).get(0);
