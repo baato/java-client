@@ -869,13 +869,20 @@ public class NavigateResponseConverterMapLibre {
 //        putLocation(points.getLat(0), points.getLon(0), maneuver);
 
         String modifier = getModifier(instruction);
-        if (modifier != null)
+        if (modifier != null){
+
             maneuver.put("modifier", modifier);
+        }else{
+            maneuver.put("modifier", "");
+        }
 
         maneuver.put("type", getTurnType(instruction, isFirstInstructionOfLeg));
         // exit number
-        if (instruction.getSign() ==  InstructionResponse.USE_ROUNDABOUT || instruction.getSign() ==  InstructionResponse.LEAVE_ROUNDABOUT  )
+        if (instruction.getSign() ==  InstructionResponse.USE_ROUNDABOUT || instruction.getSign() ==  InstructionResponse.LEAVE_ROUNDABOUT  ){
             maneuver.put("exit", instruction.getExitNumber());
+        }else{
+            maneuver.put("exit", 0);
+        }
 //        final BaatoTranslationMap navigateResponseConverterTranslationMap = new NavigateResponseConverterTranslationMap(locale.getLanguage()).doImport();
 //        maneuver.put("instruction", instruction.getTurnDescription(navigateResponseConverterTranslationMap.get("en_US")));
         maneuver.put("instruction", instruction.getTurnDescription(trMap.get(locale.getLanguage())));
