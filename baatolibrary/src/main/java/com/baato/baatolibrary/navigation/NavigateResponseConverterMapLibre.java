@@ -869,8 +869,12 @@ public class NavigateResponseConverterMapLibre {
 //        putLocation(points.getLat(0), points.getLon(0), maneuver);
 
         String modifier = getModifier(instruction);
-        if (modifier != null)
+        if (modifier != null){
+
             maneuver.put("modifier", modifier);
+        }else{
+            maneuver.put("modifier", "");
+        }
 
         maneuver.put("type", getTurnType(instruction, isFirstInstructionOfLeg));
         // exit number
