@@ -878,8 +878,11 @@ public class NavigateResponseConverterMapLibre {
 
         maneuver.put("type", getTurnType(instruction, isFirstInstructionOfLeg));
         // exit number
-        if (instruction.getSign() ==  InstructionResponse.USE_ROUNDABOUT || instruction.getSign() ==  InstructionResponse.LEAVE_ROUNDABOUT  )
+        if (instruction.getSign() ==  InstructionResponse.USE_ROUNDABOUT || instruction.getSign() ==  InstructionResponse.LEAVE_ROUNDABOUT  ){
             maneuver.put("exit", instruction.getExitNumber());
+        }else{
+            maneuver.put("exit", 0);
+        }
 //        final BaatoTranslationMap navigateResponseConverterTranslationMap = new NavigateResponseConverterTranslationMap(locale.getLanguage()).doImport();
 //        maneuver.put("instruction", instruction.getTurnDescription(navigateResponseConverterTranslationMap.get("en_US")));
         maneuver.put("instruction", instruction.getTurnDescription(trMap.get(locale.getLanguage())));
