@@ -827,8 +827,13 @@ public class NavigateResponseConverterMapLibre {
 
         singleBannerInstruction.put("type", getTurnType(instruction, false));
         String modifier = getModifier(instruction);
-        if (modifier != null)
+        if (modifier != null){
+
             singleBannerInstruction.put("modifier", modifier);
+        }else{
+            singleBannerInstruction.put("modifier", "");
+
+        }
 
         if (instruction.getSign() == InstructionResponse.USE_ROUNDABOUT) {
             double turnAngle = instruction.getTurnAngle();
