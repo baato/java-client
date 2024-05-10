@@ -808,6 +808,7 @@ public class NavigateResponseConverterMapLibre {
         if (getTurnType(instruction, false).equals("arrive")) {
             bannerInstruction = "Destination";
             singleBannerInstruction.put("text","");
+            singleBannerInstruction.put("modifier","");
         } else {
             singleBannerInstruction.put("text", bannerInstruction);
         }
