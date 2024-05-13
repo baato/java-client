@@ -807,7 +807,7 @@ public class NavigateResponseConverterMapLibre {
         String bannerInstruction = bannerInstructionName;
         if (getTurnType(instruction, false).equals("arrive")) {
             bannerInstruction = "Destination";
-            singleBannerInstruction.put("text","");
+            singleBannerInstruction.put("text","Destination");
         } else {
             singleBannerInstruction.put("text", bannerInstruction);
         }
@@ -827,8 +827,12 @@ public class NavigateResponseConverterMapLibre {
 
         singleBannerInstruction.put("type", getTurnType(instruction, false));
         String modifier = getModifier(instruction);
-        if (modifier != null)
+        if (modifier != null){
+
             singleBannerInstruction.put("modifier", modifier);
+        }else{
+            singleBannerInstruction.put("modifier", "");
+        }
 
         if (instruction.getSign() == InstructionResponse.USE_ROUNDABOUT) {
             double turnAngle = instruction.getTurnAngle();
@@ -870,7 +874,6 @@ public class NavigateResponseConverterMapLibre {
 
         String modifier = getModifier(instruction);
         if (modifier != null){
-
             maneuver.put("modifier", modifier);
         }else{
             maneuver.put("modifier", "");
