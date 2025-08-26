@@ -14,9 +14,7 @@ import com.baato.baatolibrary.services.BaatoPlace;
 import com.baato.baatolibrary.services.BaatoRouting;
 import com.baato.baatolibrary.services.BaatoReverse;
 import com.baato.baatolibrary.services.BaatoSearch;
-import com.kathmandulivinglabs.osmnavigationapp.R;
 
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         performRouting();
         performReverseGeoCoding();
         performSearch();
@@ -33,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void performRouting() {
-        String points[] = new String[]{"27.73405,85.33685", "27.6777, 85.3489"};
+        String[] points = new String[]{"27.73405,85.33685", "27.6777, 85.3489"};
         new BaatoRouting(this)
                 .setPoints(points)
                 .setAccessToken(Constants.TOKEN)
