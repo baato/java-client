@@ -1,6 +1,8 @@
 package com.baato.baatolibrary.models;
 
 
+import androidx.annotation.NonNull;
+
 public class SearchDataModel {
     private int placeId;
     private long osmId;
@@ -67,6 +69,7 @@ public class SearchDataModel {
         this.radialDistanceInKm = radialDistanceInKm;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SearchDataModel{" +
