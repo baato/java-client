@@ -1,5 +1,7 @@
 package com.baato.baatolibrary.models;
 
+import androidx.annotation.NonNull;
+
 import com.baato.baatolibrary.navigation.InstructionResponse;
 
 import java.util.List;
@@ -65,6 +67,7 @@ public class NavResponse {
         // TODO Auto-generated constructor stub
     }
 
+    @NonNull
     @Override
     public String toString () {
         return "NavigationResponse [encoded_polyline=" + encodedPolyline + ", distance=" + distanceInMeters + ", timeInMs="
