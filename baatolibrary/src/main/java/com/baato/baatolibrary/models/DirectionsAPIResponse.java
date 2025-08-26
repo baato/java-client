@@ -1,5 +1,7 @@
 package com.baato.baatolibrary.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class DirectionsAPIResponse {
@@ -41,6 +43,7 @@ public class DirectionsAPIResponse {
         this.data = data;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "DirectionsAPIResponse{" +
