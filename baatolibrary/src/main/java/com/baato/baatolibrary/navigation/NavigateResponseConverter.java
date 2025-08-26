@@ -415,7 +415,7 @@ public class NavigateResponseConverter {
 //        if (isLastInstruction(instruction))
 //            putLocation(mapObj.pointList.getLatitude(instruction.getPoints().getSize()),mapObj.pointList.getLongitude(instruction.getPoints().getSize()),intersection);
 //        else
-        putLocation(mapObj.pointList.getLatitude(instruction.getPoints().getSize()-1),mapObj.pointList.getLongitude(instruction.getPoints().getSize()-1),intersection);
+        putLocation(mapObj.pointList.getLat(instruction.getPoints().getSize()-1),mapObj.pointList.getLon(instruction.getPoints().getSize()-1),intersection);
     }
 
     @Nullable
