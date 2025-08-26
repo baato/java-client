@@ -15,8 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BaatoLib extends Application {
     private static TinyDB tinyDB;
-//    @SuppressLint("StaticFieldLeak")
-//    private static Context mContext;
 
 
     @Override
@@ -44,8 +42,7 @@ public class BaatoLib extends Application {
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create());
 
-        Retrofit retrofitV2 = builder.build();
-        return retrofitV2;
+        return builder.build();
     }
 
     public static boolean isConnectedToNetwork(Context context) {
@@ -59,7 +56,4 @@ public class BaatoLib extends Application {
         }
         return isConnected;
     }
-//    public static Context getContext(){
-//        return mContext;
-//    }
 }
