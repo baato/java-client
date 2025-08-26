@@ -1,5 +1,7 @@
 package com.baato.baatolibrary.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class Place {
@@ -103,6 +105,7 @@ public class Place {
         this.tags = tags;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Place{" +
