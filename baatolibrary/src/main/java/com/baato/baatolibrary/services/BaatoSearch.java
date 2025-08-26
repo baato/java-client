@@ -164,9 +164,14 @@ public class BaatoSearch {
         if (query != null)
             queryMap.put("q", query);
 
-        //optionals
-        if (securityCode != null && !securityCode.isEmpty())
-            queryMap.put("hash", BaatoUtil.generateHash(context.getPackageName(), accessToken, securityCode));
+        try{
+            final String appId= context.getPackageName();
+            queryMap.put("app_id",appId);
+            //optional ones
+            if (securityCode != null && !securityCode.isEmpty())
+                queryMap.put("hash", BaatoUtil.generateHash(appId, accessToken, securityCode));
+        } catch (Exception ignored) {}
+
         if (type != null)
             queryMap.put("type", type);
         if (radius != 0)

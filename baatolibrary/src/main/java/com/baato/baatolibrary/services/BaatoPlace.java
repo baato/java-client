@@ -1,8 +1,6 @@
 package com.baato.baatolibrary.services;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -14,7 +12,6 @@ import com.baato.baatolibrary.requests.BaatoAPI;
 import com.baato.baatolibrary.utilities.BaatoUtil;
 import com.baato.baatolibrary.utilities.ErrorUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +22,7 @@ import retrofit2.Response;
 @Keep
 public class BaatoPlace {
 
-    private Context context;
+    private final Context context;
     private String accessToken, securityCode;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
@@ -58,7 +55,7 @@ public class BaatoPlace {
     /**
      * Set the placeId.
      */
-    public BaatoPlace setPlaceId(@NonNull int placeId) {
+    public BaatoPlace setPlaceId(int placeId) {
         this.placeId = placeId;
         return this;
     }
@@ -130,10 +127,14 @@ public class BaatoPlace {
             queryMap.put("key", accessToken);
         if (placeId != 0)
             queryMap.put("placeId", placeId + "");
-
-        //optional ones
-        if (securityCode != null && !securityCode.isEmpty())
-            queryMap.put("hash", BaatoUtil.generateHash(context.getPackageName(), accessToken, securityCode));
+        try{
+            final String appId= context.getPackageName();
+            queryMap.put("app_id",appId);
+            //optional ones
+            if (securityCode != null && !securityCode.isEmpty())
+                queryMap.put("hash", BaatoUtil.generateHash(appId, accessToken, securityCode));
+        } catch (Exception ignored) {
+        }
         return queryMap;
     }
 }

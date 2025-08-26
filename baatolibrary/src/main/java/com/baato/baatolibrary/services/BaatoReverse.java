@@ -121,7 +121,7 @@ public class BaatoReverse {
         placeAPIResponseCall = baatoAPI.performReverseGeoCode(giveMeQueryFilter(context));
         placeAPIResponseCall.enqueue(new Callback<PlaceAPIResponse>() {
             @Override
-            public void onResponse(Call<PlaceAPIResponse> call, Response<PlaceAPIResponse> response) {
+            public void onResponse(@NonNull Call<PlaceAPIResponse> call, @NonNull Response<PlaceAPIResponse> response) {
                 if (response.isSuccessful() && response.body() != null)
                     baatoReverseRequestListener.onSuccess(response.body());
                 else {
@@ -135,7 +135,7 @@ public class BaatoReverse {
             }
 
             @Override
-            public void onFailure(Call<PlaceAPIResponse> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<PlaceAPIResponse> call, @NonNull Throwable throwable) {
                 baatoReverseRequestListener.onFailed(throwable);
             }
         });
@@ -156,10 +156,14 @@ public class BaatoReverse {
             queryMap.put("lat", latLon.lat + "");
         if (latLon.lon != 0.00)
             queryMap.put("lon", latLon.lon + "");
-
+        try{
+            final String appId= context.getPackageName();
+            queryMap.put("app_id",appId);
+            //optional ones
+            if (securityCode != null && !securityCode.isEmpty())
+                queryMap.put("hash", BaatoUtil.generateHash(appId, accessToken, securityCode));
+        } catch (Exception ignored) {}
         //optional
-        if (securityCode != null && !securityCode.isEmpty())
-            queryMap.put("hash", BaatoUtil.generateHash(context.getPackageName(), accessToken, securityCode));
         if (radius != 0)
             queryMap.put("radius", radius + "");
 

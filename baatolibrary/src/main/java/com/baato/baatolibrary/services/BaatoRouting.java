@@ -207,11 +207,14 @@ public class BaatoRouting {
         if (alternatives != null)
             queryMap.put("alternatives", alternatives);
 
-//        if(forMapbox!=null)
-//            queryMap.put("forMapbox", forMapbox);
-        //optionals
-        if (securityCode != null && !securityCode.isEmpty())
-            queryMap.put("hash", BaatoUtil.generateHash(context.getPackageName(), accessToken, securityCode));
+        try{
+            final String appId= context.getPackageName();
+            queryMap.put("app_id",appId);
+            //optional ones
+            if (securityCode != null && !securityCode.isEmpty())
+                queryMap.put("hash", BaatoUtil.generateHash(appId, accessToken, securityCode));
+        } catch (Exception ignored) {}
+
         return queryMap;
     }
 }
