@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 
 public class BaatoTranslationMap {
     private static final List<String> LOCALES = Arrays.asList("en_US","ne");
-    private final Map<String, Translation> translations = new HashMap();
+    private final Map<String, Translation> translations = new HashMap<>();
 
     public BaatoTranslationMap() {
     }
