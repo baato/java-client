@@ -16,6 +16,7 @@ public class RetryInterceptor implements Interceptor {
         this.maxRetry = maxRetry;
     }
 
+    @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
