@@ -51,6 +51,7 @@ dependencies {
            .setType("hospital") //optional parameter
            .setAPIVersion("1") // optional, default will be "1" if not set
            .setLimit(5) //optional parameter
+           .setUserId(Firebase Installation ID) //optional parameter, Firebase Installation ID || any unqiue id
            .withListener(new BaatoSearch.BaatoSearchRequestListener() {
                @Override
                public void onSuccess(SearchAPIResponse places) {
@@ -66,6 +67,13 @@ dependencies {
            })
            .doRequest();
 ```
+Every search request automatically carries two identifiers, so no setup is needed:
+
+- `appId` — your app, in the form `Android_<your.package.name>_<your.versionName>`.
+- `userId` — an anonymous id generated once per app installation and stored locally, so repeated
+  searches can be recognised as coming from the same user. It is reset when the app is reinstalled
+  or its data is cleared. Call `setUserId(...)` to send your own identifier instead (eg. a Firebase
+  installation id).
  #### 2. Reverse GeoCode
  
  ```

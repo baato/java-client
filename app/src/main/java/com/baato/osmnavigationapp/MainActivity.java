@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 .setAPIVersion("1")
                 .setQuery("Kathmandu")
                 .setLimit(5)
+                .setUserId("testId")
                 .withListener(new BaatoSearch.BaatoSearchRequestListener() {
                     @Override
                     public void onSuccess(SearchAPIResponse places) {
