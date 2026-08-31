@@ -1,6 +1,7 @@
 package com.baato.baatolibrary.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ public class BaatoSearch {
     private Context context;
     private BaatoSearchRequestListener baatoSearchRequestListener;
     private String accessToken, query;
-    private String type, securityCode;
+    private String type, securityCode, userId;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private int radius = 0, limit = 0;
@@ -58,6 +59,15 @@ public class BaatoSearch {
      */
     public BaatoSearch setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
+        return this;
+    }
+
+    /**
+     * Set the userId. Optional: if not set, the library sends its own anonymous per installation
+     * id. Use this to send your own identifier instead (eg. a Firebase installation id).
+     */
+    public BaatoSearch setUserId(String userId) {
+        this.userId = userId;
         return this;
     }
 
@@ -163,6 +173,11 @@ public class BaatoSearch {
             queryMap.put("key", accessToken);
         if (query != null)
             queryMap.put("q", query);
+        queryMap.put("appId", BaatoUtil.getAppId(context));
+        queryMap.put("userId", (userId != null && !userId.isEmpty())
+                ? userId : BaatoUtil.getUserId(context));
+
+        Log.d("checktoken", BaatoUtil.getAppId(context) + userId + BaatoUtil.getUserId(context));
 
         //optionals
         if (securityCode != null && !securityCode.isEmpty())

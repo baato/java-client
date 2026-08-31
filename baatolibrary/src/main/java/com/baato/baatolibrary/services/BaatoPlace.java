@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class BaatoPlace {
 
     private Context context;
-    private String accessToken, securityCode;
+    private String accessToken, securityCode, userId;
     private String apiVersion = "1";
     private String apiBaseUrl = "https://api.baato.io/api/";
     private BaatoPlaceListener baatoPlaceListener;
@@ -60,6 +60,15 @@ public class BaatoPlace {
      */
     public BaatoPlace setPlaceId(@NonNull int placeId) {
         this.placeId = placeId;
+        return this;
+    }
+
+    /**
+     * Set the userId. Optional: if not set, the library sends its own anonymous per installation
+     * id. Use this to send your own identifier instead (eg. a Firebase installation id).
+     */
+    public BaatoPlace setUserId(String userId) {
+        this.userId = userId;
         return this;
     }
 
@@ -130,6 +139,9 @@ public class BaatoPlace {
             queryMap.put("key", accessToken);
         if (placeId != 0)
             queryMap.put("placeId", placeId + "");
+        queryMap.put("appId", BaatoUtil.getAppId(context));
+        queryMap.put("userId", (userId != null && !userId.isEmpty())
+                ? userId : BaatoUtil.getUserId(context));
 
         //optional ones
         if (securityCode != null && !securityCode.isEmpty())
